@@ -16,7 +16,7 @@ public class DB_test {
 		System.out.println("------------");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
-		System.out.println("------------");
+		System.out.println("------------"); 
 		int select1 = in.nextInt();
 			
 		if(select1 == 1) {
