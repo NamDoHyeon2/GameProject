@@ -21,9 +21,9 @@ public class Main {
 		
 		
 		
-		TurnInformation turninformation = new TurnInformation(1); //유저의 PK값
+		//TurnInformation turninformation = new TurnInformation(1); //유저의 PK값
 		//turninformation.Input_Turn(5, 0, 0, "패"); //턴수, 심장수, 이긴횟수, 결과 를 차례로 넣어줌
-		turninformation.Show_Turn_Record(1); //게임 수를 넣어주면 그 게임수에 대한 정보가 나옴
+		//turninformation.Show_Turn_Record(1); //게임 수를 넣어주면 그 게임수에 대한 정보가 나옴
 
 	}
 
