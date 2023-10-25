@@ -65,7 +65,7 @@ public class TurnInformation {
 		}
 	}
 	
-	public void Show_Turn_Record(int pick_count) {
+	public void Show_Turn_Info(int pick_count) {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
 			Connection con = DriverManager.getConnection(DB_url, DB_user, DB_password);
