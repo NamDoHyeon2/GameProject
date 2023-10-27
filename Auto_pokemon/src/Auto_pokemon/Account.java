@@ -55,6 +55,40 @@ public class Account {
             }
 		}
 	}
+	public boolean duplicate() {
+		String sql = "";
+		try {
+			Class.forName("oracle.jdbc.OracleDriver");
+			Connection con = DriverManager.getConnection(DB_url, DB_user, DB_password);
+			System.out.println("클래스 로딩 성공!");
+			
+			sql = "SELECT * FROM USER_INFO WHERE LOGIN_ID = ?";
+			PreparedStatement pstmt;
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, login_id);
+			
+			ResultSet resultSet = pstmt.executeQuery();
+			
+			if (resultSet.next()) {
+                // 결과가 있을 때 처리
+                System.out.println("중복됩니다.");
+                return false;
+                
+            } else {
+                System.out.println("중복되지 않습니다.");
+                return true;
+            }				
+			
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+	        return false;
+		}catch (SQLException e) {
+			e.printStackTrace();
+	        return false;
+		}
+	}
+	
+	
 	//로그인
 	public void login() { 
 		try {
