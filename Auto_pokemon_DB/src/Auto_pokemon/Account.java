@@ -13,7 +13,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class Account {
 	private String DB_user = "JUNG";
 	private String DB_password = "1234";
-	private String DB_url = "jdbc:oracle:thin:@localhost:1521:xe";
+	private String DB_url = "jdbc:oracle:thin:@172.30.1.21:1521:xe";
 	private String login_id;
 	private String login_password;
 	private String login_name;
