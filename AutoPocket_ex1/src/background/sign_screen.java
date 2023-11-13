@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 
 public class sign_screen {
 
-	private JFrame signupFrame;
+	public JFrame signupFrame;
 
 	/**
 	 * Launch the application.
@@ -48,11 +48,14 @@ public class sign_screen {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-		signupFrame = new JFrame("íšŒì›ê°€ì…");
+	public void initialize() {
 		
-		ImagePanel signupPanel = new ImagePanel(new ImageIcon("C:\\Project\\AutoPocket\\src\\Image\\signimg2.png").getImage());
-		ImageIcon confirmImg = new ImageIcon("C:\\Project\\AutoPocket\\src\\Image\\confirm.png");
+		signupFrame = new JFrame("È¸¿ø°¡ÀÔ");
+		
+    	ImagePanel signupPanel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\signimg2.png").getImage());
+		ImageIcon confirmImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\confirm.png");
+		ImageIcon cancleImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\cancle.png");
+		ImageIcon registerImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\register.png");
     	
         signupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         signupFrame.setBounds(510, 350, 900, 700);
@@ -61,13 +64,13 @@ public class sign_screen {
         signupFrame.getContentPane().add(signupPanel);
         signupPanel.setLayout(null);
 
-        JLabel idLabel = new JLabel("ì•„ì´ë””");
-        idLabel.setFont(new Font("ë‚˜ëˆ”ê³ ë”•", Font.BOLD, 32));
+        JLabel idLabel = new JLabel("¾ÆÀÌµğ");
+        idLabel.setFont(new Font("³ª´®°íµñ", Font.BOLD, 32));
         idLabel.setBounds(80, 50, 117, 46);
         signupPanel.add(idLabel);
 
         JTextField idTextField = new JTextField();
-        idTextField.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 40));
+        idTextField.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 40));
         idTextField.setBounds(293, 50, 376, 46);
         signupPanel.add(idTextField);
 
@@ -78,6 +81,11 @@ public class sign_screen {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String id = idTextField.getText();
+				if (id.isEmpty()) {
+		            System.out.println("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		            return;
+		        }
+				
 				boolean duplicate = false;
 				try {
 				Class.forName("oracle.jdbc.OracleDriver");
@@ -100,10 +108,11 @@ public class sign_screen {
 				}
 
 				if (duplicate) {
-				    System.out.println("ì¤‘ë³µëœ ì•„ì´ë””ê°€ ìˆìŒ.");
+				    System.out.println("Áßº¹µÈ ¾ÆÀÌµğ°¡ ÀÖÀ½.");
 				} else {
-				    System.out.println("ì¤‘ë³µëœ ì•„ì´ë”” ì—†ìŒ.");
+				    System.out.println("Áßº¹µÈ ¾ÆÀÌµğ ¾øÀ½.");
 				}
+				
 			}catch (ClassNotFoundException f) {
 					f.printStackTrace();
 			}catch (SQLException f) {
@@ -114,33 +123,33 @@ public class sign_screen {
         	
        });
 
-        JLabel passwordLabel = new JLabel("ë¹„ë°€ë²ˆí˜¸");
-        passwordLabel.setFont(new Font("ë‚˜ëˆ”ê³ ë”•", Font.BOLD, 32));
+        JLabel passwordLabel = new JLabel("ºñ¹Ğ¹øÈ£");
+        passwordLabel.setFont(new Font("³ª´®°íµñ", Font.BOLD, 32));
         passwordLabel.setBounds(80, 129, 140, 46);
         signupPanel.add(passwordLabel);
 
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 32));
+        passwordField.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 32));
         passwordField.setBounds(293, 129, 376, 46);
         signupPanel.add(passwordField);
 
-        JLabel confirmPasswordLabel = new JLabel("ë¹„ë°€ë²ˆí˜¸ í™•ì¸");
-        confirmPasswordLabel.setFont(new Font("ë‚˜ëˆ”ê³ ë”•", Font.BOLD, 32));
+        JLabel confirmPasswordLabel = new JLabel("ºñ¹Ğ¹øÈ£ È®ÀÎ");
+        confirmPasswordLabel.setFont(new Font("³ª´®°íµñ", Font.BOLD, 32));
         confirmPasswordLabel.setBounds(80, 209, 213, 46);
         signupPanel.add(confirmPasswordLabel);
 
         JPasswordField confirmPasswordField = new JPasswordField();
-        confirmPasswordField.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 32));
+        confirmPasswordField.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 32));
         confirmPasswordField.setBounds(293, 209, 376, 46);
         signupPanel.add(confirmPasswordField);
 
-        JLabel nicknameLabel = new JLabel("ë‹‰ë„¤ì„");
-        nicknameLabel.setFont(new Font("ë‚˜ëˆ”ê³ ë”•", Font.BOLD, 32));
+        JLabel nicknameLabel = new JLabel("´Ğ³×ÀÓ");
+        nicknameLabel.setFont(new Font("³ª´®°íµñ", Font.BOLD, 32));
         nicknameLabel.setBounds(80, 450, 100, 46);
         signupPanel.add(nicknameLabel);
 
         JTextField nicknameTextField = new JTextField();
-        nicknameTextField.setFont(new Font("ë§‘ì€ ê³ ë”•", Font.BOLD, 32));
+        nicknameTextField.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 32));
         nicknameTextField.setBounds(293, 450, 376, 46);
         signupPanel.add(nicknameTextField);
         
@@ -151,6 +160,11 @@ public class sign_screen {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String nickname = nicknameTextField.getText();
+				if (nickname.isEmpty()) {
+		            System.out.println("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		            return; 
+		        }
+				
 				boolean duplicate = false;
 				try {
 				Class.forName("oracle.jdbc.OracleDriver");
@@ -173,9 +187,9 @@ public class sign_screen {
 				}
 
 				if (duplicate) {
-				    System.out.println("ì¤‘ë³µëœ ë‹‰ë„¤ì„ì´ ìˆìŒ.");
+				    System.out.println("Áßº¹µÈ ´Ğ³×ÀÓÀÌ ÀÖÀ½.");
 				} else {
-				    System.out.println("ì¤‘ë³µëœ ë‹‰ë„¤ì„ ì—†ìŒ.");
+				    System.out.println("Áßº¹µÈ ´Ğ³×ÀÓ ¾øÀ½.");
 				}
 			}catch (ClassNotFoundException f) {
 					f.printStackTrace();
@@ -187,7 +201,7 @@ public class sign_screen {
         	
        });
 
-        JButton signupButton = new JButton("ê°€ì…");
+        JButton signupButton = new JButton(registerImg);
         signupButton.setBounds(80, 566, 260, 70);
         signupPanel.add(signupButton);
         signupButton.addActionListener(new ActionListener(){
@@ -216,26 +230,41 @@ public class sign_screen {
 
 			            if (id.equals(login_id)) {
 			                isRegistered = true;
-			                System.out.println("ì•„ì´ë””ê°€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.");
+			                System.out.println("¾ÆÀÌµğ°¡ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.");
 			                break;
-			            }
-			            
-			            if (nickname.equals(login_nickname)) {
+			            }else if (nickname.equals(login_nickname)) {
 			                isRegistered = true;
-			                System.out.println("ë‹‰ë„¤ì„ì´ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.");
+			                System.out.println("´Ğ³×ÀÓÀÌ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.");
 			                break;
-			            }
+			            }else if (id.isEmpty()) {
+			            System.out.println("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+				            return;
+				        }else if (nickname.isEmpty()) {
+				            System.out.println("´Ğ³×ÀÓÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+				            return; 
+				        }else if (pass.isEmpty()) {
+				        	System.out.println("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+				        	return;
+				        }else if (passconfirm.isEmpty()) {
+				        	System.out.println("ºñ¹Ğ¹øÈ£ È®ÀÎÀ» À§ÇØ ºñ¹Ğ¹øÈ£¸¦ Àû¾îÁÖ¼¼¿ä");
+				        	return;
+				        }else if (!pass.equals(passconfirm)) {
+				            isRegistered = true;
+				            System.out.println("ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+				            break;
+				        }
 			        }
+			        
 
-			        if (!pass.equals(passconfirm)) {
-			            isRegistered = true;
-			            System.out.println("ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
-			        }
+			        
 
 			        if (!isRegistered) {
-			        	System.out.println("íšŒì›ê°€ì…ì— ì„±ê³µí•˜ì…¨ìŠµë‹ˆë‹¤.");
-			        	Account ac = new Account(id, pass, nickname);
-						ac.join_membership();
+			        	System.out.println("È¸¿ø°¡ÀÔ¿¡ ¼º°øÇÏ¼Ì½À´Ï´Ù.");
+			        	Account singlogin = new Account();
+			        	singlogin.setLogin_id(id);
+			        	singlogin.setLogin_password(pass);
+			        	singlogin.setLogin_name(nickname);
+						singlogin.join_membership();
 						signupFrame.setVisible(false);
 			        }
 
@@ -249,14 +278,13 @@ public class sign_screen {
        });
         
         
-        JButton cancleButton = new JButton("ì·¨ì†Œ");
+        JButton cancleButton = new JButton(cancleImg);
         cancleButton.setBounds(554, 566, 260, 70);
         signupPanel.add(cancleButton);
         cancleButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				signupFrame.setVisible(false);
-				
 			}
        
         });
