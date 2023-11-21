@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Move package &apos;background&apos; to &apos;Auto_pokemon/src&apos;&#x0D;&#x0A;- Original project: &apos;AutoPocket_ex1&apos;&#x0D;&#x0A;- Destination element: &apos;Auto_pokemon/src&apos;&#x0D;&#x0A;- Original element: &apos;AutoPocket_ex1/src/background&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move package" destination="=Auto_pokemon/src" element1="/src&lt;background" flags="589830" fragments="1" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.movePackages" stamp="1698808072548" version="1.0"/>
-</session>
