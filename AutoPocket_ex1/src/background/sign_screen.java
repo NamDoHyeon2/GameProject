@@ -19,7 +19,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class sign_screen {
-
+	
+	public int PK;
 	public JFrame signupFrame;
 
 	/**
@@ -89,9 +90,9 @@ public class sign_screen {
 				boolean duplicate = false;
 				try {
 				Class.forName("oracle.jdbc.OracleDriver");
-				String url = "jdbc:oracle:thin:@localhost:1521:xe";
-				String user = "Scott";
-				String password = "scott";
+				String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
+				String user = "JUNG";
+				String password = "1234";
 
 				Connection connection = DriverManager.getConnection(url, user, password);
 				String sql = "SELECT * FROM USER_INFO WHERE LOGIN_ID = ?";
@@ -168,9 +169,9 @@ public class sign_screen {
 				boolean duplicate = false;
 				try {
 				Class.forName("oracle.jdbc.OracleDriver");
-				String url = "jdbc:oracle:thin:@localhost:1521:xe";
-				String user = "Scott";
-				String password = "scott";
+				String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
+				String user = "JUNG";
+				String password = "1234";
 
 				Connection connection = DriverManager.getConnection(url, user, password);
 				String sql = "SELECT * FROM USER_INFO WHERE USER_NAME = ?";
@@ -215,9 +216,9 @@ public class sign_screen {
 
 			    try {
 			        Class.forName("oracle.jdbc.OracleDriver");
-			        String url = "jdbc:oracle:thin:@localhost:1521:xe";
-			        String user = "Scott";
-			        String password = "scott";
+			        String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
+			        String user = "JUNG";
+			        String password = "1234";
 
 			        Connection connection = DriverManager.getConnection(url, user, password);
 			        String sql = "SELECT LOGIN_ID, USER_NAME FROM USER_INFO";

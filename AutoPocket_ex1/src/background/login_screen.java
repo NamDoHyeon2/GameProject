@@ -27,6 +27,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -35,16 +36,29 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 public class login_screen {
- 
-    private JFrame frmAutoPockmon;
+	
+
+	public JPanel loginPanel;
+	public static Music backgroundMusic;
+    public JFrame frmAutoPockmon;
     private JTextField textField;
     private JPasswordField passwordField;
-    private JPanel loginPanel;
-    private JPanel mainloginPanel;
-    private JPanel PocketImg;
-    private JPanel titleImg;
- 
-    public static void main(String[] args) {
+    public JPanel mainloginPanel;
+    public JPanel PocketImg;
+    public JPanel titleImg;
+	private int pk;
+	
+    public int getPk() {
+		return pk;
+	}
+
+	public void setPk(int pk) {
+		this.pk = pk;
+	}
+
+    
+    
+	public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -62,10 +76,16 @@ public class login_screen {
     }
 
     private void initialize() {
+    	help_screen hs = new help_screen();
+    	option_screen os = new option_screen();
+    	Placement_Screen ps = new Placement_Screen();
+    	os.initialize();
+    	
         frmAutoPockmon = new JFrame();
         frmAutoPockmon.setTitle("Auto Pockmon\r\n");
         frmAutoPockmon.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frmAutoPockmon.setUndecorated(true);
+        
 
         loginPanel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\login_background.png").getImage());
         mainloginPanel= new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\main2.png").getImage());
@@ -73,7 +93,7 @@ public class login_screen {
         titleImg = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\Title2.png").getImage());
         ImageIcon startImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\start.png");
         ImageIcon signupImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\signup.png");
-        ImageIcon exitImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\exit3.png");
+        ImageIcon exitImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\exit.png");
        
         titleImg.setLocation(428, 10);
         PocketImg.setLocation(438, 170);
@@ -103,11 +123,14 @@ public class login_screen {
         mainloginPanel.add(signupbutton);
         JButton exitbutton = new JButton(exitImg);
         exitbutton.setForeground(new Color(30, 144, 255));
+        exitbutton.setBorderPainted(false); 
+        exitbutton.setContentAreaFilled(false);
         exitbutton.addActionListener(new ActionListener(){
         	
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
+				backgroundMusic.close();
 				
 			}
         	
@@ -115,18 +138,10 @@ public class login_screen {
         JButton startbutton = new JButton(startImg);
         startbutton.setSize(293, 102);
         startbutton.setLocation(43, 310);
-        startbutton.addActionListener(new ActionListener(){
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				loginstart();
-				
-			}
-        	
-        });
         mainloginPanel.add(startbutton);
-        exitbutton.setSize(50, 50);
-        exitbutton.setLocation(1860, 10);
+        exitbutton.setSize(84, 84);
+        exitbutton.setLocation(1836, 0);
         exitbutton.setBorderPainted(false);
         loginPanel.add(exitbutton);
         
@@ -151,21 +166,109 @@ public class login_screen {
         passwordField.setBounds(249, 204, 385, 55);
         mainloginPanel.add(passwordField);
         
+        main_screen ms = new main_screen(getPk());
+        frmAutoPockmon.add(ms.loginImg);
+        ms.loginImg.setVisible(false);
+        startbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	String id = textField.getText();
+                String pass = new String(passwordField.getPassword());
+                
+                Account login_check = new Account();
+
+                login_check.setLogin_id(id);
+                login_check.setLogin_password(pass);
+
+                if (login_check.login()) {
+                	pk = login_check.pknum(id, pass);
+                	setPk(pk);
+                    loginPanel.setVisible(false);
+                    ms.loginImg.setVisible(true);
+                    ms.nicknameLabel.setText(login_check.getNickname(pk));
+                } 
+            }
+        });
+        
+        frmAutoPockmon.add(os.optionImg);
+        os.optionImg.setVisible(false);
+        frmAutoPockmon.add(hs.helpImg);
+        hs.helpImg.setVisible(false);
+        frmAutoPockmon.add(ps.placementbackground);
+        ps.placementbackground.setVisible(false);
+        
+        if (backgroundMusic == null) { // À½¾Ç
+            backgroundMusic = new Music("backgroundsound.wav", true);
+            backgroundMusic.play();
+        }
+        
+        ms.optionButton.addActionListener(new ActionListener() {
+        	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				ms.loginImg.setVisible(false);
+				
+				os.optionImg.setVisible(true);
+				
+				os.pknumber.setText("È¸¿ø¹øÈ£ : " + getPk());
+				os.exitBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						os.optionImg.setVisible(false);
+						ms.loginImg.setVisible(true);
+					}
+					
+				});
+				
+				os.accountDeleteBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Account ac = new Account();
+						ac.accountDelete(getPk());
+						os.optionImg.setVisible(false);
+						loginPanel.setVisible(true);
+						textField.setText("");
+						passwordField.setText("");
+						
+					}
+			    	
+			    });
+				
+				os.logoutBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						os.optionImg.setVisible(false);
+						loginPanel.setVisible(true);
+						System.out.println("·Î±×¾Æ¿ô ÇÏ¼Ì½À´Ï´Ù.");
+						textField.setText("");
+						passwordField.setText("");
+					}
+			    	
+			    });
+			}
+			
+        });
+        
+        ms.playButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ms.loginImg.setVisible(false);
+				ps.placementbackground.setVisible(true);
+			}
+        	
+        });
+        
+        
+        
         frmAutoPockmon.getContentPane().add(loginPanel);
         frmAutoPockmon.pack();
            
     }
-    
-    private void loginstart() {
-        String id = textField.getText();
-        String pass = new String(passwordField.getPassword());
-       
-        Account login_check = new Account();
-        login_check.setLogin_id(id);
-        login_check.setLogin_password(pass);
-        if(login_check.login() == true) {
-        	main_screen ms = new main_screen();
-        	frmAutoPockmon.dispose();
-        }
-    }
 }
+
