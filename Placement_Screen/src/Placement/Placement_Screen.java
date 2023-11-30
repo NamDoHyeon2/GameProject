@@ -18,7 +18,7 @@ public class Placement_Screen extends JFrame {
 	private int life = 10; // 목숨
 	private int coin = 100; // 코인
 	private int badge = 0; // 뱃지
-	private int turnNum = 1;// 턴 수
+	private int turnNum = 6;// 턴 수
 	Random random = new Random();
 	private JPanel contentPane;
 	private LinkedList<Pokemon> shopPokemon;
@@ -760,6 +760,9 @@ public class Placement_Screen extends JFrame {
 				return;
 			}
 		} else { // 배치구역에 포켓몬이 없으면 구매성공
+			if (is3Grade(shopPlaceNum) && findPokemonNum(53) != -1) {
+				use53Ability(findPokemonNum(53));
+			}
 			placePokemon.set(myPlaceNum, shopPokemon.get(shopPlaceNum));
 			place_pokemon_panel.get(myPlaceNum).set_Lv(shop_pokemon_panel.get(shopPlaceNum).get_LV());
 			place_pokemon_panel.get(myPlaceNum).set_exp(shop_pokemon_panel.get(shopPlaceNum).get_exp());
@@ -786,14 +789,6 @@ public class Placement_Screen extends JFrame {
 			select_place_pokemon = null;
 			select_shop_pokemon = null; // 상점 선택 초기화
 			select_place = null; // 위치 선택 초기화
-
-			if (is3Grade(shopPlaceNum) && findPokemonNum(53) != -1) {
-				use53Ability(findPokemonNum(53));
-			}
-			placePokemon.set(myPlaceNum, shopPokemon.get(shopPlaceNum));
-			shopPokemon.set(shopPlaceNum, null);
-			frozenPokemonNum[shopPlaceNum] = false;
-			System.out.println("구매 성공");
 			buyAbility(myPlaceNum);
 			coin = coin - 3;
 			return;
@@ -973,7 +968,7 @@ public class Placement_Screen extends JFrame {
 					placeHealthAdjust(placeNum + 1, abilityNum);
 					placePowerAdjust(placeNum + 1, abilityNum);
 				}
-				if (placePokemon.get(placeNum - 1) == null) {
+				if (placePokemon.get(placeNum - 1) != null) {
 					placeHealthAdjust(placeNum - 1, abilityNum);
 					placePowerAdjust(placeNum - 1, abilityNum);
 				}
@@ -1007,7 +1002,7 @@ public class Placement_Screen extends JFrame {
 			int adjustNum = placePokemon.get(lowPowerPlaceNum).getPower();
 			if (lv == 2) {
 				adjustNum = adjustNum * 15 / 10;
-			} else {
+			} else if (lv == 3) {
 				adjustNum = adjustNum * 2;
 			}
 			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
@@ -1039,19 +1034,13 @@ public class Placement_Screen extends JFrame {
 				}
 			} else {
 				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
-				if (placePokemon.get(placeNum + 1) == null) {
-					return;
-				} else {
+				if (placePokemon.get(placeNum + 1) != null) {
 					placePowerAdjust(placeNum + 1, abilityNum);
 				}
-				if (placeNum == 4) {
-					if (placePokemon.get(placeNum - 1) == null) {
-						return;
-					} else {
-						placePowerAdjust(placeNum - 1, abilityNum);
-						return;
-					}
+				if (placePokemon.get(placeNum - 1) != null) {
+					placePowerAdjust(placeNum - 1, abilityNum);
 				}
+				return;
 			}
 		}
 		case 48: { // 구매 시 랜덤한 아군에게 공격력, 체력 3 증가
@@ -1274,16 +1263,15 @@ public class Placement_Screen extends JFrame {
 			coin = coin + placePokemon.get(placeNum).getLv();
 			sellAbility(placeNum);
 			placePokemon.set(placeNum, null);
-			place_pokemon_panel.get(placeNum).setVisible(false);
-			select_place_pokemon = null;
-			status_panel.set_coin_num(coin);
-
 			if (effectNum[placeNum] == 3) {
 				coin++;
 				System.out.println("<<< 아이템 효과로 코인 +1 >>>");
 			}
 			effectNum[placeNum] = 0;
 			System.out.println("<<<판매 성공>>>");
+			place_pokemon_panel.get(placeNum).setVisible(false);
+			select_place_pokemon = null;
+			status_panel.set_coin_num(coin);
 			return;
 		}
 	}
@@ -1295,7 +1283,7 @@ public class Placement_Screen extends JFrame {
 			int adjustNum = lv;
 			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 			for (int i = 1; i < 5; i++) {
-				if (placePokemon.get(i) != null && i + 1 != placeNum) {
+				if (placePokemon.get(i) != null && i != placeNum) {
 					placeHealthAdjust(i, adjustNum);
 				}
 			}
@@ -1388,35 +1376,30 @@ public class Placement_Screen extends JFrame {
 			int remainNum = checkRemainNum();
 			if (itemNum == 8) {
 				if (remainNum < 3) {
-					select_item = null;
-					select_place_pokemon.no_check();
 					System.out.println("<<< 아이템을 쓰기에는 포켓몬이 적습니다! >>>");
-					return;
 				}
-			}
-			if (itemNum == 3 && itemNum == 4 && itemNum == 6 && itemNum == 14) {
+			} else if (itemNum == 3 || itemNum == 4 || itemNum == 6 || itemNum == 14) {
 				if (remainNum < 2) {
-					select_item = null;
-					select_place_pokemon.no_check();
 					System.out.println("<<< 아이템을 쓰기에는 포켓몬이 적습니다! >>>");
-					return;
+				}
+			} else {
+				System.out.println("<<<구매 성공>>>");
+				coin = coin - 3;
+				buyItemAbility(shopPlaceNum, myPlaceNum);
+				status_panel.set_coin_num(coin);
+				item.set(shopPlaceNum, null);
+				item_panel.get(shopPlaceNum).setVisible(false);
+				frozenItemNum[shopPlaceNum] = false;
+				int num = findPokemonNum(36);
+				if (num != -1) { // 아이템 사용 시 공격력, 체력 1, 2, 3 증가
+					int adjustNum = placePokemon.get(num).getLv();
+					placeHealthAdjust(num, adjustNum);
+					placePowerAdjust(num, adjustNum);
 				}
 			}
-			buyItemAbility(shopPlaceNum, myPlaceNum);
-			item.set(shopPlaceNum, null);
-			item_panel.get(shopPlaceNum).setVisible(false);
-			select_item = null;
+			select_item.no_check();
 			select_place_pokemon.no_check();
-			frozenItemNum[shopPlaceNum] = false;
-			System.out.println("<<<구매 성공>>>");
-			coin = coin - 3;
-			status_panel.set_coin_num(coin);
-			int num = findPokemonNum(36);
-			if (num != -1) { // 아이템 사용 시 공격력, 체력 1, 2, 3 증가
-				int adjustNum = placePokemon.get(num).getLv();
-				placeHealthAdjust(num, adjustNum);
-				placePowerAdjust(num, adjustNum);
-			}
+			select_item = null;
 			return;
 		}
 	}
@@ -1553,8 +1536,8 @@ public class Placement_Screen extends JFrame {
 			effectNum[placeNum] = 1;
 			break;
 		}
-		case 12: { // 코인 + 1
-			this.coin++;
+		case 12: { // 코인 + 5
+			this.coin += 5;
 			break;
 		}
 		case 13: { // 체력 2 증가
@@ -1622,12 +1605,11 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 19: { // 50% 확률로 코인 2 증가
+		case 19: { // 50% 확률로 코인 7 증가
 			int rNum = random.nextInt(2);
 			if (rNum == 1) {
 				System.out.println("<<< 성공! >>>");
-				this.coin++;
-				this.coin++;
+				this.coin += 7;
 				break;
 			} else {
 				System.out.println("<<< 실패! >>> ");
@@ -1640,6 +1622,7 @@ public class Placement_Screen extends JFrame {
 		}
 		case 21: { // 경험치 1 증가
 			placePokemon.get(placeNum).setExp(placePokemon.get(placeNum).getExp() + 1);
+			isRankup(placeNum);
 			break;
 		}
 		case 22: { // 3/3 증가
@@ -1647,9 +1630,8 @@ public class Placement_Screen extends JFrame {
 			placeHealthAdjust(placeNum, 3 + plusNum);
 			break;
 		}
-		case 23: { // 코인 + 2
-			this.coin++;
-			this.coin++;
+		case 23: { // 코인 + 6
+			this.coin += 6;
 			break;
 		}
 		case 24: { // 대결에 승리 시 코인 2, 패배 시 1 증가 000000000000
