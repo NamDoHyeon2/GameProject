@@ -407,7 +407,7 @@ public class Placement_Screen extends JFrame {
 					}
 					// 아이템 사용 이벤트
 					if (select_item != null && select_place_pokemon != null) {
-						if (coin > 3) {
+						if (coin >= 3) {
 							shop_item_buy(select_item.getItemLocation(), select_place_pokemon.get_location_num());
 							select_item = null;
 							select_place_pokemon = null;
@@ -796,7 +796,7 @@ public class Placement_Screen extends JFrame {
 	}
 
 	boolean is3Grade(int shopPlaceNum) { // 구매한 포켓몬이 3등급 이면 true
-		if (shopPokemon.get(shopPlaceNum).getGrade() == 3) {
+		if (shopPokemon.get(shopPlaceNum).getGrade() <= 3) {
 			return true;
 		}
 		return false;
@@ -1377,25 +1377,32 @@ public class Placement_Screen extends JFrame {
 			if (itemNum == 8) {
 				if (remainNum < 3) {
 					System.out.println("<<< 아이템을 쓰기에는 포켓몬이 적습니다! >>>");
+					select_item.no_check();
+					select_place_pokemon.no_check();
+					select_item = null;
+					return;
 				}
 			} else if (itemNum == 3 || itemNum == 4 || itemNum == 6 || itemNum == 14) {
 				if (remainNum < 2) {
 					System.out.println("<<< 아이템을 쓰기에는 포켓몬이 적습니다! >>>");
+					select_item.no_check();
+					select_place_pokemon.no_check();
+					select_item = null;
+					return;
 				}
-			} else {
-				System.out.println("<<<구매 성공>>>");
-				coin = coin - 3;
-				buyItemAbility(shopPlaceNum, myPlaceNum);
-				status_panel.set_coin_num(coin);
-				item.set(shopPlaceNum, null);
-				item_panel.get(shopPlaceNum).setVisible(false);
-				frozenItemNum[shopPlaceNum] = false;
-				int num = findPokemonNum(36);
-				if (num != -1) { // 아이템 사용 시 공격력, 체력 1, 2, 3 증가
-					int adjustNum = placePokemon.get(num).getLv();
-					placeHealthAdjust(num, adjustNum);
-					placePowerAdjust(num, adjustNum);
-				}
+			}
+			System.out.println("<<<구매 성공>>>");
+			coin = coin - 3;
+			buyItemAbility(shopPlaceNum, myPlaceNum);
+			status_panel.set_coin_num(coin);
+			item.set(shopPlaceNum, null);
+			item_panel.get(shopPlaceNum).setVisible(false);
+			frozenItemNum[shopPlaceNum] = false;
+			int num = findPokemonNum(36);
+			if (num != -1) { // 아이템 사용 시 공격력, 체력 1, 2, 3 증가
+				int adjustNum = placePokemon.get(num).getLv();
+				placeHealthAdjust(num, adjustNum);
+				placePowerAdjust(num, adjustNum);
 			}
 			select_item.no_check();
 			select_place_pokemon.no_check();
