@@ -89,7 +89,7 @@ public class Placement {
                         toBattle.set(i, null);
                 }
 
-                battle b = new battle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
+                Battle b = new Battle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
                         toBattle.get(4), effectNum);
                 int resultNum = b.run();
                 if (resultNum == -1) {
