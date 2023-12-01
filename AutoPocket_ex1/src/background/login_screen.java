@@ -22,6 +22,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -263,6 +265,36 @@ public class login_screen {
 			}
         	
         });
+        
+        ps.next_btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+		        
+				
+		        for (int i = 0; i < 5; i++) {
+		            if (ps.placePokemon.get(i) != null) {
+		                int pokemonNum = ps.placePokemon.get(i).getPokemonNum();
+		                int Lv = ps.placePokemon.get(i).getLv();
+		                int exp = ps.placePokemon.get(i).getExp();
+		                String name = ps.placePokemon.get(i).getName();
+		                String type = ps.placePokemon.get(i).getType();
+		                int grade = ps.placePokemon.get(i).getGrade();
+		                int health = ps.placePokemon.get(i).getHealth();
+		                int power = ps.placePokemon.get(i).getPower();
+		                String ability = ps.placePokemon.get(i).getAbility();
+		                Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
+		                ps.toBattle.set(i, p);
+		            } else
+		                ps.toBattle.set(i, null);
+		        }
+		        
+		        StartBattle battle_screen = new StartBattle(ps.turnNum, ps.toBattle.get(0), ps.toBattle.get(1), ps.toBattle.get(2), ps.toBattle.get(3),
+		                ps.toBattle.get(4), ps.effectNum);		        
+		        frmAutoPockmon.add(battle_screen);
+		        ps.placementbackground.setVisible(false);
+		        battle_screen.setVisible(true);
+			}
+		});
         
         
         

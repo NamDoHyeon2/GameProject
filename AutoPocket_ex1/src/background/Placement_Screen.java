@@ -15,18 +15,18 @@ import javax.swing.border.EmptyBorder;
 public class Placement_Screen extends JFrame {
 	
 	int effectNum[] = { 0, 0, 0, 0, 0 };
-	private int life = 10; // ëª©ìˆ¨
-	private int coin = 100; // ì½”ì¸
-	private int badge = 0; // ë±ƒì?
-	private int turnNum = 1;// ?„´ ?ˆ˜
+	private int life = 10; // ï§â‘¹ë‹²
+	private int coin = 100; // è‚„ë¶¿ì”¤
+	private int badge = 0; // è«­ê»‹ï¿½
+	public int turnNum = 1;// ï¿½ê½© ï¿½ë‹”
 	Random random = new Random();
 	private JPanel contentPane;
 	private LinkedList<Pokemon> shopPokemon;
-	private LinkedList<Obj_Panel2> shop_pokemon_panel; //?ƒ?  ?Œ¨?„?„ ???¥?•˜ê³? ?ˆ?Œ
-	private Obj_Panel2 select_shop_pokemon; //?ƒ? ?—?„œ ?„ ?ƒ?•œ ?Œ¨?„?„ ???¥?•¨
-	private LinkedList<Place_Area2> place_area_panel; //ë°°ì¹˜ ?Œ¨?„?„ ???¥?•˜ê³? ?ˆ?Œ
-	private Place_Area2 select_place; //?„ ?ƒ ?•œ ë°°ì¹˜ ?Œ¨?„?„ ê°?ì§?ê³ ìˆ?Œ
-	private LinkedList<Obj_Panel2> place_pokemon_panel; //ë°°ì¹˜?— ?œ„ì¹˜í•œ ?¬ì¼“ëª¬ ?Œ¨?„?„ ê°?ì§?ê³ ìˆ?Œ
+	private LinkedList<Obj_Panel2> shop_pokemon_panel; //ï¿½ê¸½ï¿½ì  ï¿½ë™£ï¿½ê¼¸ï¿½ì“£ ï¿½ï¿½ï¿½ì˜£ï¿½ë¸¯æ€¨ï¿½ ï¿½ì—³ï¿½ì“¬
+	private Obj_Panel2 select_shop_pokemon; //ï¿½ê¸½ï¿½ì ï¿½ë¿‰ï¿½ê½Œ ï¿½ê½‘ï¿½ê¹®ï¿½ë¸³ ï¿½ë™£ï¿½ê¼¸ï¿½ì“£ ï¿½ï¿½ï¿½ì˜£ï¿½ë¸¿
+	private LinkedList<Place_Area2> place_area_panel; //è«›ê³—íŠ‚ ï¿½ë™£ï¿½ê¼¸ï¿½ì“£ ï¿½ï¿½ï¿½ì˜£ï¿½ë¸¯æ€¨ï¿½ ï¿½ì—³ï¿½ì“¬
+	private Place_Area2 select_place; //ï¿½ê½‘ï¿½ê¹® ï¿½ë¸³ è«›ê³—íŠ‚ ï¿½ë™£ï¿½ê¼¸ï¿½ì“£ åª›ï¿½ï§ï¿½æ€¨ì¢ì—³ï¿½ì“¬
+	private LinkedList<Obj_Panel2> place_pokemon_panel; //è«›ê³—íŠ‚ï¿½ë¿‰ ï¿½ìç§»ì„‘ë¸³ ï¿½ë£·è€³ë³¥ãŒ ï¿½ë™£ï¿½ê¼¸ï¿½ì“£ åª›ï¿½ï§ï¿½æ€¨ì¢ì—³ï¿½ì“¬
 	private Obj_Panel2 select_place_pokemon; 
 	public LinkedList<Pokemon> placePokemon;
 	private LinkedList<Pokemon> forReplace;
@@ -34,12 +34,15 @@ public class Placement_Screen extends JFrame {
 	setPokemon s = new setPokemon();
 	private LinkedList<item> item;
 	private LinkedList<Item_Panel> item_panel;
+	public LinkedList<Pokemon> toBattle;
 	setItem t = new setItem();
-	boolean frozenPokemonNum[] = { false, false, false, false, false }; // ?ƒ?  ?¬ì¼“ëª¬ ?–¼ë¦¬ê¸° ?„¤? •
-	boolean frozenItemNum[] = { false, false };// ?•„?´?…œ ?–¼ë¦¬ê¸°
+	boolean frozenPokemonNum[] = { false, false, false, false, false }; // ï¿½ê¸½ï¿½ì  ï¿½ë£·è€³ë³¥ãŒ ï¿½ë¼¹ç”±Ñˆë¦° ï¿½ê½•ï¿½ì ™
+	boolean frozenItemNum[] = { false, false };// ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ ï¿½ë¼¹ç”±Ñˆë¦°
 	public ImagePanel placementbackground = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\placement_background.png").getImage());
 	private Item_Panel select_item;
 	boolean item24Effect = false;
+	private StartBattle battle_screen;
+	public ImagePanel next_btn;
 	/**
 	 * Launch the application.
 	 */
@@ -60,12 +63,11 @@ public class Placement_Screen extends JFrame {
 	 * Create the frame.
 	 */
 	public Placement_Screen() {
-		
 		placementbackground.setBounds(0, 0, 1920, 1080);
 		placementbackground.setBackground(new Color(255,255,255));
 		placementbackground.setLayout(null);
 		
-		
+		this.toBattle = new LinkedList<>();
 		this.shopPokemon = new LinkedList<>();
 		this.placePokemon = new LinkedList<>();
 		this.forReplace = new LinkedList<>();
@@ -80,13 +82,12 @@ public class Placement_Screen extends JFrame {
 		
 	}
 	
-	public void panel_setting() { //?ƒ?  ?¬ì¼“ëª¬ ì´ˆê¸°?„¤? •
+	public void panel_setting() { //ï¿½ê¸½ï¿½ì  ï¿½ë£·è€³ë³¥ãŒ ç¥ë‡ë¦°ï¿½ê½•ï¿½ì ™
 		
-			
 		//---------------Item_1_panel------------------//
 		Item_Panel item1 = new Item_Panel();
 		ImagePanel item_location_1 = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\select_location.png").getImage());
-		item1.setBounds(1325, 625, 409, 245);
+		item1.setBounds(1325, 600, 409, 245);
 		item_location_1.setBounds(1328, 780, 184, 110);
 		placementbackground.add(item1);
 		placementbackground.add(item_location_1);
@@ -96,7 +97,7 @@ public class Placement_Screen extends JFrame {
 		//---------------Item_2_panel------------------//
 		Item_Panel item2 = new Item_Panel();
 		ImagePanel item_location_2 = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\select_location.png").getImage());
-		item2.setBounds(1564, 625, 356, 245);
+		item2.setBounds(1564, 600, 356, 245);
 		item_location_2.setBounds(1570, 780, 184, 110);
 		placementbackground.add(item2);
 		placementbackground.add(item_location_2);
@@ -111,31 +112,28 @@ public class Placement_Screen extends JFrame {
 			Obj_Panel2 shop_obj_1 = new Obj_Panel2();
 			placementbackground.add(shop_obj_1);
 			shop_pokemon_panel.add(0, shop_obj_1);
-			shop_obj_1.setBounds(161, 566, 486, 340);
-			shop_obj_1.setVisible(false); //?””?´?Š¸?Š” ?•ˆë³´ì´ê²?
+			shop_obj_1.setVisible(false); //ï¿½ëµ’ï¿½ë¤ƒï¿½ë“ƒï¿½ë’— ï¿½ë¸è¹‚ëŒì” å¯ƒï¿½
 				
 			Obj_Panel2 shop_obj_2 = new Obj_Panel2();
+			shop_obj_2.setLocation(373, 566);
 			placementbackground.add(shop_obj_2);
-			shop_obj_2.setBounds(373, 566, 486, 340);
 			shop_pokemon_panel.add(1, shop_obj_2);
 			shop_obj_2.setVisible(false);
 				
 			Obj_Panel2 shop_obj_3 = new Obj_Panel2();
-			
+			shop_obj_3.setLocation(585, 566);
 			placementbackground.add(shop_obj_3);
 			shop_pokemon_panel.add(2, shop_obj_3);
-			shop_obj_3.setBounds(585, 566, 486, 340);
 			shop_obj_3.setVisible(false);
 				
 			Obj_Panel2 shop_obj_4 = new Obj_Panel2();
-			
+			shop_obj_4.setLocation(797, 566);
 			placementbackground.add(shop_obj_4);
 			shop_pokemon_panel.add(3, shop_obj_4);
-			shop_obj_4.setBounds(797, 566, 486, 340);
 			shop_obj_4.setVisible(false);
 				
 			Obj_Panel2 shop_obj_5 = new Obj_Panel2();
-			shop_obj_5.setBounds(1008, 566, 486, 340);
+			shop_obj_5.setLocation(1009, 566);
 			placementbackground.add(shop_obj_5);
 			shop_pokemon_panel.add(4, shop_obj_5);
 			shop_obj_5.setVisible(false);
@@ -222,19 +220,19 @@ public class Placement_Screen extends JFrame {
 		//-------------------------------------------//	
 		
 		//---------------next_panel------------------//
-		ImagePanel next_btn = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\next_btn.png").getImage());
+		next_btn = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\next_btn.png").getImage());
 		next_btn.setLocation(1663, 911);
 		placementbackground.add(next_btn);
 		next_btn.setLocation(1663, 911);
 		//-------------------------------------------//	
 		
 		//---------------next_panel------------------//
-		ImagePanel sell_btn = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\sell.png").getImage());
+		ImagePanel sell_btn = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\sell_1.png").getImage());
 		sell_btn.setBounds(1259, 916, 300, 145);
 		placementbackground.add(sell_btn);
 		
 		
-		//item 1ë²ˆì§¸ ?„ ?ƒ?‹œ
+		//item 1è¸°ë‰ã ï¿½ê½‘ï¿½ê¹®ï¿½ë–†
 		item1.get_item_panel().addMouseListener(new MouseAdapter() {
 	        @Override
 	        public void mouseClicked(MouseEvent e) {
@@ -248,7 +246,7 @@ public class Placement_Screen extends JFrame {
 	        	}
 	        }
 	    });
-		//?•„?´?…œ ?„¤ëª?
+		//ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ ï¿½ê½•ï§ï¿½
 		item1.get_item_panel().addMouseListener(new MouseAdapter() {
 			
 			public void mouseEntered(MouseEvent e) {
@@ -261,7 +259,7 @@ public class Placement_Screen extends JFrame {
 		
 		 });
 		
-		//item 2ë²ˆì§¸ ?„ ?ƒ?‹œ
+		//item 2è¸°ë‰ã ï¿½ê½‘ï¿½ê¹®ï¿½ë–†
 		item2.get_item_panel().addMouseListener(new MouseAdapter() {
 	        @Override
 	        public void mouseClicked(MouseEvent e) {
@@ -326,19 +324,38 @@ public class Placement_Screen extends JFrame {
 		    });
 		}
 		
-		//ê²Œì„ ?™”ë©? ì§„í–‰
+		//å¯ƒëš¯ì—« ï¿½ì†•ï§ï¿½ ï§ê¾ªë»¾
 		next_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				shop_reroll();
-				coin = 10;
-				turnNum++;
-				status_panel.set_coin_num(coin);
-				System.out.println("?„´?„˜?–´ê°”ë‹¤?‰");
+		        
+				//è«›ê³ ï¿½ï¿½ë–†ï¿½ì˜‰
+		        for (int i = 0; i < 5; i++) {
+		            if (placePokemon.get(i) != null) {
+		                int pokemonNum = placePokemon.get(i).getPokemonNum();
+		                int Lv = placePokemon.get(i).getLv();
+		                int exp = placePokemon.get(i).getExp();
+		                String name = placePokemon.get(i).getName();
+		                String type = placePokemon.get(i).getType();
+		                int grade = placePokemon.get(i).getGrade();
+		                int health = placePokemon.get(i).getHealth();
+		                int power = placePokemon.get(i).getPower();
+		                String ability = placePokemon.get(i).getAbility();
+		                Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
+		                toBattle.set(i, p);
+		            } else
+		                toBattle.set(i, null);
+		        }
+		        
+		        StartBattle battle_screen = new StartBattle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
+		                toBattle.get(4), effectNum);		        
+		        getContentPane().add(battle_screen);
+		        placementbackground.setVisible(false);
+		        battle_screen.setVisible(true);
 			}
 		});
 			
-		//?ƒ?  ?¬ì¼“ëª¬ ?•˜?‚˜ë§? ?„ ?ƒ?˜ê²? ?•˜ê³? ?„ ?ƒ?•œ ê°ì²´ë¥? ???¥?•¨
+		//ï¿½ê¸½ï¿½ì  ï¿½ë£·è€³ë³¥ãŒ ï¿½ë¸¯ï¿½êµ¹ï§ï¿½ ï¿½ê½‘ï¿½ê¹®ï¿½ë¦ºå¯ƒï¿½ ï¿½ë¸¯æ€¨ï¿½ ï¿½ê½‘ï¿½ê¹®ï¿½ë¸³ åª›ì•¹ê»œç‘œï¿½ ï¿½ï¿½ï¿½ì˜£ï¿½ë¸¿
 		for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
 			shop_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
 		        @Override
@@ -347,7 +364,7 @@ public class Placement_Screen extends JFrame {
 		        }
 		    });
 		}
-		 //ë°°ì¹˜êµ¬ì—­?— ?ˆ?Š” ?¬ì¼“ëª¬?˜ ?™?‘?„ ?•¨(ê²½í—˜ì¹? ì¦ê? ?´ë²¤íŠ¸)
+		 //è«›ê³—íŠ‚æ´ÑŠë¿­ï¿½ë¿‰ ï¿½ì—³ï¿½ë’— ï¿½ë£·è€³ë³¥ãŒï¿½ì“½ ï¿½ë£ï¿½ì˜‰ï¿½ì“£ ï¿½ë¸¿(å¯ƒì€ë¿•ç§»ï¿½ ï§ì•·ï¿½ ï¿½ì” è¸°ã…½ë“ƒ)
 		 for (Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
 			 place_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
 			        @Override
@@ -363,13 +380,13 @@ public class Placement_Screen extends JFrame {
 							        coin = coin - 3;
 							        status_panel.set_coin_num(coin);
 				        		}else {
-				        			System.out.println("ì½”ì¸?´ ë¶?ì¡±í•©?‹ˆ?‹¤.");
+				        			System.out.println("è‚„ë¶¿ì”¤ï¿½ì”  éºï¿½è­°ê¹Šë¹€ï¿½ë•²ï¿½ë–.");
 				        		}
 				        	}else {
-				        		System.out.println("?¬ì¼“ëª¬ ? ˆë²¨ì—… ?• ? ¤?Š”ê±? ?•„?‹˜");
+				        		System.out.println("ï¿½ë£·è€³ë³¥ãŒ ï¿½ì …è¸°â‘¥ë¾½ ï¿½ë¸·ï¿½ì ®ï¿½ë’—å«„ï¿½ ï¿½ë¸˜ï¿½ë–‚");
 				        	}
 			        	}
-			        	//?•„?´?…œ ?‚¬?š© ?´ë²¤íŠ¸
+			        	//ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ ï¿½ê¶—ï¿½ìŠœ ï¿½ì” è¸°ã…½ë“ƒ
 			        	if(select_item != null && select_place_pokemon != null) {
 			        		if (coin > 3) {
 				        		shop_item_buy(select_item.getItemLocation(), select_place_pokemon.get_location_num());
@@ -381,32 +398,32 @@ public class Placement_Screen extends JFrame {
 			    });
 			}
 		 
-		//ë°°ì¹˜ ?¥?†Œ ?„ ?ƒ?„ ?•˜?‚˜ë°–ì— ?„ ?ƒ?•˜ê²? ?•˜ê³? ?„ ?ƒ?•œ ê°ì²´?˜ ?œ„ì¹˜ë?? ???¥?•¨
+		//è«›ê³—íŠ‚ ï¿½ì˜£ï¿½ëƒ¼ ï¿½ê½‘ï¿½ê¹®ï¿½ì“£ ï¿½ë¸¯ï¿½êµ¹è«›ë½°ë¿‰ ï¿½ê½‘ï¿½ê¹®ï¿½ë¸¯å¯ƒï¿½ ï¿½ë¸¯æ€¨ï¿½ ï¿½ê½‘ï¿½ê¹®ï¿½ë¸³ åª›ì•¹ê»œï¿½ì“½ ï¿½ìç§»ì„ï¿½ï¿½ ï¿½ï¿½ï¿½ì˜£ï¿½ë¸¿
 		 for (Place_Area2 placeArea : place_area_panel) {
 	            placeArea.get_no_select_place_panel().addMouseListener(new MouseAdapter() {
 	                @Override
 	                public void mouseClicked(MouseEvent e) {
 	                    selectPlaceArea(placeArea);
 	                    
-	                    if(select_shop_pokemon != null) { //select_shop_pokemon?— ê°ì²´ ?—†?œ¼ë©? ?ƒ?  êµ¬ë§¤ x //?ƒ?  êµ¬ë§¤
+	                    if(select_shop_pokemon != null) { //select_shop_pokemonï¿½ë¿‰ åª›ì•¹ê»œ ï¿½ë¾¾ï¿½ì‘ï§ï¿½ ï¿½ê¸½ï¿½ì  æ´Ñ‰â„“ x //ï¿½ê¸½ï¿½ì  æ´Ñ‰â„“
 	                    	if(coin >= 3) {
 		                    	int shop_select_location = select_shop_pokemon.get_location_num();  
 			                	int place_select_location = select_place.get_location_num();
 			                	shop_buy(shop_select_location, place_select_location);
 			                	status_panel.set_coin_num(coin);
 	                    	}else {
-	                    		System.out.println("ì½”ì¸?´ ë¶?ì¡±í•©?‹ˆ?‹¤.");
+	                    		System.out.println("è‚„ë¶¿ì”¤ï¿½ì”  éºï¿½è­°ê¹Šë¹€ï¿½ë•²ï¿½ë–.");
 	                    	}
 	                    }else {
-	                    	System.out.println("?¬ì¼“ëª¬?„ êµ¬ë§¤?•˜?Š” ?–‰?™ ?•„?‹˜");
+	                    	System.out.println("ï¿½ë£·è€³ë³¥ãŒï¿½ì“£ æ´Ñ‰â„“ï¿½ë¸¯ï¿½ë’— ï¿½ë»¾ï¿½ë£ ï¿½ë¸˜ï¿½ë–‚");
 	                    }
 		                     
-	                    if(select_place_pokemon != null) { //select_place_pokemon?— ê°ì²´ ?—†?œ¼ë©? ?œ„ì¹? ?´?™ x
-			                int place_select_pokemon = select_place_pokemon.get_location_num(); //?¬ì¼“ëª¬ ?œ„ì¹? ?˜®ê¸°ê¸°
+	                    if(select_place_pokemon != null) { //select_place_pokemonï¿½ë¿‰ åª›ì•¹ê»œ ï¿½ë¾¾ï¿½ì‘ï§ï¿½ ï¿½ìç§»ï¿½ ï¿½ì” ï¿½ë£ x
+			                int place_select_pokemon = select_place_pokemon.get_location_num(); //ï¿½ë£·è€³ë³¥ãŒ ï¿½ìç§»ï¿½ ï¿½ì‚·æ¹²ê³Œë¦°
 			                int place_select = select_place.get_location_num();
 			                place_replace(place_select_pokemon, place_select);
 	                    }else {
-	                    	//System.out.println("?œ„ì¹˜êµ¬?—­?—?„œ ?„ ?ƒ?•œ ?¬ì¼“ëª¬?´ ?—†?Šµ?‹ˆ?‹¤");
+	                    	//System.out.println("ï¿½ìç§»ì„ë„ï¿½ë¿­ï¿½ë¿‰ï¿½ê½Œ ï¿½ê½‘ï¿½ê¹®ï¿½ë¸³ ï¿½ë£·è€³ë³¥ãŒï¿½ì”  ï¿½ë¾¾ï¿½ë’¿ï¿½ë•²ï¿½ë–");
 	                    }
 	                }
 	            });
@@ -419,7 +436,7 @@ public class Placement_Screen extends JFrame {
 	            });
 	        }
 		
-		//ë¦¬ë¡¤ ?´ë¦? ?´ë²¤íŠ¸
+		//ç”±Ñ‰Â· ï¿½ê²¢ç”±ï¿½ ï¿½ì” è¸°ã…½ë“ƒ
 		reroll.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -428,14 +445,14 @@ public class Placement_Screen extends JFrame {
 					coin = coin - 1;
 					status_panel.set_coin_num(coin);
 				}else {
-					System.out.println("ì½”ì¸?´ ë¶?ì¡±í•©?‹ˆ?‹¤");
+					System.out.println("è‚„ë¶¿ì”¤ï¿½ì”  éºï¿½è­°ê¹Šë¹€ï¿½ë•²ï¿½ë–");
 				}
 			}
 		});
 		
 		
 		
-		//?–¼ë¦¬ê¸° ?´ë¦? ?´ë²¤íŠ¸
+		//ï¿½ë¼¹ç”±Ñˆë¦° ï¿½ê²¢ç”±ï¿½ ï¿½ì” è¸°ã…½ë“ƒ
 		frozen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -445,7 +462,7 @@ public class Placement_Screen extends JFrame {
 					pokemon_frozen(shop_select_location);
 					select_shop_pokemon = null;
 				}else {
-					System.out.println("?–¼ë¦¬ê¸° ?–‰?™?•„?‹˜");
+					System.out.println("ï¿½ë¼¹ç”±Ñˆë¦° ï¿½ë»¾ï¿½ë£ï¿½ë¸˜ï¿½ë–‚");
 				}
 				if(select_item != null) {
 					int select_item_location = select_item.getItemLocation();
@@ -458,8 +475,29 @@ public class Placement_Screen extends JFrame {
 	
 	}
 	
+	void startPlacement() { // è«›ê³—íŠ‚ ï¿½ë–’æ€¨ï¿½ ï¿½ë–†ï¿½ì˜‰ ï¿½ë–† æ´Ñ‹ì½
+		shop_reroll();
+		coin = 10;
+		turnNum++;
+	}
 	
-	void settingList() { // ê·¸ëƒ¥ ë¹„ì–´?‘ë©? ?—?Ÿ¬ ?– ?„œ nullë¡? ì§?? • ?•¨
+	int coinUp() {
+		for (Pokemon p : placePokemon) {
+			if (p != null && p.getPokemonNum() == 56) { // ï¿½ï¿½å¯ƒï¿½ ï¿½ë“…ç”±ï¿½ ï¿½ë–† è‚„ë¶¿ì”¤ 1, 2, 3 ï§ì•·ï¿½
+				if (p.getLv() == 1) {
+					return 1;
+				} else if (p.getLv() == 2) {
+					return 2;
+				} else if (p.getLv() == 3) {
+					return 3;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	
+	void settingList() { // æ´¹ëªƒê¹· é®ê¾©ë¼±ï¿½ëª¢ï§ï¿½ ï¿½ë¿‰ï¿½ìœ­ ï¿½ë¼šï¿½ê½Œ nullæ¿¡ï¿½ ï§ï¿½ï¿½ì ™ ï¿½ë¸¿
 		shopPokemon.add(0, null);
 		shopPokemon.add(1, null);
 		shopPokemon.add(2, null);
@@ -472,10 +510,15 @@ public class Placement_Screen extends JFrame {
 		placePokemon.add(4, null);
 		item.add(0, null);
 		item.add(1, null);
+		toBattle.add(0, null);
+		toBattle.add(1, null);
+		toBattle.add(2, null);
+		toBattle.add(3, null);
+		toBattle.add(4, null);
 		
 	}
 	
-	void shop_reroll() { // ?ƒ?  ?¬ì¼“ëª¬ ë¦¬ë¡¤
+	void shop_reroll() { // ï¿½ê¸½ï¿½ì  ï¿½ë£·è€³ë³¥ãŒ ç”±Ñ‰Â·
 		int i = shop_place_num() - 1;
 
 		while (i >= 0) {
@@ -536,7 +579,7 @@ public class Placement_Screen extends JFrame {
 		}
 	}
 	
-	int randomNum() { // ?¬ì¼“ëª¬ ?ˆ˜ ë§Œí¼?˜ ?‚œ?ˆ˜
+	int randomNum() { // ï¿½ë£·è€³ë³¥ãŒ ï¿½ë‹” ï§ëš°ê²®ï¿½ì“½ ï¿½ê¶ƒï¿½ë‹”
 		if(turnNum<=6) {
 			return random.nextInt(turnNum*10) + 1;
 		}else {
@@ -545,7 +588,7 @@ public class Placement_Screen extends JFrame {
 	}
 	
 	
-	int shop_place_num() { // ?ƒ?  ê¸°ë¬¼ ?ˆ˜ë¥? ?œ„?•œ ?•¨?ˆ˜ ?„´?´ ?Š˜?–´ ?‚ ?ˆ˜ë¡? ê°’ì´ ì»¤ì§„?‹¤.
+	int shop_place_num() { // ï¿½ê¸½ï¿½ì  æ¹²ê³•Ğª ï¿½ë‹”ç‘œï¿½ ï¿½ìï¿½ë¸³ ï¿½ë¸¿ï¿½ë‹” ï¿½ê½©ï¿½ì”  ï¿½ë’›ï¿½ë¼± ï¿½ê¶‡ï¿½ë‹”æ¿¡ï¿½ åª›ë¯ªì”  è€Œã…¼ì­Šï¿½ë–.
 		if (turnNum == 1) {
 			return 3;
 		} else if (turnNum <= 3) {
@@ -555,22 +598,22 @@ public class Placement_Screen extends JFrame {
 		}
 	}
 	
-	void shop_show(int shopPlaceNum) { // ?ƒ?  ?¬ì¼“ëª¬ ?™•?¸
-		System.out.println("<<<?ƒ?  êµ¬ì—­ ì¶œë ¥>>>");
+	void shop_show(int shopPlaceNum) { // ï¿½ê¸½ï¿½ì  ï¿½ë£·è€³ë³¥ãŒ ï¿½ì†—ï¿½ì”¤
+		System.out.println("<<<ï¿½ê¸½ï¿½ì  æ´ÑŠë¿­ ç•°ì’•ì °>>>");
 		int i = 0;
 		while (i < shopPlaceNum) {
 			if (shopPokemon.get(i) == null) {
-				System.out.println((i + 1) + "ë²? ë¹„ì–´?ˆ?Œ");
+				System.out.println((i + 1) + "è¸°ï¿½ é®ê¾©ë¼±ï¿½ì—³ï¿½ì“¬");
 			} else if (frozenPokemonNum[i]) {
-				System.out.println((i + 1) + "ë²? ?–¼ë¦?! ?´ë¦? : " + shopPokemon.get(i).getName() + " / ???… : "
-						+ shopPokemon.get(i).getType() + " / ?“±ê¸? : " + shopPokemon.get(i).getGrade() + " / LV : "
-						+ shopPokemon.get(i).getLv() + " / ì²´ë ¥ : " + shopPokemon.get(i).getHealth() + " / ê³µê²©? ¥ : "
-						+ shopPokemon.get(i).getPower() + " / ?Š¥? ¥ : " + shopPokemon.get(i).getAbility());
+				System.out.println((i + 1) + "è¸°ï¿½ ï¿½ë¼¹ç”±ï¿½! ï¿½ì” ç”±ï¿½ : " + shopPokemon.get(i).getName() + " / ï¿½ï¿½ï¿½ì—¯ : "
+						+ shopPokemon.get(i).getType() + " / ï¿½ë²‘æ¹²ï¿½ : " + shopPokemon.get(i).getGrade() + " / LV : "
+						+ shopPokemon.get(i).getLv() + " / ï§£ëŒ€ì ° : " + shopPokemon.get(i).getHealth() + " / æ€¨ë“¦êº½ï¿½ì ° : "
+						+ shopPokemon.get(i).getPower() + " / ï¿½ë’«ï¿½ì ° : " + shopPokemon.get(i).getAbility());
 			} else {
-				System.out.println((i + 1) + "ë²? ?´ë¦? : " + shopPokemon.get(i).getName() + " / ???… : "
-						+ shopPokemon.get(i).getType() + " / ?“±ê¸? : " + shopPokemon.get(i).getGrade() + " / LV : "
-						+ shopPokemon.get(i).getLv() + " / ì²´ë ¥ : " + shopPokemon.get(i).getHealth() + " / ê³µê²©? ¥ : "
-						+ shopPokemon.get(i).getPower() + " / ?Š¥? ¥ : " + shopPokemon.get(i).getAbility());
+				System.out.println((i + 1) + "è¸°ï¿½ ï¿½ì” ç”±ï¿½ : " + shopPokemon.get(i).getName() + " / ï¿½ï¿½ï¿½ì—¯ : "
+						+ shopPokemon.get(i).getType() + " / ï¿½ë²‘æ¹²ï¿½ : " + shopPokemon.get(i).getGrade() + " / LV : "
+						+ shopPokemon.get(i).getLv() + " / ï§£ëŒ€ì ° : " + shopPokemon.get(i).getHealth() + " / æ€¨ë“¦êº½ï¿½ì ° : "
+						+ shopPokemon.get(i).getPower() + " / ï¿½ë’«ï¿½ì ° : " + shopPokemon.get(i).getAbility());
 				
 				/*
 				if(shop_pokemon_panel.get(i).get_pokemon_num() != 0) {
@@ -582,16 +625,16 @@ public class Placement_Screen extends JFrame {
 			i++;
 		}
 	}
-	void shop_select_obj(Obj_Panel2 selectedPanel) { //?•˜?‚˜?˜ ?ƒ?  ?Œ¨?„?„ ?„ ?ƒ?–ˆ?„?•Œ ?‚˜ë¨¸ì? ?ƒ?  ?Œ¨?„?? ì²´í¬ ?•´? œ ?¨
+	void shop_select_obj(Obj_Panel2 selectedPanel) { //ï¿½ë¸¯ï¿½êµ¹ï¿½ì“½ ï¿½ê¸½ï¿½ì  ï¿½ë™£ï¿½ê¼¸ï¿½ì“£ ï¿½ê½‘ï¿½ê¹®ï¿½ë»½ï¿½ì“£ï¿½ë¸£ ï¿½êµ¹ç™’ëª„ï¿½ ï¿½ê¸½ï¿½ì  ï¿½ë™£ï¿½ê¼¸ï¿½ï¿½ ï§£ëŒ„ê²• ï¿½ë¹ï¿½ì £ ï¿½ë§–
 	    for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
 	        if (shop_pokemon_panel.equals(selectedPanel)) {
 	            if (shop_pokemon_panel.ischecked()) {
 	            	shop_pokemon_panel.no_check();
-	                select_shop_pokemon = null; // ?„ ?ƒ ?•´? œ ?‹œ select_shop_pokemon?„ nullë¡? ?„¤? •
+	                select_shop_pokemon = null; // ï¿½ê½‘ï¿½ê¹® ï¿½ë¹ï¿½ì £ ï¿½ë–† select_shop_pokemonï¿½ì“£ nullæ¿¡ï¿½ ï¿½ê½•ï¿½ì ™
 	            } else {
 	            	shop_pokemon_panel.check();
 	                select_shop_pokemon = shop_pokemon_panel;
-	                System.out.println("?ƒ? ?—?„œ ?„ ?ƒ?•œ ?¬ì¼“ëª¬ ?œ„ì¹?" + select_shop_pokemon.get_location_num());
+	                System.out.println("ï¿½ê¸½ï¿½ì ï¿½ë¿‰ï¿½ê½Œ ï¿½ê½‘ï¿½ê¹®ï¿½ë¸³ ï¿½ë£·è€³ë³¥ãŒ ï¿½ìç§»ï¿½" + select_shop_pokemon.get_location_num());
 	            }
 	        } else {
 	            shop_pokemon_panel.no_check();
@@ -604,7 +647,7 @@ public class Placement_Screen extends JFrame {
 	        if (place_pokemon_panel.equals(selectedPanel)) {
 	            if (place_pokemon_panel.ischecked()) {
 	            	place_pokemon_panel.no_check();
-	                select_place_pokemon = null; // ?„ ?ƒ ?•´? œ ?‹œ select_shop_pokemon?„ nullë¡? ?„¤? •
+	                select_place_pokemon = null; // ï¿½ê½‘ï¿½ê¹® ï¿½ë¹ï¿½ì £ ï¿½ë–† select_shop_pokemonï¿½ì“£ nullæ¿¡ï¿½ ï¿½ê½•ï¿½ì ™
 	            } else {
 	                place_pokemon_panel.check();
 	            	if(select_place_pokemon != null) {
@@ -623,7 +666,7 @@ public class Placement_Screen extends JFrame {
 		        		}
 		        	}
 	            	select_place_pokemon = selectedPanel;
-	            	System.out.println("?„ ?ƒ?•œ ë°°ì¹˜êµ¬ì—­ ?¬ì¼“ëª¬ ?œ„ì¹˜ëŠ”" + select_place_pokemon.get_location_num() + "?…?‹ˆ?‹¤.");
+	            	System.out.println("ï¿½ê½‘ï¿½ê¹®ï¿½ë¸³ è«›ê³—íŠ‚æ´ÑŠë¿­ ï¿½ë£·è€³ë³¥ãŒ ï¿½ìç§»ì„ë’—" + select_place_pokemon.get_location_num() + "ï¿½ì—¯ï¿½ë•²ï¿½ë–.");
 	            	
 	            }
 	        } else {
@@ -633,50 +676,50 @@ public class Placement_Screen extends JFrame {
 	}
 
 	
-    private void selectPlaceArea(Place_Area2 placeArea) { //?œ„ì¹˜ë?? ?„ ?ƒ?–ˆ?„?•Œ ì²˜ë¦¬?•´ì£¼ëŠ” ?•¨?ˆ˜
+    private void selectPlaceArea(Place_Area2 placeArea) { //ï¿½ìç§»ì„ï¿½ï¿½ ï¿½ê½‘ï¿½ê¹®ï¿½ë»½ï¿½ì“£ï¿½ë¸£ ï§£ì„â”ï¿½ë¹äºŒì‡°ë’— ï¿½ë¸¿ï¿½ë‹”
         placeArea.check();
         select_place = placeArea;
-        System.out.println("?„ ?ƒ?•œ ë°°ì¹˜ ?œ„ì¹? ë²ˆí˜¸?Š” " + select_place.get_location_num()+ "?…?‹ˆ?‹¤.");
+        System.out.println("ï¿½ê½‘ï¿½ê¹®ï¿½ë¸³ è«›ê³—íŠ‚ ï¿½ìç§»ï¿½ è¸°ëŠìƒ‡ï¿½ë’— " + select_place.get_location_num()+ "ï¿½ì—¯ï¿½ë•²ï¿½ë–.");
     }
 
-    private void deselectPlaceArea(Place_Area2 placeArea) { //?œ„ì¹˜ë¦¬ë¥? ?•´? œ ?–ˆ?„?•Œ ì²˜ë¦¬?•´ì£¼ëŠ” ?•¨?ˆ˜
+    private void deselectPlaceArea(Place_Area2 placeArea) { //ï¿½ìç§»ì„â”ç‘œï¿½ ï¿½ë¹ï¿½ì £ ï¿½ë»½ï¿½ì“£ï¿½ë¸£ ï§£ì„â”ï¿½ë¹äºŒì‡°ë’— ï¿½ë¸¿ï¿½ë‹”
         placeArea.no_check();
         select_place = null;
     }
 	
 
-    void pokemon_frozen(int placeNum) { // ?ƒ?  ?¬ì¼“ëª¬ ?–¼ë¦¬ê¸°
+    void pokemon_frozen(int placeNum) { // ï¿½ê¸½ï¿½ì  ï¿½ë£·è€³ë³¥ãŒ ï¿½ë¼¹ç”±Ñˆë¦°
         if (!validationShopPokemonNum(placeNum)) {
-            System.out.println("<<<?…? ¥ ?˜¤ë¥?>>>");
+            System.out.println("<<<ï¿½ì—¯ï¿½ì ° ï¿½ì‚¤ç‘œï¿½>>>");
             return;
         } else if (isNullShopPokemon(placeNum)) {
-            System.out.println("<<<ë¹„ì–´?ˆ?Šµ?‹ˆ?‹¤.>>>");
+            System.out.println("<<<é®ê¾©ë¼±ï¿½ì—³ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
             return;
         } else if (frozenPokemonNum[placeNum] == false) {
             frozenPokemonNum[placeNum] = true;
             select_shop_pokemon.get_frozen_panel().setVisible(true);
-            System.out.println("<<<" + (placeNum + 1) + "ë²ˆì— ?–¼ë¦¬ê¸° ?„¤? •>>>");
+            System.out.println("<<<" + (placeNum + 1) + "è¸°ë‰ë¿‰ ï¿½ë¼¹ç”±Ñˆë¦° ï¿½ê½•ï¿½ì ™>>>");
             return;
         } else {
             frozenPokemonNum[placeNum] = false;
             select_shop_pokemon.get_frozen_panel().setVisible(false);
-            System.out.println("<<<" + (placeNum + 1) + "ë²ˆì— ?–¼ë¦¬ê¸° ì·¨ì†Œ ?„¤? •>>>");
+            System.out.println("<<<" + (placeNum + 1) + "è¸°ë‰ë¿‰ ï¿½ë¼¹ç”±Ñˆë¦° ç—â‘¥ëƒ¼ ï¿½ê½•ï¿½ì ™>>>");
             return;
         }
     }
 	
-	void shop_buy(int shopPlaceNum, int myPlaceNum) { // ?ƒ? ?—?„œ ?¬ì¼“ëª¬ êµ¬ë§¤
+	void shop_buy(int shopPlaceNum, int myPlaceNum) { // ï¿½ê¸½ï¿½ì ï¿½ë¿‰ï¿½ê½Œ ï¿½ë£·è€³ë³¥ãŒ æ´Ñ‰â„“
 		if (!validationShopNum(shopPlaceNum) || !validationPlaceNum(myPlaceNum)) {
-			System.out.println("?…? ¥ ?˜¤ë¥?");
+			System.out.println("ï¿½ì—¯ï¿½ì ° ï¿½ì‚¤ç‘œï¿½");
 			return;
-		} else if (isNullShopPokemon(shopPlaceNum)) { // ?´ë¯? êµ¬ë§¤?•œ ?ƒ?  ë²ˆí˜¸ë©? êµ¬ë§¤ ë¶ˆê?
-			System.out.println("<<<" + (shopPlaceNum + 1) + "ºó »óÁ¡ÀÌ ÀÖ.>>>");
+		} else if (isNullShopPokemon(shopPlaceNum)) { // ï¿½ì” èª˜ï¿½ æ´Ñ‰â„“ï¿½ë¸³ ï¿½ê¸½ï¿½ì  è¸°ëŠìƒ‡ï§ï¿½ æ´Ñ‰â„“ éºë‡ï¿½
+			System.out.println("<<<" + (shopPlaceNum + 1) + "è¸°ï¿½ ï¿½ê¸½ï¿½ì ï¿½ì”  é®ê¾©ë¼±ï¿½ì—³ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
 			return;
-		} else if (!isNullPlacePokemon(myPlaceNum)) { // ë°°ì¹˜ êµ¬ì—­?— ?¬ì¼“ëª¬?´ ?ˆ?œ¼ë©? êµ¬ë§¤ ë¶ˆê?
+		} else if (!isNullPlacePokemon(myPlaceNum)) { // è«›ê³—íŠ‚ æ´ÑŠë¿­ï¿½ë¿‰ ï¿½ë£·è€³ë³¥ãŒï¿½ì”  ï¿½ì—³ï¿½ì‘ï§ï¿½ æ´Ñ‰â„“ éºë‡ï¿½
 			if (shop_buy_expUp(shopPlaceNum, myPlaceNum)) {
 				shopPokemon.set(shopPlaceNum, null);
 				frozenPokemonNum[shopPlaceNum] = false;
-				System.out.println("<<<±¸¸Å ¼º°ø>>>");
+				System.out.println("<<<æ´Ñ‰â„“ ï¿½ê½¦æ€¨ï¿½>>>");
 				for (int i = 0; i < 5; i++) {
 					if (placePokemon.get(i) != null) {
 						if (placePokemon.get(i).getPokemonNum() == 53) {
@@ -688,11 +731,11 @@ public class Placement_Screen extends JFrame {
 				coin = coin - 3;
 				return;
 			} else
-				System.out.println("<<<" + (myPlaceNum + 1) + "ë²ˆì— ?´ë¯? ?ˆ?Šµ?‹ˆ?‹¤.>>>");
+				System.out.println("<<<" + (myPlaceNum + 1) + "è¸°ë‰ë¿‰ ï¿½ì” èª˜ï¿½ ï¿½ì—³ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
 			{
 				return;
 			}
-		} else { // ë°°ì¹˜êµ¬ì—­?— ?¬ì¼“ëª¬?´ ?—†?œ¼ë©? êµ¬ë§¤?„±ê³?
+		} else { // è«›ê³—íŠ‚æ´ÑŠë¿­ï¿½ë¿‰ ï¿½ë£·è€³ë³¥ãŒï¿½ì”  ï¿½ë¾¾ï¿½ì‘ï§ï¿½ æ´Ñ‰â„“ï¿½ê½¦æ€¨ï¿½
 			placePokemon.set(myPlaceNum, shopPokemon.get(shopPlaceNum));
 			place_pokemon_panel.get(myPlaceNum).set_Lv(shop_pokemon_panel.get(shopPlaceNum).get_LV());
 			place_pokemon_panel.get(myPlaceNum).set_exp(shop_pokemon_panel.get(shopPlaceNum).get_exp());
@@ -702,23 +745,23 @@ public class Placement_Screen extends JFrame {
 			place_pokemon_panel.get(myPlaceNum).set_location_num(myPlaceNum);
 			place_pokemon_panel.get(myPlaceNum).set_pokemon_num(shop_pokemon_panel.get(shopPlaceNum).get_pokemon_num(),shop_pokemon_panel.get(shopPlaceNum).get_LV());
 			place_pokemon_panel.get(myPlaceNum).set_ex(shop_pokemon_panel.get(shopPlaceNum).get_ex());
-			place_pokemon_panel.get(myPlaceNum).setVisible(true); //?Œ¨?„?— set?•´ì£¼ê³  ë³´ì´ê²? ?•˜ê¸?
+			place_pokemon_panel.get(myPlaceNum).setVisible(true); //ï¿½ë™£ï¿½ê¼¸ï¿½ë¿‰ setï¿½ë¹äºŒì‡¨í€¬ è¹‚ëŒì” å¯ƒï¿½ ï¿½ë¸¯æ¹²ï¿½
 			
 	
 			shopPokemon.set(shopPlaceNum, null); 
-			shop_pokemon_panel.get(shopPlaceNum).setVisible(false); //shop_place_num?´ null? ?•Œ ?•ˆë³´ì´ê²? ?•˜ê¸?
+			shop_pokemon_panel.get(shopPlaceNum).setVisible(false); //shop_place_numï¿½ì”  nullï¿½ë§†ï¿½ë¸£ ï¿½ë¸è¹‚ëŒì” å¯ƒï¿½ ï¿½ë¸¯æ¹²ï¿½
 			shop_pokemon_panel.get(shopPlaceNum).no_frozen();
 			shop_pokemon_panel.get(myPlaceNum).get_frozen_panel().setVisible(false);
 			select_place.no_check();
 			
 			frozenPokemonNum[shopPlaceNum] = false;
-			System.out.println(select_shop_pokemon.get_location_num() + "ë²? ?ƒ?  ?¬ì¼“ëª¬?„");
-        	System.out.println(select_place.get_location_num() + "ë²ˆì— ë°°ì¹˜?•˜???Šµ?‹ˆ?‹¤.");
-			System.out.println("êµ¬ë§¤ ?„±ê³?");
+			System.out.println(select_shop_pokemon.get_location_num() + "è¸°ï¿½ ï¿½ê¸½ï¿½ì  ï¿½ë£·è€³ë³¥ãŒï¿½ì“£");
+        	System.out.println(select_place.get_location_num() + "è¸°ë‰ë¿‰ è«›ê³—íŠ‚ï¿½ë¸¯ï¿½ï¿½ï¿½ë’¿ï¿½ë•²ï¿½ë–.");
+			System.out.println("æ´Ñ‰â„“ ï¿½ê½¦æ€¨ï¿½");
 			
 			select_place_pokemon = null;
-			select_shop_pokemon = null; //?ƒ?  ?„ ?ƒ ì´ˆê¸°?™”
-			select_place = null; //?œ„ì¹? ?„ ?ƒ ì´ˆê¸°?™”
+			select_shop_pokemon = null; //ï¿½ê¸½ï¿½ì  ï¿½ê½‘ï¿½ê¹® ç¥ë‡ë¦°ï¿½ì†•
+			select_place = null; //ï¿½ìç§»ï¿½ ï¿½ê½‘ï¿½ê¹® ç¥ë‡ë¦°ï¿½ì†•
 			
 			buyAbility(myPlaceNum);
 			coin = coin - 3;
@@ -726,37 +769,37 @@ public class Placement_Screen extends JFrame {
 		}
 	}
 	
-	boolean validationShopNum(int placeNum) { // ?ƒ?  êµ¬ì—­ ë²ˆí˜¸ ?œ ?š¨?„± ê²??‚¬
+	boolean validationShopNum(int placeNum) { // ï¿½ê¸½ï¿½ì  æ´ÑŠë¿­ è¸°ëŠìƒ‡ ï¿½ì‘€ï¿½ìŠšï¿½ê½¦ å¯ƒï¿½ï¿½ê¶—
 		if (shop_place_num() < placeNum || placeNum < 0) {
 			return false;
 		} else
 			return true;
 	}
 	
-	boolean validationPlaceNum(int placeNum) { // ë°°ì¹˜ êµ¬ì—­ ë²ˆí˜¸ ?œ ?š¨?„± ê²??‚¬
+	boolean validationPlaceNum(int placeNum) { // è«›ê³—íŠ‚ æ´ÑŠë¿­ è¸°ëŠìƒ‡ ï¿½ì‘€ï¿½ìŠšï¿½ê½¦ å¯ƒï¿½ï¿½ê¶—
 		if (4 < placeNum || placeNum < 0) {
 			return false;
 		} else
 			return true;
 	}
 	
-	boolean isNullShopPokemon(int placeNum) { // ?ƒ?  êµ¬ì—­ ?¬ì¼“ëª¬?´ null?¸ì§? ?™•?¸
+	boolean isNullShopPokemon(int placeNum) { // ï¿½ê¸½ï¿½ì  æ´ÑŠë¿­ ï¿½ë£·è€³ë³¥ãŒï¿½ì”  nullï¿½ì”¤ï§ï¿½ ï¿½ì†—ï¿½ì”¤
 		if (shopPokemon.get(placeNum) == null)
 			return true;
 		return false;
 	}
 	
-	boolean isNullPlacePokemon(int placeNum) { // ë°°ì¹˜ êµ¬ì—­ ?¬ì¼“ëª¬?´ null?¸ì§? ?™•?¸
+	boolean isNullPlacePokemon(int placeNum) { // è«›ê³—íŠ‚ æ´ÑŠë¿­ ï¿½ë£·è€³ë³¥ãŒï¿½ì”  nullï¿½ì”¤ï§ï¿½ ï¿½ì†—ï¿½ì”¤
 		if (placePokemon.get(placeNum) == null)
 			return true;
 		return false;
 	}
 	
 	boolean shop_buy_expUp(int shopPlaceNum, int myPlaceNum) {
-		if (placePokemon.get(myPlaceNum) != null) { // ê°™ì? ?¬ì¼“ëª¬?´ë©? ê²½í—˜ì¹? ì¦ê?
+		if (placePokemon.get(myPlaceNum) != null) { // åª›ìˆˆï¿½ ï¿½ë£·è€³ë³¥ãŒï¿½ì” ï§ï¿½ å¯ƒì€ë¿•ç§»ï¿½ ï§ì•·ï¿½
 			if (shopPokemon.get(shopPlaceNum).getPokemonNum() == placePokemon.get(myPlaceNum).getPokemonNum()) {
 				if (placePokemon.get(myPlaceNum).getLv() == 3) {
-					System.out.println("<< 3? ˆë²? ?…?‹ˆ?‹¤!! >>");
+					System.out.println("<< 3ï¿½ì …è¸°ï¿½ ï¿½ì—¯ï¿½ë•²ï¿½ë–!! >>");
 					return false;
 				}	
 				placePokemon.get(myPlaceNum).setExp(placePokemon.get(myPlaceNum).getExp() + 1);
@@ -770,14 +813,14 @@ public class Placement_Screen extends JFrame {
 				select_shop_pokemon = null;
 				
 				isRankup(myPlaceNum);
-				System.out.println("<<<ê²½í—˜ì¹? ì¦ê?!>>>");
+				System.out.println("<<<å¯ƒì€ë¿•ç§»ï¿½ ï§ì•·ï¿½!>>>");
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	int checkRemainNum() { // ?‚¨?•„?ˆ?Š” ë°°ì¹˜ êµ¬ì—­ ?¬ì¼“ëª¬ ?ˆ˜ ë°˜í™˜
+	int checkRemainNum() { // ï¿½ê¶“ï¿½ë¸˜ï¿½ì—³ï¿½ë’— è«›ê³—íŠ‚ æ´ÑŠë¿­ ï¿½ë£·è€³ë³¥ãŒ ï¿½ë‹” è«›ì„‘ì†š
 		int i = 0;
 		for (Pokemon p : placePokemon) {
 			if (p != null) {
@@ -788,21 +831,21 @@ public class Placement_Screen extends JFrame {
 	}
 	
 	
-	void buyAbility(int placeNum) { // êµ¬ë§¤ ?‹œ ?Š¥? ¥
+	void buyAbility(int placeNum) { // æ´Ñ‰â„“ ï¿½ë–† ï¿½ë’«ï¿½ì °
 		int lv = placePokemon.get(placeNum).getLv();
 		switch (placePokemon.get(placeNum).getPokemonNum()) {
-		case 8: { // êµ¬ë§¤ ?‹œ ?œ?¤?•œ ?•„êµ? 1, 2, 3ëª? ê³µê²©? ¥ 1 ì¦ê?
+		case 8: { // æ´Ñ‰â„“ ï¿½ë–† ï¿½ì˜–ï¿½ëœ¡ï¿½ë¸³ ï¿½ë¸˜æ´ï¿½ 1, 2, 3ï§ï¿½ æ€¨ë“¦êº½ï¿½ì ° 1 ï§ì•·ï¿½
 			int remainNum = checkRemainNum();
 			if ((lv == 1 && remainNum >= 1) || (lv == 2 && remainNum == 1) || (lv == 3 && remainNum == 1)) {
 				while (true) {
 					int i = random.nextInt(5);
 					if (placePokemon.get(i) != null) {
-						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 						placePowerAdjust(i, 1);
 						return;
 					}
 				}
-			} else if ((lv == 2 && remainNum >= 2) || (lv == 3 && remainNum == 2)) { // êµ¬ë§¤ ?‹œ ?œ?¤?•œ ?•„êµ? 2ëª? ê³µê²©? ¥ 1 ì¦ê?
+			} else if ((lv == 2 && remainNum >= 2) || (lv == 3 && remainNum == 2)) { // æ´Ñ‰â„“ ï¿½ë–† ï¿½ì˜–ï¿½ëœ¡ï¿½ë¸³ ï¿½ë¸˜æ´ï¿½ 2ï§ï¿½ æ€¨ë“¦êº½ï¿½ì ° 1 ï§ì•·ï¿½
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
@@ -811,13 +854,13 @@ public class Placement_Screen extends JFrame {
 						j = random.nextInt(5);
 					}
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null) {
-						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 						placePowerAdjust(i, 1);
 						placePowerAdjust(j, 1);
 						return;
 					}
 				}
-			} else if (remainNum >= 3) { // êµ¬ë§¤ ?‹œ ?œ?¤?•œ ?•„êµ? 3ëª? ê³µê²©? ¥ 1 ì¦ê?
+			} else if (remainNum >= 3) { // æ´Ñ‰â„“ ï¿½ë–† ï¿½ì˜–ï¿½ëœ¡ï¿½ë¸³ ï¿½ë¸˜æ´ï¿½ 3ï§ï¿½ æ€¨ë“¦êº½ï¿½ì ° 1 ï§ì•·ï¿½
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
@@ -828,17 +871,17 @@ public class Placement_Screen extends JFrame {
 						k = random.nextInt(5);
 					}
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null) {
-						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 						placePowerAdjust(i, 1);
 						placePowerAdjust(j, 1);
 						placePowerAdjust(k, 1);
-						System.out.println("<<<?Š¥? ¥ ?‚¬?š©>>>");
+						System.out.println("<<<ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ>>>");
 						return;
 					}
 				}
 			}
 		}
-		case 13: { // êµ¬ë§¤ ?‹œ ?–‘ ?˜†?— ë°°ì¹˜?œ ?•„êµ? ê³µê²©? ¥, ì²´ë ¥ 2ì¦ê?
+		case 13: { // æ´Ñ‰â„“ ï¿½ë–† ï¿½ë¼‡ ï¿½ì¿ï¿½ë¿‰ è«›ê³—íŠ‚ï¿½ë§‚ ï¿½ë¸˜æ´ï¿½ æ€¨ë“¦êº½ï¿½ì °, ï§£ëŒ€ì ° 2ï§ì•·ï¿½
 			int abilityNum = 2;
 			if (lv == 2) {
 				abilityNum = 3;
@@ -849,7 +892,7 @@ public class Placement_Screen extends JFrame {
 				if (placePokemon.get(placeNum + 1) == null) {
 					return;
 				} else {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 					placeHealthAdjust(placeNum + 1, abilityNum);
 					placePowerAdjust(placeNum + 1, abilityNum);
 					return;
@@ -859,14 +902,14 @@ public class Placement_Screen extends JFrame {
 				if (placePokemon.get(placeNum - 1) == null) {
 					return;
 				} else {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 					placeHealthAdjust(placeNum - 1, abilityNum);
 					placePowerAdjust(placeNum - 1, abilityNum);
 					return;
 				}
 			}
 		}
-		case 17: { // êµ¬ë§¤ ?‹œ ê³µê²©? ¥?´ ê°??¥ ? ?? ?•„êµ°ì—ê²? ê³µê²©? ¥ 2ë°? ì¦ê?
+		case 17: { // æ´Ñ‰â„“ ï¿½ë–† æ€¨ë“¦êº½ï¿½ì °ï¿½ì”  åª›ï¿½ï¿½ì˜£ ï¿½ìŸ»ï¿½ï¿½ ï¿½ë¸˜æ´ê³—ë¿‰å¯ƒï¿½ æ€¨ë“¦êº½ï¿½ì ° 2è«›ï¿½ ï§ì•·ï¿½
 			int lowPowerPlaceNum = -1;
 			int powerNumArr[] = { -1, -1, -1, -1, -1 };
 			int min = -1;
@@ -894,51 +937,39 @@ public class Placement_Screen extends JFrame {
 			} else {
 				adjustNum = adjustNum * 2;
 			}
-			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 			placePowerAdjust(lowPowerPlaceNum, adjustNum);
 			return;
 		}
-		case 33: { // ±¸¸Å ½Ã ¾ç ¿·¿¡ ¹èÄ¡µÈ ¾Æ±º °ø°İ·Â 3 Áõ°¡
-            int abilityNum = 3;
-            if (lv == 2) {
-                abilityNum = 4;
-            } else if (lv == 3) {
-                abilityNum = 5;
-            }
-            if (placeNum == 0) {
-                if (placePokemon.get(placeNum + 1) == null) {
-                    return;
-                } else {
-                    System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ´É·Â »ç¿ë >>>");
-                    placePowerAdjust(placeNum + 1, abilityNum);
-                    return;
-                }
-            } else if (placeNum == 4) {
-                if (placePokemon.get(placeNum - 1) == null) {
-                    return;
-                } else {
-                    System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ´É·Â »ç¿ë >>>");
-                    placePowerAdjust(placeNum - 1, abilityNum);
-                    return;
-                }
-            } else {
-                System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ´É·Â »ç¿ë >>>");
-                if (placePokemon.get(placeNum + 1) == null) {
-                    return;
-                } else {
-                    placePowerAdjust(placeNum + 1, abilityNum);
-                }
-                if (placeNum == 4) {
-                    if (placePokemon.get(placeNum - 1) == null) {
-                        return;
-                    } else {
-                        placePowerAdjust(placeNum - 1, abilityNum);
-                        return;
-                    }
-                }
-            }
-        }
-		case 48: { // êµ¬ë§¤ ?‹œ ?œ?¤?•œ ?•„êµ°ì—ê²? ê³µê²©? ¥, ì²´ë ¥ 3 ì¦ê?
+		case 33: { // æ´Ñ‰â„“ ï¿½ë–† ï¿½ë¼‡ ï¿½ì¿ï¿½ë¿‰ è«›ê³—íŠ‚ï¿½ë§‚ ï¿½ë¸˜æ´ï¿½ æ€¨ë“¦êº½ï¿½ì ° 3 ï§ì•·ï¿½
+			int abilityNum = 3;
+			if (lv == 2) {
+				abilityNum = 4;
+			} else if (lv == 3) {
+				abilityNum = 5;
+			}
+			if (placeNum == 0) {
+				if (placePokemon.get(placeNum + 1) == null) {
+					return;
+				} else {
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
+					placeHealthAdjust(placeNum + 1, abilityNum);
+					placePowerAdjust(placeNum + 1, abilityNum);
+					return;
+				}
+			}
+			if (placeNum == 4) {
+				if (placePokemon.get(placeNum - 1) == null) {
+					return;
+				} else {
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
+					placeHealthAdjust(placeNum - 1, abilityNum);
+					placePowerAdjust(placeNum - 1, abilityNum);
+					return;
+				}
+			}
+		}
+		case 48: { // æ´Ñ‰â„“ ï¿½ë–† ï¿½ì˜–ï¿½ëœ¡ï¿½ë¸³ ï¿½ë¸˜æ´ê³—ë¿‰å¯ƒï¿½ æ€¨ë“¦êº½ï¿½ì °, ï§£ëŒ€ì ° 3 ï§ì•·ï¿½
 			int abilityNum = 3;
 			if (lv == 2) {
 				abilityNum = 4;
@@ -948,7 +979,7 @@ public class Placement_Screen extends JFrame {
 			while (true) {
 				int i = random.nextInt(5);
 				if (placePokemon.get(i) != null) {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 					placeHealthAdjust(i, abilityNum);
 					placePowerAdjust(i, abilityNum);
 					return;
@@ -961,32 +992,32 @@ public class Placement_Screen extends JFrame {
 		}
 	}
 	
-	void placeHealthAdjust(int placeNum, int adjustNum) { // ?•„êµ? ì²´ë ¥ ì¡°ì •
+	void placeHealthAdjust(int placeNum, int adjustNum) { // ï¿½ë¸˜æ´ï¿½ ï§£ëŒ€ì ° è­°ê³—ì ™
 		if (placePokemon.get(placeNum) != null) {
 			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth() + adjustNum);
 			place_pokemon_panel.get(placeNum).set_heart(place_pokemon_panel.get(placeNum).get_heart() + adjustNum);
-			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " ì²´ë ¥ ì¡°ì • " + adjustNum + " >>>");
+			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " ï§£ëŒ€ì ° è­°ê³—ì ™ " + adjustNum + " >>>");
 		}
 	}
 
-	void placePowerAdjust(int placeNum, int adjustNum) { // ?•„êµ? ê³µê²©? ¥ ì¡°ì •
+	void placePowerAdjust(int placeNum, int adjustNum) { // ï¿½ë¸˜æ´ï¿½ æ€¨ë“¦êº½ï¿½ì ° è­°ê³—ì ™
 		if (placePokemon.get(placeNum) != null) {
 			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower() + adjustNum);
 			place_pokemon_panel.get(placeNum).set_damage(place_pokemon_panel.get(placeNum).get_damage() + adjustNum);
-			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " ê³µê²©? ¥ ì¡°ì • " + adjustNum + " >>>");
+			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " æ€¨ë“¦êº½ï¿½ì ° è­°ê³—ì ™ " + adjustNum + " >>>");
 		}
 	}
 	
 	
-	void place_replace(int place1, int place2) { // ë°°ì¹˜ êµ¬ì—­ ?¬ì¼“ëª¬ ?œ„ì¹? ë°”ê¾¸ê¸?
+	void place_replace(int place1, int place2) { // è«›ê³—íŠ‚ æ´ÑŠë¿­ ï¿½ë£·è€³ë³¥ãŒ ï¿½ìç§»ï¿½ è«›ë¶½ì”€æ¹²ï¿½
         if (place1 == place2 || !validationPlaceNum(place1) ||  !validationPlaceNum(place2)) {
-            System.out.println("<<<?…? ¥ ?˜¤ë¥?>>>");
+            System.out.println("<<<ï¿½ì—¯ï¿½ì ° ï¿½ì‚¤ç‘œï¿½>>>");
             return;
         } else if (isNullPlacePokemon(place1) && isNullPlacePokemon(place2)) {
-            System.out.println("<<<?‘˜ ?‹¤ ë¹„ì–´?ˆ?Š” ë°°ì¹˜ ë²ˆí˜¸ë¥? ?…? ¥?•˜?…¨?Šµ?‹ˆ?‹¤.>>>");
+            System.out.println("<<<ï¿½ëª® ï¿½ë– é®ê¾©ë¼±ï¿½ì—³ï¿½ë’— è«›ê³—íŠ‚ è¸°ëŠìƒ‡ç‘œï¿½ ï¿½ì—¯ï¿½ì °ï¿½ë¸¯ï¿½ë€²ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
             return;
-        } else if (placePokemon.get(place1) != null && placePokemon.get(place2) == null) { // place 1?´ null?´ ?•„?‹ˆë©?
-            placePokemon.set(place2, placePokemon.get(place1));// place2 ë¡? ë³µì‚¬ ?›„ plcae1?? nullë¡?
+        } else if (placePokemon.get(place1) != null && placePokemon.get(place2) == null) { // place 1ï¿½ì”  nullï¿½ì”  ï¿½ë¸˜ï¿½ë•²ï§ï¿½
+            placePokemon.set(place2, placePokemon.get(place1));// place2 æ¿¡ï¿½ è¹‚ë“­ê¶— ï¿½ì‘ plcae1ï¿½ï¿½ nullæ¿¡ï¿½
             placePokemon.set(place1, null);
            place_pokemon_panel.get(place1).setVisible(false);
             
@@ -994,13 +1025,13 @@ public class Placement_Screen extends JFrame {
             place_pokemon_panel.get(place2).set_exp(place_pokemon_panel.get(place1).get_exp());
             place_pokemon_panel.get(place2).set_grade(place_pokemon_panel.get(place1).get_grade());
             place_pokemon_panel.get(place2).set_heart(place_pokemon_panel.get(place1).get_heart());
-            place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),place_pokemon_panel.get(place1).get_LV()); //?—¬ê¸? ë¬¸ì œ ì°¾ì•˜?‹¤.
+            place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),place_pokemon_panel.get(place1).get_LV()); //ï¿½ë¿¬æ¹²ï¿½ è‡¾ëª„ì £ ï§¡ì– ë¸¯ï¿½ë–.
             place_pokemon_panel.get(place2).set_damage(place_pokemon_panel.get(place1).get_damage());
             place_pokemon_panel.get(place2).set_location_num(place2);
             place_pokemon_panel.get(place2).set_ex(place_pokemon_panel.get(place1).get_ex());
             place_pokemon_panel.get(place2).setVisible(true);
             
-            System.out.println(place_pokemon_panel.get(place1).get_location_num() + "ë²? ?œ„ì¹˜ì˜ ?¬ì¼“ëª¬?„ " + place_pokemon_panel.get(place2).get_location_num() + "ë¡? ?˜®ê¹?");
+            System.out.println(place_pokemon_panel.get(place1).get_location_num() + "è¸°ï¿½ ï¿½ìç§»ì„ì“½ ï¿½ë£·è€³ë³¥ãŒï¿½ì“£ " + place_pokemon_panel.get(place2).get_location_num() + "æ¿¡ï¿½ ï¿½ì‚·æºï¿½");
             
             place_area_panel.get(place2).no_check();
             place_pokemon_panel.get(place2).no_check();
@@ -1009,8 +1040,8 @@ public class Placement_Screen extends JFrame {
             select_place = null;
             
             return;
-        } else if (placePokemon.get(place1) == null && placePokemon.get(place2) != null) { // place 2?´ null?´ ?•„?‹ˆë©?
-            placePokemon.set(place1, placePokemon.get(place2));// place1 ë¡? ë³µì‚¬ ?›„ plcae2?? nullë¡?
+        } else if (placePokemon.get(place1) == null && placePokemon.get(place2) != null) { // place 2ï¿½ì”  nullï¿½ì”  ï¿½ë¸˜ï¿½ë•²ï§ï¿½
+            placePokemon.set(place1, placePokemon.get(place2));// place1 æ¿¡ï¿½ è¹‚ë“­ê¶— ï¿½ì‘ plcae2ï¿½ï¿½ nullæ¿¡ï¿½
             placePokemon.set(place2, null);
             return;
         } else if (placePokemon.get(place1).getPokemonNum() == placePokemon.get(place2).getPokemonNum()) {
@@ -1022,7 +1053,7 @@ public class Placement_Screen extends JFrame {
             placePokemon.get(place2).setExp(placePokemon.get(place2).getExp() + 1);
             place_pokemon_panel.get(place2).set_exp(place_pokemon_panel.get(place2).get_exp() + 1);
             isRankup(place2);
-            System.out.println("? ˆë²¨ì—… ?„±ê³?");
+            System.out.println("ï¿½ì …è¸°â‘¥ë¾½ ï¿½ê½¦æ€¨ï¿½");
             placePokemon.set(place1, null);
             place_pokemon_panel.get(place1).setVisible(false);
             select_place_pokemon = null;
@@ -1037,7 +1068,7 @@ public class Placement_Screen extends JFrame {
             place_pokemon_panel.get(place1).set_exp(place_pokemon_panel.get(place2).get_exp());
             place_pokemon_panel.get(place1).set_grade(place_pokemon_panel.get(place2).get_grade());
             place_pokemon_panel.get(place1).set_heart(place_pokemon_panel.get(place2).get_heart());
-            place_pokemon_panel.get(place1).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),place_pokemon_panel.get(place1).get_LV()); //?—¬ê¸? ë¬¸ì œ ì°¾ì•˜?‹¤.
+            place_pokemon_panel.get(place1).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),place_pokemon_panel.get(place1).get_LV()); //ï¿½ë¿¬æ¹²ï¿½ è‡¾ëª„ì £ ï§¡ì– ë¸¯ï¿½ë–.
             place_pokemon_panel.get(place1).set_damage(place_pokemon_panel.get(place2).get_damage());
             place_pokemon_panel.get(place1).set_location_num(place1);
             place_pokemon_panel.get(place1).set_ex(place_pokemon_panel.get(place2).get_ex());
@@ -1051,7 +1082,7 @@ public class Placement_Screen extends JFrame {
             place_pokemon_panel.get(place2).set_exp(placePokemon.get(place2).getExp());
             place_pokemon_panel.get(place2).set_grade(placePokemon.get(place2).getGrade());
             place_pokemon_panel.get(place2).set_heart(placePokemon.get(place2).getHealth());
-            place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),placePokemon.get(place2).getLv()); //?—¬ê¸? ë¬¸ì œ ì°¾ì•˜?‹¤.
+            place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),placePokemon.get(place2).getLv()); //ï¿½ë¿¬æ¹²ï¿½ è‡¾ëª„ì £ ï§¡ì– ë¸¯ï¿½ë–.
             place_pokemon_panel.get(place2).set_damage(placePokemon.get(place2).getPower());
             place_pokemon_panel.get(place2).set_location_num(place2);
             place_pokemon_panel.get(place2).set_ex(placePokemon.get(place2).getAbility());
@@ -1061,12 +1092,12 @@ public class Placement_Screen extends JFrame {
             
             //
             forReplace.remove();
-            System.out.println("<<<?œ„ì¹? ë³?ê²? ?„±ê³?>>>");
+            System.out.println("<<<ï¿½ìç§»ï¿½ è¹‚ï¿½å¯ƒï¿½ ï¿½ê½¦æ€¨ï¿½>>>");
             return;
         }
     }
 	
-	void isRankup(int placeNum) { // ê²½í—˜ì¹˜ê? 3?´ë©? ? ˆë²? ?—…, ? ˆë²? ?—… ?•˜ë©? 2/2 ì¦ê?
+	void isRankup(int placeNum) { // å¯ƒì€ë¿•ç§»ì„ï¿½ 3ï¿½ì” ï§ï¿½ ï¿½ì …è¸°ï¿½ ï¿½ë¾½, ï¿½ì …è¸°ï¿½ ï¿½ë¾½ ï¿½ë¸¯ï§ï¿½ 2/2 ï§ì•·ï¿½
 		if (placePokemon.get(placeNum).getExp() == 3 && placePokemon.get(placeNum).getLv() == 1) {
 			Pokemon p2 = s.getLV2Pokemon(placePokemon.get(placeNum).getPokemonNum());
 			System.out.println(p2.getPokemonNum() + p2.getName());
@@ -1076,9 +1107,9 @@ public class Placement_Screen extends JFrame {
 			placePokemon.get(placeNum).setExp(1);
 			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth()+2);
 			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower()+2);
-			System.out.println("<<2? ˆë²? ?—…!>>");
+			System.out.println("<<2ï¿½ì …è¸°ï¿½ ï¿½ë¾½!>>");
 			
-			//?Œ¨?„ ? ˆë²? 2ë¡? ?—…?°?´?Š¸
+			//ï¿½ë™£ï¿½ê¼¸ ï¿½ì …è¸°ï¿½ 2æ¿¡ï¿½ ï¿½ë¾½ï¿½ëœ²ï¿½ì” ï¿½ë“ƒ
 			place_pokemon_panel.get(placeNum).set_Lv(2);
 			place_pokemon_panel.get(placeNum).set_exp(1);
 			place_pokemon_panel.get(placeNum).set_grade(p2.getGrade());
@@ -1097,9 +1128,9 @@ public class Placement_Screen extends JFrame {
 			placePokemon.get(placeNum).setExp(1);
 			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth()+2);
 			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower()+2);
-			System.out.println("<<3? ˆë²? ?—…!>>");
+			System.out.println("<<3ï¿½ì …è¸°ï¿½ ï¿½ë¾½!>>");
 			
-			//?Œ¨?„ ? ˆë²? 3?œ¼ë¡? ?—…?°?´?Š¸
+			//ï¿½ë™£ï¿½ê¼¸ ï¿½ì …è¸°ï¿½ 3ï¿½ì‘æ¿¡ï¿½ ï¿½ë¾½ï¿½ëœ²ï¿½ì” ï¿½ë“ƒ
 			place_pokemon_panel.get(placeNum).set_Lv(3);
 			place_pokemon_panel.get(placeNum).set_exp(1);
 			place_pokemon_panel.get(placeNum).set_ex(p3.getAbility());
@@ -1112,50 +1143,49 @@ public class Placement_Screen extends JFrame {
 		}
 	}
 	
-	void place_sell(int placeNum) { // ë°°ì¹˜ êµ¬ì—­ ?¬ì¼“ëª¬ ?Œ”ê¸?
+	void place_sell(int placeNum) { // è«›ê³—íŠ‚ æ´ÑŠë¿­ ï¿½ë£·è€³ë³¥ãŒ ï¿½ë™æ¹²ï¿½
 		if (!validationPlaceNum(placeNum)) {
-			System.out.println("<<<?…? ¥ ?˜¤ë¥?>>>");
+			System.out.println("<<<ï¿½ì—¯ï¿½ì ° ï¿½ì‚¤ç‘œï¿½>>>");
 			return;
 		} else if (isNullPlacePokemon(placeNum)) {
-			System.out.println("<<<ë¹„ì–´?ˆ?Šµ?‹ˆ?‹¤.>>>");
+			System.out.println("<<<é®ê¾©ë¼±ï¿½ì—³ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
 			return;
 		} else if (placePokemon.get(placeNum).getLv() == 3) {
+			sellAbility(placeNum);
 			placePokemon.set(placeNum, null);
 			place_pokemon_panel.get(placeNum).setVisible(false);
 			select_place_pokemon = null;
 			coin = coin + 3;
 			status_panel.set_coin_num(coin);
-			System.out.println("<<<?Œë§? ?„±ê³?>>>");
-			sellAbility(placeNum);
+			System.out.println("<<<ï¿½ë™‹ï§ï¿½ ï¿½ê½¦æ€¨ï¿½>>>");
 			return;
 		} else if (placePokemon.get(placeNum).getLv() == 2) {
+			sellAbility(placeNum);
 			placePokemon.set(placeNum, null);
 			place_pokemon_panel.get(placeNum).setVisible(false);
 			select_place_pokemon = null;
 			coin = coin + 2;
 			status_panel.set_coin_num(coin);
-			System.out.println("<<<?Œë§? ?„±ê³?>>>");
-			sellAbility(placeNum);
+			System.out.println("<<<ï¿½ë™‹ï§ï¿½ ï¿½ê½¦æ€¨ï¿½>>>");
 			return;
 		} else {
+			sellAbility(placeNum);
 			placePokemon.set(placeNum, null);
 			place_pokemon_panel.get(placeNum).setVisible(false);
 			select_place_pokemon = null;
 			coin++;
 			status_panel.set_coin_num(coin);
-			System.out.println("<<<?Œë§? ?„±ê³?>>>");
-			sellAbility(placeNum);
+			System.out.println("<<<ï¿½ë™‹ï§ï¿½ ï¿½ê½¦æ€¨ï¿½>>>");
 			return;
 		}
 		
 	}
-	
-	void sellAbility(int placeNum) { // ?Œë§? ?‹œ ?Š¥? ¥
+	void sellAbility(int placeNum) { // ï¿½ë™‹ï§ï¿½ ï¿½ë–† ï¿½ë’«ï¿½ì °
 		int lv = placePokemon.get(placeNum).getLv();
 		switch (placePokemon.get(placeNum).getPokemonNum()) {
-		case 7: { // ?Œë§? ?‹œ ?•„êµ? ì²´ë ¥ 1 ì¦ê?
+		case 7: { // ï¿½ë™‹ï§ï¿½ ï¿½ë–† ï¿½ë¸˜æ´ï¿½ ï§£ëŒ€ì ° 1 ï§ì•·ï¿½
 			int adjustNum = lv;
-			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 			for (int i = 1; i < 5; i++) {
 				if (placePokemon.get(i) != null && i + 1 != placeNum) {
 					placeHealthAdjust(i, adjustNum);
@@ -1163,33 +1193,33 @@ public class Placement_Screen extends JFrame {
 			}
 			return;
 		}
-		case 14: {// ?Œë§? ?‹œ ?œ?¤?•œ ?•„êµ? 1,2,3?—ê²? ë²„ì„¯ ?ˆ¬?—¬
+		case 14: {// ï¿½ë™‹ï§ï¿½ ï¿½ë–† ï¿½ì˜–ï¿½ëœ¡ï¿½ë¸³ ï¿½ë¸˜æ´ï¿½ 1,2,3ï¿½ë¿‰å¯ƒï¿½ è¸°ê¾©ê½¢ ï¿½ë‹¾ï¿½ë¿¬
 			int remainNum = checkRemainNum();
 			if ((lv == 1 && remainNum >= 1) || (lv == 2 && remainNum == 1) || (lv == 3 && remainNum == 1)) {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 				while (true) {
 					int i = random.nextInt(5);
 					if (placePokemon.get(i) != null && i + 1 != placeNum) {
-						effectNum[i] = 1; // ?š¨ê³? 1?? ë²„ì„¯ ?š¨ê³?
-						System.out.println("<<<" + placePokemon.get(i).getName() + " ë²„ì„¯ ?š¨ê³?! >>>");
+						effectNum[i] = 1; // ï¿½ìŠšæ€¨ï¿½ 1ï¿½ï¿½ è¸°ê¾©ê½¢ ï¿½ìŠšæ€¨ï¿½
+						System.out.println("<<<" + placePokemon.get(i).getName() + " è¸°ê¾©ê½¢ ï¿½ìŠšæ€¨ï¿½! >>>");
 						return;
 					}
 				}
 			} else if ((lv == 2 && remainNum >= 2) || (lv == 3 && remainNum == 2)) {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null && i != j && i + 1 != placeNum) {
 						effectNum[i] = 1;
-						System.out.println("<<<" + placePokemon.get(i).getName() + " ë²„ì„¯ ?š¨ê³?! >>>");
+						System.out.println("<<<" + placePokemon.get(i).getName() + " è¸°ê¾©ê½¢ ï¿½ìŠšæ€¨ï¿½! >>>");
 						effectNum[j] = 1;
-						System.out.println("<<<" + placePokemon.get(j).getName() + " ë²„ì„¯ ?š¨ê³?! >>>");
+						System.out.println("<<<" + placePokemon.get(j).getName() + " è¸°ê¾©ê½¢ ï¿½ìŠšæ€¨ï¿½! >>>");
 						return;
 					}
 				}
 			} else {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
@@ -1197,22 +1227,22 @@ public class Placement_Screen extends JFrame {
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null && placePokemon.get(k) != null
 							&& i != j && i != k && k != j && i + 1 != placeNum) {
 						effectNum[i] = 1;
-						System.out.println("<<<" + placePokemon.get(i).getName() + " ë²„ì„¯ ?š¨ê³?! >>>");
+						System.out.println("<<<" + placePokemon.get(i).getName() + " è¸°ê¾©ê½¢ ï¿½ìŠšæ€¨ï¿½! >>>");
 						effectNum[j] = 1;
-						System.out.println("<<<" + placePokemon.get(j).getName() + " ë²„ì„¯ ?š¨ê³?! >>>");
+						System.out.println("<<<" + placePokemon.get(j).getName() + " è¸°ê¾©ê½¢ ï¿½ìŠšæ€¨ï¿½! >>>");
 						effectNum[k] = 1;
-						System.out.println("<<<" + placePokemon.get(k).getName() + " ë²„ì„¯ ?š¨ê³?! >>>");
+						System.out.println("<<<" + placePokemon.get(k).getName() + " è¸°ê¾©ê½¢ ï¿½ìŠšæ€¨ï¿½! >>>");
 						return;
 					}
 				}
 			}
 
 		}
-		case 49: { // ?Œë§? ?‹œ ?•?— ?ˆ?Š” ?•„êµ°ì—ê²? ê³µê²©? ¥,ì²´ë ¥?˜ 50%, 70%, 100%ë§Œí¼ ì¦ê?
+		case 49: { // ï¿½ë™‹ï§ï¿½ ï¿½ë–† ï¿½ë¸µï¿½ë¿‰ ï¿½ì—³ï¿½ë’— ï¿½ë¸˜æ´ê³—ë¿‰å¯ƒï¿½ æ€¨ë“¦êº½ï¿½ì °,ï§£ëŒ€ì °ï¿½ì“½ 50%, 70%, 100%ï§ëš°ê²® ï§ì•·ï¿½
 			if (placeNum == 4) {
 				return;
 			} else if (placePokemon.get(placeNum + 1) != null) {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ?Š¥? ¥ ?‚¬?š© >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " ï¿½ë’«ï¿½ì ° ï¿½ê¶—ï¿½ìŠœ >>>");
 				if (lv == 1) {
 					int adjustNum = placePokemon.get(placeNum).getHealth() / 2;
 					placeHealthAdjust(placeNum + 1, adjustNum);
@@ -1235,7 +1265,7 @@ public class Placement_Screen extends JFrame {
 		}
 	}
 	
-	boolean isAllNull() { //ë°°ì¹˜ êµ¬ì—­?´ ? „ë¶? null?¸ì§? ?™•?¸
+	boolean isAllNull() { //è«›ê³—íŠ‚ æ´ÑŠë¿­ï¿½ì”  ï¿½ìŸ¾éºï¿½ nullï¿½ì”¤ï§ï¿½ ï¿½ì†—ï¿½ì”¤
 		for (int i = 0; i < 5; i++) {
 			if (placePokemon.get(i) != null) {
 				return false;
@@ -1244,7 +1274,7 @@ public class Placement_Screen extends JFrame {
 		return true;
 	}
 	
-	int randomItemNum() { // ?•„?´?…œ ?ˆ˜ ë§Œí¼ ?‚œ?ˆ˜
+	int randomItemNum() { // ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ ï¿½ë‹” ï§ëš°ê²® ï¿½ê¶ƒï¿½ë‹”
 		if (turnNum <= 6) {
 			return random.nextInt(turnNum * 4) + 1;
 		} else {
@@ -1252,15 +1282,15 @@ public class Placement_Screen extends JFrame {
 		}
 	}
 	
-	void shop_item_buy(int shopPlaceNum, int myPlaceNum) { // ?ƒ? ?—?„œ ?•„?´?…œ êµ¬ë§¤
+	void shop_item_buy(int shopPlaceNum, int myPlaceNum) { // ï¿½ê¸½ï¿½ì ï¿½ë¿‰ï¿½ê½Œ ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ æ´Ñ‰â„“
 		if (!validationShopItemNum(shopPlaceNum) || !validationPlaceNum(myPlaceNum)) {
-			System.out.println("?…? ¥ ?˜¤ë¥?");
+			System.out.println("ï¿½ì—¯ï¿½ì ° ï¿½ì‚¤ç‘œï¿½");
 			return;
-		} else if (isNullShopItem(shopPlaceNum)) { // ?´ë¯? êµ¬ë§¤?•œ ?ƒ?  ë²ˆí˜¸ë©? êµ¬ë§¤ ë¶ˆê?
-			System.out.println("<<<" + (shopPlaceNum + 1) + "ë²? ?ƒ? ?´ ë¹„ì–´?ˆ?Šµ?‹ˆ?‹¤.>>>");
+		} else if (isNullShopItem(shopPlaceNum)) { // ï¿½ì” èª˜ï¿½ æ´Ñ‰â„“ï¿½ë¸³ ï¿½ê¸½ï¿½ì  è¸°ëŠìƒ‡ï§ï¿½ æ´Ñ‰â„“ éºë‡ï¿½
+			System.out.println("<<<" + (shopPlaceNum + 1) + "è¸°ï¿½ ï¿½ê¸½ï¿½ì ï¿½ì”  é®ê¾©ë¼±ï¿½ì—³ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
 			return;
-		} else if (isNullPlacePokemon(myPlaceNum)) { // ë°°ì¹˜ êµ¬ì—­?— ?¬ì¼“ëª¬?´ ?—†?œ¼ë©? êµ¬ë§¤ ë¶ˆê?
-			System.out.println("<<<" + (myPlaceNum + 1) + "ë²ˆì— ?—†?Šµ?‹ˆ?‹¤.>>>");
+		} else if (isNullPlacePokemon(myPlaceNum)) { // è«›ê³—íŠ‚ æ´ÑŠë¿­ï¿½ë¿‰ ï¿½ë£·è€³ë³¥ãŒï¿½ì”  ï¿½ë¾¾ï¿½ì‘ï§ï¿½ æ´Ñ‰â„“ éºë‡ï¿½
+			System.out.println("<<<" + (myPlaceNum + 1) + "è¸°ë‰ë¿‰ ï¿½ë¾¾ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
 			return;
 		} else {
 			int itemNum = item.get(shopPlaceNum).getItemNum();
@@ -1269,7 +1299,7 @@ public class Placement_Screen extends JFrame {
 				if (remainNum < 3) {
 					select_item = null;
 					select_place_pokemon.no_check();
-					System.out.println("<<< ?•„?´?…œ?„ ?“°ê¸°ì—?Š” ?¬ì¼“ëª¬?´ ? ?Šµ?‹ˆ?‹¤! >>>");
+					System.out.println("<<< ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ï¿½ì“£ ï¿½ë²æ¹²ê³—ë¿‰ï¿½ë’— ï¿½ë£·è€³ë³¥ãŒï¿½ì”  ï¿½ìŸ»ï¿½ë’¿ï¿½ë•²ï¿½ë–! >>>");
 					return;
 				}
 			}
@@ -1277,7 +1307,7 @@ public class Placement_Screen extends JFrame {
 				if (remainNum < 2) {
 					select_item = null;
 					select_place_pokemon.no_check();
-					System.out.println("<<< ?•„?´?…œ?„ ?“°ê¸°ì—?Š” ?¬ì¼“ëª¬?´ ? ?Šµ?‹ˆ?‹¤! >>>");
+					System.out.println("<<< ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ï¿½ì“£ ï¿½ë²æ¹²ê³—ë¿‰ï¿½ë’— ï¿½ë£·è€³ë³¥ãŒï¿½ì”  ï¿½ìŸ»ï¿½ë’¿ï¿½ë•²ï¿½ë–! >>>");
 					return;
 				}
 			}
@@ -1287,14 +1317,14 @@ public class Placement_Screen extends JFrame {
 			select_item = null;
 			select_place_pokemon.no_check();
 			frozenItemNum[shopPlaceNum] = false;
-			System.out.println("<<<êµ¬ë§¤ ?„±ê³?>>>");
+			System.out.println("<<<æ´Ñ‰â„“ ï¿½ê½¦æ€¨ï¿½>>>");
 			coin = coin - 3;
 			status_panel.set_coin_num(coin);
 			return;
 		}
 	}
 	
-	boolean validationShopItemNum(int placeNum) { // ?ƒ?  êµ¬ì—­ ë²ˆí˜¸ ?•„?´?…œ ê²??‚¬
+	boolean validationShopItemNum(int placeNum) { // ï¿½ê¸½ï¿½ì  æ´ÑŠë¿­ è¸°ëŠìƒ‡ ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ å¯ƒï¿½ï¿½ê¶—
 		if (2 < placeNum || placeNum < 0) {
 			return false;
 		} else
@@ -1307,17 +1337,17 @@ public class Placement_Screen extends JFrame {
 		return false;
 	}
 	
-	void buyItemAbility(int shopPlaceNum, int placeNum) { // ?•„?´?…œ êµ¬ë§¤ ?‹œ ?Š¥? ¥
+	void buyItemAbility(int shopPlaceNum, int placeNum) { // ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ æ´Ñ‰â„“ ï¿½ë–† ï¿½ë’«ï¿½ì °
 		switch (item.get(shopPlaceNum).getItemNum()) {
-		case 1: { // ê³µê²©? ¥ 1 ì¦ê?
+		case 1: { // æ€¨ë“¦êº½ï¿½ì ° 1 ï§ì•·ï¿½
 			placePowerAdjust(placeNum, 1);
 			break;
 		}
-		case 2: { // ì²´ë ¥ 1 ì¦ê?
+		case 2: { // ï§£ëŒ€ì ° 1 ï§ì•·ï¿½
 			placeHealthAdjust(placeNum, 1);
 			break;
 		}
-		case 3: { // ?œ?¤?œ¼ë¡? 2 ê¸°ë¬¼?—ê²? ê³µê²©? ¥ 1 ì¦ê?
+		case 3: { // ï¿½ì˜–ï¿½ëœ¡ï¿½ì‘æ¿¡ï¿½ 2 æ¹²ê³•Ğªï¿½ë¿‰å¯ƒï¿½ æ€¨ë“¦êº½ï¿½ì ° 1 ï§ì•·ï¿½
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
@@ -1330,7 +1360,7 @@ public class Placement_Screen extends JFrame {
 			break;
 
 		}
-		case 4: { // ?œ?¤?œ¼ë¡? 2 ê¸°ë¬¼?—ê²? ì²´ë ¥ 1 ì¦ê?
+		case 4: { // ï¿½ì˜–ï¿½ëœ¡ï¿½ì‘æ¿¡ï¿½ 2 æ¹²ê³•Ğªï¿½ë¿‰å¯ƒï¿½ ï§£ëŒ€ì ° 1 ï§ì•·ï¿½
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
@@ -1342,12 +1372,12 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 5: { // 1/1 ì¦ê?
+		case 5: { // 1/1 ï§ì•·ï¿½
 			placePowerAdjust(placeNum, 1);
 			placeHealthAdjust(placeNum, 1);
 			break;
 		}
-		case 6: { // ?œ?¤?œ¼ë¡? 2 ê¸°ë¬¼?—ê²? 1/1 ì¦ê?
+		case 6: { // ï¿½ì˜–ï¿½ëœ¡ï¿½ì‘æ¿¡ï¿½ 2 æ¹²ê³•Ğªï¿½ë¿‰å¯ƒï¿½ 1/1 ï§ì•·ï¿½
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
@@ -1361,7 +1391,7 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 7: { // ?œ?¤?œ¼ë¡? 1 ê¸°ë¬¼?—ê²? 2/2 ì¦ê?
+		case 7: { // ï¿½ì˜–ï¿½ëœ¡ï¿½ì‘æ¿¡ï¿½ 1 æ¹²ê³•Ğªï¿½ë¿‰å¯ƒï¿½ 2/2 ï§ì•·ï¿½
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				if (placePokemon.get(rNum1) != null) {
@@ -1372,7 +1402,7 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 8: { // ?œ?¤?œ¼ë¡? 3 ê¸°ë¬¼?—ê²? ê³µê²©? ¥ 1 ì¦ê?
+		case 8: { // ï¿½ì˜–ï¿½ëœ¡ï¿½ì‘æ¿¡ï¿½ 3 æ¹²ê³•Ğªï¿½ë¿‰å¯ƒï¿½ æ€¨ë“¦êº½ï¿½ì ° 1 ï§ì•·ï¿½
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
@@ -1387,7 +1417,7 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 9: { // ?‚¬?š©?•  ê¸°ë¬¼ ?–‘ ?˜† ê¸°ë¬¼?˜ ê³µê²©? ¥ 2?„ ê°?? ¸ ?˜µ?‹ˆ?‹¤.
+		case 9: { // ï¿½ê¶—ï¿½ìŠœï¿½ë¸· æ¹²ê³•Ğª ï¿½ë¼‡ ï¿½ì¿ æ¹²ê³•Ğªï¿½ì“½ æ€¨ë“¦êº½ï¿½ì ° 2ï¿½ì“£ åª›ï¿½ï¿½ì¡‡ ï¿½ìƒƒï¿½ë•²ï¿½ë–.
 			if (placeNum == 0) {
 				if (!isNullPlacePokemon(placeNum + 1)) {
 					placePowerAdjust(placeNum + 1, -2);
@@ -1412,23 +1442,23 @@ public class Placement_Screen extends JFrame {
 				break;
 			}
 		}
-		case 10: { // ?‚¬?š©?•œ ?¬ì¼“ëª¬?´ ??ê²°ì—?„œ ?‚´?•„?‚¨?œ¼ë©? ê²½í—˜ì¹? 1 ì¦ê?
+		case 10: { // ï¿½ê¶—ï¿½ìŠœï¿½ë¸³ ï¿½ë£·è€³ë³¥ãŒï¿½ì”  ï¿½ï¿½å¯ƒê³—ë¿‰ï¿½ê½Œ ï¿½ê¶¡ï¿½ë¸˜ï¿½ê¶“ï¿½ì‘ï§ï¿½ å¯ƒì€ë¿•ç§»ï¿½ 1 ï§ì•·ï¿½
 			effectNum[placeNum] = 2;
 			break;
 		}
-		case 11: { // ì²˜ìŒ ë§ì? ê³µê²© ë¬´ì‹œ
+		case 11: { // ï§£ì„ì“¬ ï§ìšï¿½ æ€¨ë“¦êº½ è‡¾ëŒë–†
 			effectNum[placeNum] = 1;
 			break;
 		}
-		case 12: { // ì½”ì¸ + 1
+		case 12: { // è‚„ë¶¿ì”¤ + 1
 			this.coin++;
 			break;
 		}
-		case 13: { // ì²´ë ¥ 2 ì¦ê?
+		case 13: { // ï§£ëŒ€ì ° 2 ï§ì•·ï¿½
 			placeHealthAdjust(placeNum, 2);
 			break;
 		}
-		case 14: { // ?œ?¤?œ¼ë¡? 2 ê¸°ë¬¼?—ê²? 2/2 ì¦ê?
+		case 14: { // ï¿½ì˜–ï¿½ëœ¡ï¿½ì‘æ¿¡ï¿½ 2 æ¹²ê³•Ğªï¿½ë¿‰å¯ƒï¿½ 2/2 ï§ì•·ï¿½
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
@@ -1442,7 +1472,7 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 15: { // ?‚¬?š© ê¸°ë¬¼ê³? ?–‘ ?˜†?˜ ê¸°ë¬¼?— 1/2 ì¦ê?
+		case 15: { // ï¿½ê¶—ï¿½ìŠœ æ¹²ê³•Ğªæ€¨ï¿½ ï¿½ë¼‡ ï¿½ì¿ï¿½ì“½ æ¹²ê³•Ğªï¿½ë¿‰ 1/2 ï§ì•·ï¿½
 			placePowerAdjust(placeNum, 1);
 			placeHealthAdjust(placeNum, 2);
 			if (placeNum == 0) {
@@ -1469,16 +1499,16 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 16: { // ?‚¬?š© ?š¨ê³¼ëŠ” ?—†ì§?ë§? ?´ ?•„?´?…œ?´ ? ?š©?œ ê¸°ë¬¼ ?Œë§? ?‹œ ?Œë§¤ì½”?¸ 1 ì¦ê?
+		case 16: { // ï¿½ê¶—ï¿½ìŠœ ï¿½ìŠšæ€¨ì‡°ë’— ï¿½ë¾¾ï§ï¿½ï§ï¿½ ï¿½ì”  ï¿½ë¸˜ï¿½ì” ï¿½ë€¥ï¿½ì”  ï¿½ìŸ»ï¿½ìŠœï¿½ë§‚ æ¹²ê³•Ğª ï¿½ë™‹ï§ï¿½ ï¿½ë–† ï¿½ë™‹ï§ã…¼í«ï¿½ì”¤ 1 ï§ì•·ï¿½
 			effectNum[placeNum] = 3;
 			break;
 		}
-		case 17: { // 2/2 ì¦ê?
+		case 17: { // 2/2 ï§ì•·ï¿½
 			placePowerAdjust(placeNum, 2);
 			placeHealthAdjust(placeNum, 2);
 			break;
 		}
-		case 18: { // ?œ?¤?œ¼ë¡? 1ê¸°ë¬¼?—ê²? ê²½í—˜ì¹? 1 ì¦ê?
+		case 18: { // ï¿½ì˜–ï¿½ëœ¡ï¿½ì‘æ¿¡ï¿½ 1æ¹²ê³•Ğªï¿½ë¿‰å¯ƒï¿½ å¯ƒì€ë¿•ç§»ï¿½ 1 ï§ì•·ï¿½
 			while (true) {
 				int rNum = random.nextInt(5);
 				if (!isNullPlacePokemon(rNum)) {
@@ -1489,37 +1519,37 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 19: { // 50% ?™•ë¥ ë¡œ ì½”ì¸ 2 ì¦ê?
+		case 19: { // 50% ï¿½ì†—ç‘œì¢Šì¤ˆ è‚„ë¶¿ì”¤ 2 ï§ì•·ï¿½
 			int rNum = random.nextInt(2);
 			if (rNum == 1) {
-				System.out.println("<<< ?„±ê³?! >>>");
+				System.out.println("<<< ï¿½ê½¦æ€¨ï¿½! >>>");
 				this.coin++;
 				this.coin++;
 				break;
 			} else {
-				System.out.println("<<< ?‹¤?Œ¨! >>> ");
+				System.out.println("<<< ï¿½ë–ï¿½ë™£! >>> ");
 				break;
 			}
 		}
-		case 20: { // ê³µê²©? ¥ 3 ì¦ê?
+		case 20: { // æ€¨ë“¦êº½ï¿½ì ° 3 ï§ì•·ï¿½
 			placePowerAdjust(placeNum, 3);
 			break;
 		}
-		case 21: { // ê²½í—˜ì¹? 1 ì¦ê?
+		case 21: { // å¯ƒì€ë¿•ç§»ï¿½ 1 ï§ì•·ï¿½
 			placePokemon.get(placeNum).setExp(placePokemon.get(placeNum).getExp() + 1);
 			break;
 		}
-		case 22: { // 3/3 ì¦ê?
+		case 22: { // 3/3 ï§ì•·ï¿½
 			placePowerAdjust(placeNum, 3);
 			placeHealthAdjust(placeNum, 3);
 			break;
 		}
-		case 23: { // ì½”ì¸ + 2
+		case 23: { // è‚„ë¶¿ì”¤ + 2
 			this.coin++;
 			this.coin++;
 			break;
 		}
-		case 24: { // ??ê²°ì— ?Š¹ë¦? ?‹œ ì½”ì¸ 2, ?Œ¨ë°? ?‹œ 1 ì¦ê? 000000000000
+		case 24: { // ï¿½ï¿½å¯ƒê³—ë¿‰ ï¿½ë“…ç”±ï¿½ ï¿½ë–† è‚„ë¶¿ì”¤ 2, ï¿½ë™£è«›ï¿½ ï¿½ë–† 1 ï§ì•·ï¿½ 000000000000
 			item24Effect = true;
 			break;
 		}
@@ -1532,25 +1562,25 @@ public class Placement_Screen extends JFrame {
 	
 	void item_frozen(int placeNum) {
 		if (!validationShopItemNum(placeNum)) {
-			System.out.println("<<<?…? ¥ ?˜¤ë¥?>>>");
+			System.out.println("<<<ï¿½ì—¯ï¿½ì ° ï¿½ì‚¤ç‘œï¿½>>>");
 			return;
 		} else if (isNullShopItem(placeNum)) {
-			System.out.println("<<<ë¹„ì–´?ˆ?Šµ?‹ˆ?‹¤.>>>");
+			System.out.println("<<<é®ê¾©ë¼±ï¿½ì—³ï¿½ë’¿ï¿½ë•²ï¿½ë–.>>>");
 			return;
 		} else if (frozenItemNum[placeNum] == false) {
 			frozenItemNum[placeNum] = true;
-			System.out.println("<<<" + (placeNum + 1) + "ë²ˆì— ?–¼ë¦¬ê¸° ?„¤? •>>>");
+			System.out.println("<<<" + (placeNum + 1) + "è¸°ë‰ë¿‰ ï¿½ë¼¹ç”±Ñˆë¦° ï¿½ê½•ï¿½ì ™>>>");
 			select_item.get_frozen_panel().setVisible(true);
 			return;
 		} else {
 			frozenItemNum[placeNum] = false;
-			System.out.println("<<<" + (placeNum + 1) + "ë²ˆì— ?–¼ë¦¬ê¸° ì·¨ì†Œ ?„¤? •>>>");
+			System.out.println("<<<" + (placeNum + 1) + "è¸°ë‰ë¿‰ ï¿½ë¼¹ç”±Ñˆë¦° ç—â‘¥ëƒ¼ ï¿½ê½•ï¿½ì ™>>>");
 			select_item.get_frozen_panel().setVisible(false);
 			return;
 		}
 	}
 	
-	boolean validationShopPokemonNum(int placeNum) { // ?ƒ?  êµ¬ì—­ ë²ˆí˜¸ ?œ ?š¨?„± ê²??‚¬
+	boolean validationShopPokemonNum(int placeNum) { // ï¿½ê¸½ï¿½ì  æ´ÑŠë¿­ è¸°ëŠìƒ‡ ï¿½ì‘€ï¿½ìŠšï¿½ê½¦ å¯ƒï¿½ï¿½ê¶—
 		if (shop_place_num() < placeNum || placeNum < 0) {
 			return false;
 		} else

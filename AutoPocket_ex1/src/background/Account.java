@@ -11,7 +11,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class Account {
 	private String DB_user = "JUNG";
 	private String DB_password = "1234";
-	private String DB_url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
+	private String DB_url = "jdbc:oracle:thin:@172.16.117.226:1521:xe";
 	private String login_id;
 	private String login_password;
 	private String login_name;
@@ -82,9 +82,8 @@ public class Account {
 	    }catch (ClassNotFoundException e) {
 	        e.printStackTrace();
 	    }catch (SQLException e) {
-	        //?븘?씠?뵒 ?삉?뒗 ?씠由꾩씠 以묐났?릱?쓣?븣?쓽 ?삁?쇅泥섎━.
 	        if (e instanceof SQLIntegrityConstraintViolationException) {
-	            System.out.println("?븘?씠?뵒 ?삉?뒗 ?씠由꾩씠 以묐났?맗?땲?떎!");
+	            System.out.println("Error");
 	        } else {
 	            e.printStackTrace();
 	        }
@@ -106,7 +105,7 @@ public class Account {
 	            String login_password = resultSet.getString("LOGIN_PASSWORD");
 	
 	            if (this.login_id.equals(login_id) && this.login_password.equals(login_password)) {
-	                System.out.println("濡쒓렇?씤?뿉 ?꽦怨듯븯?뀲?뒿?땲?떎.");
+	                System.out.println("로그인 성공하셨습니다!");
 	                return true;
 	            }
 	        }
@@ -186,9 +185,9 @@ public class Account {
 	        int rowsAffected = pstmt.executeUpdate();
 
 	        if (rowsAffected > 0) {
-	            System.out.println("怨꾩젙 ?궘?젣媛? ?셿猷뚮릺?뿀?뒿?땲?떎.");
+	            System.out.println("계정 삭제를 완료했습니다.");
 	        } else {
-	            System.out.println("?씪移섑븯?뒗 pk媛믪씠 ?뾾?뒿?땲?떎.");
+	            System.out.println("일치하는 값이 없습니다.");
 	        }
 
 	        con.close();
