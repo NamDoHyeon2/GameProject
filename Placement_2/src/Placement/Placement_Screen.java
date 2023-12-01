@@ -347,8 +347,6 @@ public class Placement_Screen extends JFrame {
 		next_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				shop_reroll();
-				turnNum++;
 				if (battle_screen != null && contentPane.isAncestorOf(battle_screen)) {
 				    contentPane.remove(battle_screen);  // battle_screen이 null이 아니고 contentPane의 자식인 경우에만 제거
 				    contentPane.revalidate();
@@ -361,6 +359,8 @@ public class Placement_Screen extends JFrame {
 		        System.out.println("화면 넘어갔다잉");
 		        background.setVisible(false);
 		        battle_screen.setVisible(true);
+				shop_reroll();
+				turnNum++;
 			}
 		});
 		
