@@ -357,7 +357,7 @@ public class Placement_Screen extends JFrame {
 		        }
 		        
 		        StartBattle battle_screen = new StartBattle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
-		                toBattle.get(4), effectNum);		        
+		                toBattle.get(4), effectNum, background);		        
 		        getContentPane().add(battle_screen);
 		        background.setVisible(false);
 		        battle_screen.setVisible(true);

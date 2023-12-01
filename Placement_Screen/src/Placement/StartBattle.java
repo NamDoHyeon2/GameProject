@@ -1,5 +1,7 @@
 package Placement;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
@@ -10,13 +12,17 @@ import javax.swing.JPanel;
 
 public class StartBattle extends JPanel {
 	private ImagePanel background;
-	
+	private ImagePanel next_btn;
+	private ImagePanel PlacementScreen;
 	Scanner sc = new Scanner(System.in);
 	private LinkedList<Pokemon> friendly; // 아군 리스트
-	private LinkedList<Obj_Panel2> friendly_panel;
-	private LinkedList<Obj_Panel2> enemy_panel;
+	private LinkedList<Obj_Panel3> friendly_panel;
+	private LinkedList<Obj_Panel3> enemy_panel;
 	private LinkedList<Pokemon> enemy; // 적군 리스트
 	private LinkedList<Pokemon> forreplace; //
+	private LinkedList <Button> buttons;
+	private boolean isnext;
+	
 	Random random = new Random();
 	int turnNum; // 턴 수
 	int friendlyMaxPalceNum = 5; // 아군 남아있는 수
@@ -42,17 +48,21 @@ public class StartBattle extends JPanel {
 	int enemyPoisonNum[] = { 0, 0, 0, 0, 0 }; // 적군 독 피해량 저장
 
 	Pokemon dan = new Pokemon(61, 2, 1, "단데기", "벌레", 1, 2, 2, "기절 시 능력 없는 2/2단데기 2 소환");
+	Obj_Panel3 dan_panel = new Obj_Panel3();
 	Pokemon mang = new Pokemon(62, 1, 1, "망키", "격투", 2, 3, 2, "기절 시 능력 없는 망키 소환");
 	Pokemon mo = new Pokemon(63, 1, 1, "모다피", "풀", 3, 3, 3, "기절 시 체력 2배인 능력 없는 모다피 2 소환");
 	/**
 	 * Create the panel.
 	 */
-	public StartBattle(int turnNum, Pokemon f1, Pokemon f2, Pokemon f3, Pokemon f4, Pokemon f5, int findEffect[]) {
+	public StartBattle(int turnNum, Pokemon f1, Pokemon f2, Pokemon f3, Pokemon f4, Pokemon f5, 
+			int findEffect[], ImagePanel placement) {
+		this.PlacementScreen = placement;
 		this.friendly_panel = new LinkedList<>();
 		this.friendly = new LinkedList<>();
 		this.enemy_panel = new LinkedList<>();
 		this.enemy = new LinkedList<>();
 		this.forreplace = new LinkedList<>();
+		this.buttons = new LinkedList<>();
 		this.findEffect = findEffect;
 		this.turnNum = turnNum;
 		forreplace.add(null);
@@ -72,91 +82,451 @@ public class StartBattle extends JPanel {
 		friendly.set(4, f1);
 		settingEnemy();
 		findEffect();
+		
+		//--------단대기------------------
+		dan_panel.set_pokemon_num(1, 2);
+		dan_panel.set_exp(1);
+		dan_panel.set_damage(2);
+		dan_panel.set_heart(2);
+		dan_panel.set_Lv(2);
+		//------------------------------
+		
 		this.setLayout(null);
 		this.setBounds(0, 0, 1920, 1080);
 		this.background = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\combat_background.png").getImage());
 		background.setBounds(0, 0, 1920, 1080);
 		background.setLayout(null);
 		this.add(background);
+		isnext = false;
+		
+		//---------------------다음 버튼-------------------
+		this.next_btn = new ImagePanel (new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\Next_Battle.png").getImage());
+		this.background.add(next_btn);
+		next_btn.setLocation(910, 200);
+		
+		for(int i = 0; i < 100; i ++) {	
+			Button button = new Button();
+			this.background.add(button);
+			button.setBounds(910,200,101,116);
+			button.setVisible(false);
+			buttons.add(i, button);
+		}
+
+		//----------------------------------------------
 		
 		//---------------------아군 진영-------------------
-		Obj_Panel2 friendly_panel_1 = new Obj_Panel2();
-		friendly_panel_1.set_pokemon_num(1, 1);
+		
+		Obj_Panel3 friendly_panel_1 = new Obj_Panel3();
 		background.add(friendly_panel_1);
 		friendly_panel.add(0, friendly_panel_1);
 		friendly_panel_1.setLocation(750, 391);
-		friendly_panel_1.setVisible(true); //디폴트는 안보이게
-		
-		Obj_Panel2 friendly_panel_2 = new Obj_Panel2();
-		friendly_panel_2.set_pokemon_num(1, 1);
+		friendly_panel_1.setVisible(false); //디폴트는 안보이게
+		if(friendly.get(0) != null) {
+			friendly_panel_1.set_pokemon_num(friendly.get(0).getPokemonNum(), friendly.get(0).getLv());
+			friendly_panel_1.set_heart(friendly.get(0).getHealth());
+			friendly_panel_1.set_damage(friendly.get(0).getPower());
+			friendly_panel_1.set_exp(friendly.get(0).getExp());
+			friendly_panel_1.set_Lv(friendly.get(0).getLv());
+			friendly_panel_1.setVisible(true);
+		}
+	
+		Obj_Panel3 friendly_panel_2 = new Obj_Panel3();
 		background.add(friendly_panel_2);
 		friendly_panel.add(1, friendly_panel_2);
 		friendly_panel_2.setLocation(570, 391);
-		friendly_panel_2.setVisible(true); //디폴트는 안보이게
+		friendly_panel_2.setVisible(false); //디폴트는 안보이게
+		if(friendly.get(1) != null) {
+			friendly_panel_2.set_pokemon_num(friendly.get(1).getPokemonNum(), friendly.get(1).getLv());
+			friendly_panel_2.set_heart(friendly.get(1).getHealth());
+			friendly_panel_2.set_damage(friendly.get(1).getPower());
+			friendly_panel_2.set_exp(friendly.get(1).getExp());
+			friendly_panel_2.set_Lv(friendly.get(1).getLv());
+			friendly_panel_2.setVisible(true);
+		}
 		
-		Obj_Panel2 friendly_panel_3 = new Obj_Panel2();
-		friendly_panel_3.set_pokemon_num(1, 1);
+		Obj_Panel3 friendly_panel_3 = new Obj_Panel3();
 		background.add(friendly_panel_3);
 		friendly_panel.add(2, friendly_panel_3);
 		friendly_panel_3.setLocation(390, 391);
-		friendly_panel_3.setVisible(true); //디폴트는 안보이게
+		friendly_panel_3.setVisible(false); //디폴트는 안보이게
+		if(friendly.get(2)!= null) {
+			friendly_panel_3.set_pokemon_num(friendly.get(2).getPokemonNum(), friendly.get(2).getLv());
+			friendly_panel_3.set_heart(friendly.get(2).getHealth());
+			friendly_panel_3.set_damage(friendly.get(2).getPower());
+			friendly_panel_3.set_exp(friendly.get(2).getExp());
+			friendly_panel_3.set_Lv(friendly.get(2).getLv());
+			friendly_panel_3.setVisible(true);
+		}
 		
-		Obj_Panel2 friendly_panel_4 = new Obj_Panel2();
-		friendly_panel_4.set_pokemon_num(1, 1);
+		
+		Obj_Panel3 friendly_panel_4 = new Obj_Panel3();
 		background.add(friendly_panel_4);
 		friendly_panel.add(3, friendly_panel_4);
 		friendly_panel_4.setLocation(210, 391);
-		friendly_panel_4.setVisible(true); //디폴트는 안보이게
+		friendly_panel_4.setVisible(false); //디폴트는 안보이게
+		if(friendly.get(3) != null) {
+			friendly_panel_4.set_pokemon_num(friendly.get(3).getPokemonNum(), friendly.get(3).getLv());
+			friendly_panel_4.set_heart(friendly.get(3).getHealth());
+			friendly_panel_4.set_damage(friendly.get(3).getPower());
+			friendly_panel_4.set_exp(friendly.get(3).getExp());
+			friendly_panel_4.set_Lv(friendly.get(3).getLv());
+			friendly_panel_4.setVisible(true);
+		}
 		
-		Obj_Panel2 friendly_panel_5 = new Obj_Panel2();
-		friendly_panel_5.set_pokemon_num(1, 1);
+		Obj_Panel3 friendly_panel_5 = new Obj_Panel3();
 		background.add(friendly_panel_5);
 		friendly_panel.add(4, friendly_panel_5);
 		friendly_panel_5.setLocation(30, 391);
-		friendly_panel_5.setVisible(true); //디폴트는 안보이게
+		friendly_panel_5.setVisible(false); //디폴트는 안보이게
+		if(friendly.get(4) != null) {
+			friendly_panel_5.set_pokemon_num(friendly.get(4).getPokemonNum(), friendly.get(4).getLv());
+			friendly_panel_5.set_heart(friendly.get(4).getHealth());
+			friendly_panel_5.set_damage(friendly.get(4).getPower());
+			friendly_panel_5.set_exp(friendly.get(4).getExp());
+			friendly_panel_5.set_Lv(friendly.get(4).getLv());
+			friendly_panel_5.setVisible(true);
+		}
 		//----------------------------------------------
 		
-		Obj_Panel2 enemy_panel_1 = new Obj_Panel2();
-		enemy_panel_1.set_pokemon_num(1, 1);
+		//---------------------적군 진영-------------------
+		Obj_Panel3 enemy_panel_1 = new Obj_Panel3();
 		background.add(enemy_panel_1);
-		friendly_panel.add(0, enemy_panel_1);
+		enemy_panel.add(0, enemy_panel_1);
 		enemy_panel_1.setLocation(1000, 391);
-		enemy_panel_1.setVisible(true); //디폴트는 안보이게
+		enemy_panel_1.setVisible(false); //디폴트는 안보이게
+		if(enemy.get(0) != null) {
+			enemy_panel_1.set_pokemon_num(enemy.get(0).getPokemonNum(), enemy.get(0).getLv());
+			enemy_panel_1.set_heart(enemy.get(0).getHealth());
+			enemy_panel_1.set_damage(enemy.get(0).getPower());
+			enemy_panel_1.set_exp(enemy.get(0).getExp());
+			enemy_panel_1.set_Lv(enemy.get(0).getLv());
+			enemy_panel_1.setVisible(true);
+		}
 		
-		Obj_Panel2 enemy_panel_2 = new Obj_Panel2();
-		enemy_panel_2.set_pokemon_num(1, 1);
+		Obj_Panel3 enemy_panel_2 = new Obj_Panel3();
 		background.add(enemy_panel_2);
-		friendly_panel.add(0, enemy_panel_2);
+		enemy_panel.add(1, enemy_panel_2);
 		enemy_panel_2.setLocation(1180, 391);
-		enemy_panel_2.setVisible(true); //디폴트는 안보이게
+		enemy_panel_2.setVisible(false); //디폴트는 안보이게
+		if(enemy.get(1) != null) {
+			enemy_panel_2.set_pokemon_num(enemy.get(1).getPokemonNum(), enemy.get(1).getLv());
+			enemy_panel_2.set_heart(enemy.get(1).getHealth());
+			enemy_panel_2.set_damage(enemy.get(1).getPower());
+			enemy_panel_2.set_exp(enemy.get(1).getExp());
+			enemy_panel_2.set_Lv(enemy.get(1).getLv());
+			enemy_panel_2.setVisible(true);
+		}
 		
-		Obj_Panel2 enemy_panel_3 = new Obj_Panel2();
-		enemy_panel_3.set_pokemon_num(1, 1);
+		Obj_Panel3 enemy_panel_3 = new Obj_Panel3();
 		background.add(enemy_panel_3);
-		friendly_panel.add(0, enemy_panel_3);
+		enemy_panel.add(2, enemy_panel_3);
 		enemy_panel_3.setLocation(1360, 391);
-		enemy_panel_3.setVisible(true); //디폴트는 안보이게
+		enemy_panel_3.setVisible(false); //디폴트는 안보이게
+		if(enemy.get(2) != null) {
+			enemy_panel_3.set_pokemon_num(enemy.get(2).getPokemonNum(), enemy.get(2).getLv());
+			enemy_panel_3.set_heart(enemy.get(2).getHealth());
+			enemy_panel_3.set_damage(enemy.get(2).getPower());
+			enemy_panel_3.set_exp(enemy.get(2).getExp());
+			enemy_panel_3.set_Lv(enemy.get(2).getLv());
+			enemy_panel_3.setVisible(true);
+		}
 		
-		Obj_Panel2 enemy_panel_4 = new Obj_Panel2();
-		enemy_panel_4.set_pokemon_num(1, 1);
+		Obj_Panel3 enemy_panel_4 = new Obj_Panel3();
 		background.add(enemy_panel_4);
-		friendly_panel.add(0, enemy_panel_4);
+		enemy_panel.add(3, enemy_panel_4);
 		enemy_panel_4.setLocation(1540, 391);
-		enemy_panel_4.setVisible(true); //디폴트는 안보이게
+		enemy_panel_4.setVisible(false); //디폴트는 안보이게
+		if(enemy.get(3) != null) {
+			enemy_panel_1.set_pokemon_num(enemy.get(3).getPokemonNum(), enemy.get(3).getLv());
+			enemy_panel_1.set_heart(enemy.get(3).getHealth());
+			enemy_panel_1.set_damage(enemy.get(3).getPower());
+			enemy_panel_1.set_exp(enemy.get(3).getExp());
+			enemy_panel_1.set_Lv(enemy.get(3).getLv());
+			enemy_panel_1.setVisible(true);
+		}
 		
-		Obj_Panel2 enemy_panel_5 = new Obj_Panel2();
-		enemy_panel_5.set_pokemon_num(1, 1);
+		Obj_Panel3 enemy_panel_5 = new Obj_Panel3();
 		background.add(enemy_panel_5);
-		friendly_panel.add(0, enemy_panel_5);
+		enemy_panel.add(4, enemy_panel_5);
 		enemy_panel_5.setLocation(1720, 391);
-		enemy_panel_5.setVisible(true); //디폴트는 안보이게
+		enemy_panel_5.setVisible(false); //디폴트는 안보이게
+		if(enemy.get(4) != null) {
+			enemy_panel_5.set_pokemon_num(enemy.get(4).getPokemonNum(), enemy.get(4).getLv());
+			enemy_panel_5.set_heart(enemy.get(4).getHealth());
+			enemy_panel_5.set_damage(enemy.get(4).getPower());
+			enemy_panel_5.set_exp(enemy.get(4).getExp());
+			enemy_panel_5.set_Lv(enemy.get(4).getLv());
+			enemy_panel_5.setVisible(true);
+		}
+		//----------------------------------------------
+		next_btn.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+	        	friendlyGoFront(); // 아군 배치 조정 ( 앞으로 땡기기 )
+	    		enemyGoFront(); // 적군 배치 조정 ( 앞으로 땡기기 )
+	    		settingFriendlySummonModapi(); // 아군 모다피 능력 구현
+	    		settingEnemySummonModapi(); // 적군 모다피 능력 구현
+	    		next_btn.setVisible(false);
+	    		show1();
+	        }
+	    });
+		buttons.get(0).setVisible(true);
+		buttons.get(0).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				useStartBattleAbility(); //시작시 능력 사용
+				buttons.get(0).setVisible(false);
+				show1();
+			}
+		});
+		buttons.get(1).setVisible(true);
+		buttons.get(1).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				isDownFriendly();  // 아군 기절 확인
+				buttons.get(1).setVisible(false);
+				//show1();
+			}
+		});
+		buttons.get(2).setVisible(true);
+		buttons.get(2).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				isDownEnemy(); // 적군 기절 확인
+				buttons.get(2).setVisible(false);
+				//show1();
+			}
+		});
+		buttons.get(3).setVisible(true);
+		buttons.get(3).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (winFriendly()) { // 승리 확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);					
+				} else if (winEnemy()) { //패배확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);
+				}
+				buttons.get(3).setVisible(false);
+				//show1();
+			}
+		});
+		buttons.get(4).setVisible(true);
+		buttons.get(4).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				useFriendlyHitAbility(); //아군 맞았을 때 능력발동
+				buttons.get(4).setVisible(false);
+				//show1();
+			}
+		});
+		buttons.get(5).setVisible(true);
+		buttons.get(5).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				useEnemyHitAbility();  //적군 맞았을 때 능력 발동
+				buttons.get(5).setVisible(false);
+				//show1();
+			}
+		});
+		buttons.get(7).setVisible(true);
+		buttons.get(7).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				isDownFriendly(); //아군 다운됐는지 확인
+				buttons.get(7).setVisible(false);
+				//show1();
+			}
+		});
+		buttons.get(8).setVisible(true);
+		buttons.get(8).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				isDownEnemy(); //적군 다운됐는지 확인
+				buttons.get(8).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(9).setVisible(true);
+		buttons.get(9).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (winFriendly()) { // 승리 확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);					
+				} else if (winEnemy()) { //패배확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);
+				}
+				buttons.get(9).setVisible(false);
+				//show1();
+			}
+		});
+		
+		for (int i = 9; i <= 60; i += 3) {
+		    final int index = i;
+
+		    buttons.get(index).setVisible(true);
+		    buttons.get(index).addMouseListener(new MouseAdapter() {
+		        public void mouseClicked(MouseEvent e) {
+		            if (winFriendly() || winEnemy()) {
+		                background.setVisible(false);
+		                PlacementScreen.setVisible(true);
+		            }
+		            buttons.get(index).setVisible(false);
+		            //show1();
+		        }
+		    });
+
+		    buttons.get(index + 1).setVisible(true);
+		    buttons.get(index + 1).addMouseListener(new MouseAdapter() {
+		        public void mouseClicked(MouseEvent e) {
+		            hitEnemy();
+		            hitFriendly();
+		            buttons.get(index + 1).setVisible(false);
+		            //show1();
+		        }
+		    });
+
+		    buttons.get(index + 2).setVisible(true);
+		    buttons.get(index + 2).addMouseListener(new MouseAdapter() {
+		        public void mouseClicked(MouseEvent e) {
+		            isDownFriendly();
+		            isDownEnemy();
+		            buttons.get(index + 2).setVisible(false);
+		            //show1();
+		        }
+		    });
+		}
+		
+		/*
+		buttons.get(10).setVisible(true);
+		buttons.get(10).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				hitEnemy();
+				hitFriendly();
+				buttons.get(10).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(11).setVisible(true);
+		buttons.get(11).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				isDownFriendly();
+				isDownEnemy();
+				buttons.get(11).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(12).setVisible(true);
+		buttons.get(12).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (winFriendly()) { // 승리 확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);					
+				} else if (winEnemy()) { //패배확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);
+				}
+				buttons.get(12).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(13).setVisible(true);
+		buttons.get(13).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				hitEnemy();
+				hitFriendly();
+				buttons.get(13).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(14).setVisible(true);
+		buttons.get(14).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				isDownFriendly();
+				isDownEnemy();
+				buttons.get(14).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(15).setVisible(true);
+		buttons.get(15).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (winFriendly()) { // 승리 확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);					
+				} else if (winEnemy()) { //패배확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);
+				}
+				buttons.get(15).setVisible(false);
+				//show1();
+			}
+		});
+		buttons.get(16).setVisible(true);
+		buttons.get(16).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				hitEnemy();
+				hitFriendly();
+				buttons.get(16).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(17).setVisible(true);
+		buttons.get(17).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				isDownFriendly();
+				isDownEnemy();
+				buttons.get(17).setVisible(false);
+				//show1();
+			}
+		});
+		
+		buttons.get(18).setVisible(true);
+		buttons.get(18).addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (winFriendly()) { // 승리 확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);					
+				} else if (winEnemy()) { //패배확인
+					background.setVisible(false);
+					PlacementScreen.setVisible(true);
+				}
+				buttons.get(18).setVisible(false);
+				//show1();
+			}
+		});
+		*/
 		
 		
-		
-		friendlyGoFront(); // 아군 배치 조정 ( 앞으로 땡기기 )
-		enemyGoFront(); // 적군 배치 조정 ( 앞으로 땡기기 )
 	}
 	
+	
+		
+	
+	
+	//--------------------------------------------------------------
+	
+	public void sleepMilliseconds(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	void change_pokemon_panel(int location, int pokemon_num,
+			int pokemon_Lv, int pokemon_Health, int pokemon_power, int pokemon_exp) {
+		
+		friendly_panel.get(location).set_pokemon_num(pokemon_num, pokemon_Lv);
+		friendly_panel.get(location).set_heart(pokemon_Health);
+		friendly_panel.get(location).set_damage(pokemon_power);
+		friendly_panel.get(location).set_exp(pokemon_exp);
+		friendly_panel.get(location).set_Lv(pokemon_Lv);
+		friendly_panel.get(location).setVisible(true);
+	}
+
+	//---------------------------------------------------------------
 	int run() {
 		friendlyGoFront(); // 아군 배치 조정 ( 앞으로 땡기기 )
 		enemyGoFront(); // 적군 배치 조정 ( 앞으로 땡기기 )
@@ -249,6 +619,7 @@ public class StartBattle extends JPanel {
 	void settingEnemy() {
 		setEnemy e = new setEnemy(turnNum);
 		enemy = e.settingEnemy();
+		
 	}
 
 	void findEffect() { // 배치 단계의 효과를 가져와 1이면 버섯효과 저장
@@ -437,6 +808,7 @@ public class StartBattle extends JPanel {
 					friendly.remove(i);
 				} else {
 					friendly.set(i, null);
+					friendly_panel.get(i).setVisible(false);
 				}
 				whoHitFriendly[i] = -1;
 				friendlyPoisonNum[i] = 0;
@@ -447,7 +819,9 @@ public class StartBattle extends JPanel {
 			friendlyFirstHit[i] = false;
 		}
 		for (int i = 0; i < j; i++) {
-			friendly.set(i, forreplace.get(i)); //friendly 에 앞으로 땡겨서 담는듯
+			friendly.set(i, forreplace.get(i)); //friendly 에 앞으로 땡김 지태 코드에 맞게 내 패널들도 앞으로 땡겨짐
+			change_pokemon_panel(i,forreplace.get(i).getPokemonNum(),forreplace.get(i).getLv(),forreplace.get(i).getHealth(),
+								forreplace.get(i).getPower(), forreplace.get(i).getExp());
 			whoHitFriendly[i] = replaceHitNum[i];
 			friendlyPoisonNum[i] = replacePoisonNum[i];
 			friendlyFirstHit[i] = replaceFirstHit[i];
@@ -593,13 +967,17 @@ public class StartBattle extends JPanel {
 				if (enemy.get(placeNum + 1).getPokemonNum() == 42) { // 앞에 있는 아군 공격에 맞을 시 // 20% 대신 맞아줍니다.
 					System.out.println("<<< " + enemy.get(placeNum + 1).getName() + " 능력 사용! >>>");
 					enemy.get(placeNum).setHealth(enemy.get(placeNum).getHealth() + (adjustNum / 10 * 8));
+					enemy_panel.get(placeNum).set_heart(enemy_panel.get(placeNum).get_heart() + (adjustNum / 10 * 8));
 					enemy.get(placeNum + 1).setHealth(enemy.get(placeNum + 1).getHealth() + (adjustNum / 10 * 2));
+					enemy_panel.get(placeNum + 1).set_heart(enemy_panel.get(placeNum + 1).get_heart() + (adjustNum / 10 * 2));
+					
 					System.out.println("<<< " + enemy.get(placeNum + 1).getName() + " 가 "
 							+ (enemy.get(placeNum).getHealth() + adjustNum) / 10 * 2 + " 만큼 대신 맞아줬습니다! >>>");
 					return;
 				}
 			}
 			enemy.get(placeNum).setHealth(enemy.get(placeNum).getHealth() + adjustNum);
+			enemy_panel.get(placeNum).set_heart(enemy_panel.get(placeNum).get_heart() + adjustNum);
 			return;
 		}
 	}
@@ -644,6 +1022,7 @@ public class StartBattle extends JPanel {
 		for (int i = 0; i < remainFriendlyNum(); i++) {
 			if (friendly.get(i).getPokemonNum() == 28) {
 				mo.setHealth(friendly.get(i).getHealth() * 2);
+				friendly_panel.get(i).set_heart(friendly.get(i).getHealth() * 2);
 			}
 		}
 		mo.setHealth(3);
@@ -654,6 +1033,7 @@ public class StartBattle extends JPanel {
 		for (int i = 0; i < remainEnemyNum(); i++) {
 			if (enemy.get(i).getPokemonNum() == 28) {
 				mo.setHealth(enemy.get(i).getHealth() * 2);
+				enemy_panel.get(i).set_heart(enemy.get(i).getHealth() * 2);
 			}
 		}
 		mo.setHealth(3);
@@ -1244,6 +1624,12 @@ public class StartBattle extends JPanel {
 				for (int i = 0; i < lv; i++) {
 					friendlyGoBack();
 					friendly.set(0, dan);
+					friendly_panel.get(0).set_pokemon_num(1, 2);
+					friendly_panel.get(0).set_exp(1);
+					friendly_panel.get(0).set_damage(2);
+					friendly_panel.get(0).set_heart(2);
+					friendly_panel.get(0).set_Lv(2);
+					friendly_panel.get(0).setVisible(true);
 					System.out.println("<<< " + "단데기" + " 소환! >>>");
 					friendlyUseToSummon();
 					friendlyUseSummonAbility();
@@ -1258,6 +1644,7 @@ public class StartBattle extends JPanel {
 				friendlyPoisonNum[i] += lv;
 				System.out.println("<<< " + enemy.get(i).getName() + "에게 " + lv + " 독 피해! >>>");
 				friendly.set(placeNum, null);
+				friendly_panel.get(placeNum).setVisible(false);
 				return;
 			}
 			case 18: { // 기절 시 가장 앞에 있는 적군 2, 3, 4 피해
@@ -1270,6 +1657,7 @@ public class StartBattle extends JPanel {
 				System.out.println("<<< " + enemy.get(0).getName() + "에게 " + abilityNum + " 피해! >>>");
 				findHitEnemy(0, placeNum);
 				friendly.set(placeNum, null);
+				friendly_panel.get(placeNum).setVisible(false);
 				return;
 			}
 			case 19: { // 기절 시 능력 없는 망키 1, 2, 3 소환
@@ -1311,6 +1699,7 @@ public class StartBattle extends JPanel {
 			}
 			default: {
 				friendly.set(placeNum, null);
+				friendly_panel.get(placeNum).setVisible(false);
 				return;
 			}
 			}
@@ -2145,6 +2534,12 @@ public class StartBattle extends JPanel {
 				for (int i = 0; i < lv; i++) {
 					enemyGoBack();
 					enemy.set(0, dan);
+					enemy_panel.get(0).set_pokemon_num(1, 2);
+					enemy_panel.get(0).set_exp(1);
+					enemy_panel.get(0).set_damage(2);
+					enemy_panel.get(0).set_heart(2);
+					enemy_panel.get(0).set_Lv(2);
+					enemy_panel.get(0).setVisible(true);
 					System.out.println("<<< " + "단데기" + " 소환! >>>");
 					enemyUseToSummon();
 					enemyUseSummonAbility();
@@ -2159,6 +2554,7 @@ public class StartBattle extends JPanel {
 				enemyPoisonNum[i] += lv;
 				System.out.println("<<< " + friendly.get(i).getName() + "에게 " + lv + " 독 피해! >>>");
 				enemy.set(placeNum, null);
+				enemy_panel.get(placeNum).setVisible(false);
 				return;
 			}
 			case 18: { // 기절 시 가장 앞에 있는 적군 2, 3, 4 피해
@@ -2171,6 +2567,7 @@ public class StartBattle extends JPanel {
 				System.out.println("<<< " + friendly.get(0).getName() + "에게 " + abilityNum + " 피해! >>>");
 				findHitfriendly(0, placeNum);
 				enemy.set(placeNum, null);
+				enemy_panel.get(placeNum).setVisible(false);
 				return;
 			}
 			case 19: { // 기절 시 능력 없는 망키 1, 2, 3 소환
@@ -2184,6 +2581,7 @@ public class StartBattle extends JPanel {
 					friendlyEnemySummonAbility();
 				}
 				enemy.set(placeNum + lv, null);
+				enemy_panel.get(placeNum + lv).setVisible(false);
 				return;
 			}
 
@@ -2211,6 +2609,7 @@ public class StartBattle extends JPanel {
 			}
 			default: {
 				enemy.set(placeNum, null);
+				enemy_panel.get(placeNum).setVisible(false);
 				return;
 			}
 			}
