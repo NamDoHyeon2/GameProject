@@ -18,7 +18,7 @@ public class Placement_Screen extends JFrame {
 	private int life = 10; // 목숨
 	private int coin = 100; // 코인
 	private int badge = 0; // 뱃지
-	private int turnNum = 6;// 턴 수
+	private int turnNum = 1;// 턴 수
 	Random random = new Random();
 	private JPanel contentPane;
 	private LinkedList<Pokemon> shopPokemon;
@@ -39,11 +39,11 @@ public class Placement_Screen extends JFrame {
 	boolean frozenPokemonNum[] = { false, false, false, false, false }; // 상점 포켓몬 얼리기 설정
 	boolean frozenItemNum[] = { false, false };// 아이템 얼리기
 	private ImagePanel background = new ImagePanel(
-			new ImageIcon("C:\\Users\\jite1\\Desktop\\GameProject\\Image\\src\\Image\\placement_background.png")
+			new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\placement_background.png")
 					.getImage());
 	private Item_Panel select_item;
 	boolean item24Effect = false;
-	private StartBattle battle_screen;
+	public StartBattle battle_screen;
 
 	/**
 	 * Launch the application.
@@ -99,7 +99,7 @@ public class Placement_Screen extends JFrame {
 		// ---------------Item_1_panel------------------//
 		Item_Panel item1 = new Item_Panel();
 		ImagePanel item_location_1 = new ImagePanel(
-				new ImageIcon("C:\\Users\\jite1\\Desktop\\GameProject\\Image\\src\\Image\\select_location.png")
+				new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\select_location.png")
 						.getImage());
 		item1.setBounds(1325, 600, 409, 245);
 		item_location_1.setBounds(1328, 780, 184, 110);
@@ -111,7 +111,7 @@ public class Placement_Screen extends JFrame {
 		// ---------------Item_2_panel------------------//
 		Item_Panel item2 = new Item_Panel();
 		ImagePanel item_location_2 = new ImagePanel(
-				new ImageIcon("C:\\Users\\jite1\\Desktop\\GameProject\\Image\\src\\Image\\select_location.png")
+				new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\select_location.png")
 						.getImage());
 		item2.setBounds(1564, 600, 356, 245);
 		item_location_2.setBounds(1570, 780, 184, 110);
@@ -222,21 +222,21 @@ public class Placement_Screen extends JFrame {
 
 		// ---------------reroll_panel------------------//
 		ImagePanel reroll = new ImagePanel(
-				new ImageIcon("C:\\Users\\jite1\\Desktop\\GameProject\\Image\\src\\Image\\reroll.png").getImage());
+				new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\reroll.png").getImage());
 		reroll.setLocation(12, 957);
 		background.add(reroll);
 		// -------------------------------------------//
 
 		// ---------------frozen_panel------------------//
 		ImagePanel frozen = new ImagePanel(
-				new ImageIcon("C:\\Users\\jite1\\Desktop\\GameProject\\Image\\src\\Image\\prozen.png").getImage());
+				new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\prozen.png").getImage());
 		frozen.setLocation(253, 935);
 		background.add(frozen);
 		// -------------------------------------------//
 
 		// ---------------next_panel------------------//
 		ImagePanel next_btn = new ImagePanel(
-				new ImageIcon("C:\\Users\\jite1\\Desktop\\GameProject\\Image\\src\\Image\\next_btn.png").getImage());
+				new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\next_btn.png").getImage());
 		next_btn.setLocation(1663, 911);
 		background.add(next_btn);
 		next_btn.setLocation(1663, 911);
@@ -244,7 +244,7 @@ public class Placement_Screen extends JFrame {
 
 		// ---------------next_panel------------------//
 		ImagePanel sell_btn = new ImagePanel(
-				new ImageIcon("C:\\Users\\jite1\\Desktop\\GameProject\\Image\\src\\Image\\sell_1.png").getImage());
+				new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\sell_1.png").getImage());
 		sell_btn.setBounds(1259, 916, 300, 145);
 		background.add(sell_btn);
 
@@ -347,53 +347,23 @@ public class Placement_Screen extends JFrame {
 		next_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-		        
-				//배틀시작
-		        for (int i = 0; i < 5; i++) {
-		            if (placePokemon.get(i) != null) {
-		                int pokemonNum = placePokemon.get(i).getPokemonNum();
-		                int Lv = placePokemon.get(i).getLv();
-		                int exp = placePokemon.get(i).getExp();
-		                String name = placePokemon.get(i).getName();
-		                String type = placePokemon.get(i).getType();
-		                int grade = placePokemon.get(i).getGrade();
-		                int health = placePokemon.get(i).getHealth();
-		                int power = placePokemon.get(i).getPower();
-		                String ability = placePokemon.get(i).getAbility();
-		                Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
-		                toBattle.set(i, p);
-		            } else
-		                toBattle.set(i, null);
-		        }
-		        
-		        StartBattle battle_screen = new StartBattle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
-		                toBattle.get(4), effectNum, background);		        
-		        getContentPane().add(battle_screen);
+				shop_reroll();
+				turnNum++;
+				if (battle_screen != null && contentPane.isAncestorOf(battle_screen)) {
+				    contentPane.remove(battle_screen);  // battle_screen이 null이 아니고 contentPane의 자식인 경우에만 제거
+				    contentPane.revalidate();
+				    contentPane.repaint();
+				}
+				setBattleScreen();
+		        battle_screen = new StartBattle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
+		                toBattle.get(4), effectNum, background);
+		        contentPane.add(battle_screen);
+		        System.out.println("화면 넘어갔다잉");
 		        background.setVisible(false);
 		        battle_screen.setVisible(true);
-
-
-				// 배틀시작
-				for (int i = 0; i < 5; i++) {
-					if (placePokemon.get(i) != null) {
-						int pokemonNum = placePokemon.get(i).getPokemonNum();
-						int Lv = placePokemon.get(i).getLv();
-						int exp = placePokemon.get(i).getExp();
-						String name = placePokemon.get(i).getName();
-						String type = placePokemon.get(i).getType();
-						int grade = placePokemon.get(i).getGrade();
-						int health = placePokemon.get(i).getHealth();
-						int power = placePokemon.get(i).getPower();
-						String ability = placePokemon.get(i).getAbility();
-						Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
-						toBattle.set(i, p);
-					} else
-						toBattle.set(i, null);
-				}
-
 			}
 		});
-
+		
 		// 상점 포켓몬 하나만 선택되게 하고 선택한 객체를 저장함
 		for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
 			shop_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
@@ -511,6 +481,25 @@ public class Placement_Screen extends JFrame {
 		});
 
 	}
+	void setBattleScreen() {
+		for (int i = 0; i < 5; i++) {
+            if (placePokemon.get(i) != null) {
+                int pokemonNum = placePokemon.get(i).getPokemonNum();
+                int Lv = placePokemon.get(i).getLv();
+                int exp = placePokemon.get(i).getExp();
+                String name = placePokemon.get(i).getName();
+                String type = placePokemon.get(i).getType();
+                int grade = placePokemon.get(i).getGrade();
+                int health = placePokemon.get(i).getHealth();
+                int power = placePokemon.get(i).getPower();
+                String ability = placePokemon.get(i).getAbility();
+                Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
+                toBattle.set(i, p);
+            } else
+                toBattle.set(i, null);
+        }
+	}
+	
 
 	void startPlacement() { // 배치 단계 시작 시 구현
 		shop_reroll();
