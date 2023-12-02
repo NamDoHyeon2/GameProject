@@ -354,7 +354,7 @@ public class Placement_Screen extends JFrame {
 				}
 				setBattleScreen();
 		        battle_screen = new StartBattle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
-		                toBattle.get(4), effectNum, background);
+		                toBattle.get(4), effectNum, background, status_panel);
 		        contentPane.add(battle_screen);
 		        System.out.println("화면 넘어갔다잉");
 		        background.setVisible(false);
@@ -481,6 +481,14 @@ public class Placement_Screen extends JFrame {
 		});
 
 	}
+	public void up_bedge() {
+		this.badge++;
+	}
+	
+	void down_heart() {
+		this.life--;
+	}
+	
 	void setBattleScreen() {
 		for (int i = 0; i < 5; i++) {
             if (placePokemon.get(i) != null) {

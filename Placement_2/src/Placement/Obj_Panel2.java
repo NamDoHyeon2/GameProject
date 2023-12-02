@@ -152,7 +152,6 @@ public class Obj_Panel2 extends JPanel {
 	public void no_show_ex() {
 		explanation.setVisible(false);
 	}
-	
 	public void set_pokemon_num(int pokemon_num, int Lv) {
 	    if (Lv == 1) {
 	        this.pokemonNum = Integer.toString(pokemon_num);

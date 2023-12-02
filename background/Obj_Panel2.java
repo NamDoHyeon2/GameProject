@@ -1,4 +1,4 @@
-package Placement;
+package background;
 
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -20,11 +20,13 @@ import javax.swing.border.EtchedBorder;
 
 
 
-public class Obj_Panel3 extends JPanel {
+public class Obj_Panel2 extends JPanel {
 	private JLabel heart_label;
 	private JLabel damage_label;
 	private JLabel Lv_label;
 	private JLabel exp_label;
+	private JLabel check_grade_label;
+	private JLabel no_check_grade_label;
 	private JPanel explanation;
 	private JTextArea ex_label;
 	
@@ -39,33 +41,42 @@ public class Obj_Panel3 extends JPanel {
 	private String grade;
 	private String heart;
 	private String damage;
+	private ImagePanel check_panel;
+	private ImagePanel default_check_panel;
 	private ImagePanel pokemon_panel;
+	private ImagePanel frozen_panel;
 	private boolean isfrozen;
 	
 	
-	public Obj_Panel3() {
+	public Obj_Panel2() {
 		this.ischecked = false;
 		this.isfrozen = false;
-		this.heart = "0";
+		
 		setLayout(null);
 		setBounds(161, 566, 486, 340);
 		setOpaque(false);
-		ImagePanel heart_panel = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\shop_heart.png").getImage());
-		ImagePanel damage_panel = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\shop_damage.png").getImage());
+		ImagePanel heart_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\shop_heart.png").getImage());
+		ImagePanel damage_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\shop_damage.png").getImage());
+		this.default_check_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\no_check.png").getImage());
+		this.check_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\check.png").getImage());
 		this.heart_label = new JLabel(this.heart);
 		this.damage_label = new JLabel(this.damage);
-		this.pokemon_panel = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\"+ pokemonNum +".png").getImage());
+		this.frozen_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\prozen_obj.png").getImage());
+		this.pokemon_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\"+ pokemonNum +".png").getImage());
+		
+		frozen_panel.setBounds(28, 93, 120, 131);
+		this.add(frozen_panel);
+		frozen_panel.setVisible(false);
 		
 		pokemon_panel.setBounds(12, 126, 166, 166);
 		this.add(pokemon_panel);
 		
 		this.exp_label = new JLabel("null/2");
-		exp_label.setBounds(69, 68, 81, 28);
+		exp_label.setBounds(81, 20, 81, 28);
 		this.add(exp_label);
 		exp_label.setFont(new Font("êµ´ë¦¼", Font.BOLD, 24));
 		exp_label.setHorizontalAlignment(JLabel.CENTER); 
 		exp_label.setVerticalAlignment(JLabel.CENTER);
-		exp_label.setForeground(Color.WHITE);
 		
 		heart_panel.setBounds(111, 272, 67, 65);
 		heart_panel.setLayout(null);
@@ -73,7 +84,7 @@ public class Obj_Panel3 extends JPanel {
 		
 		heart_label.setFont(new Font("êµ´ë¦¼", Font.BOLD, 30));
 		heart_label.setBounds(0, 15, 67, 33);
-		heart_label.setHorizontalAlignment(JLabel.CENTER); // ìˆ˜í‰ ì •ë ¬ ì„¤ì •
+		heart_label.setHorizontalAlignment(JLabel.CENTER); // ?ˆ˜?‰ ? •? ¬ ?„¤? •
 		heart_label.setVerticalAlignment(JLabel.CENTER);
 		heart_panel.add(heart_label);
 
@@ -87,11 +98,33 @@ public class Obj_Panel3 extends JPanel {
 		damage_label.setVerticalAlignment(JLabel.CENTER);
 		damage_panel.add(damage_label);
 		
+		default_check_panel.setBounds(62, 59, 56, 56);
+		this.add(default_check_panel);
+		default_check_panel.setLayout(null);
+		
+		check_panel.setBounds(62, 60, 56, 56);
+		this.add(check_panel);
+		check_panel.setLayout(null);
+		check_panel.setVisible(false);
+		
+		this.check_grade_label = new JLabel(this.grade);
+		check_grade_label.setFont(new Font("êµ´ë¦¼", Font.BOLD, 29));
+		check_grade_label.setBounds(0, 5, 57, 51);
+		check_panel.add(check_grade_label);
+		check_grade_label.setHorizontalAlignment(JLabel.CENTER); 
+		check_grade_label.setVerticalAlignment(JLabel.CENTER);
+		
+		this.no_check_grade_label = new JLabel(this.grade);
+		no_check_grade_label.setFont(new Font("êµ´ë¦¼", Font.BOLD, 29));
+		no_check_grade_label.setBounds(0, 5, 57, 51);
+		default_check_panel.add(no_check_grade_label);
+		no_check_grade_label.setHorizontalAlignment(JLabel.CENTER); 
+		no_check_grade_label.setVerticalAlignment(JLabel.CENTER);
+		
 		this.Lv_label = new JLabel("Lvnull");
 		Lv_label.setFont(new Font("êµ´ë¦¼", Font.BOLD, 24));
-		Lv_label.setBounds(28, 69, 53, 27);
+		Lv_label.setBounds(39, 21, 53, 27);
 		add(Lv_label);
-		Lv_label.setForeground(Color.WHITE);
 		
 		this.explanation = new JPanel();
 		explanation.setBackground(new Color(255, 251, 202));
@@ -119,9 +152,7 @@ public class Obj_Panel3 extends JPanel {
 	public void no_show_ex() {
 		explanation.setVisible(false);
 	}
-	public JPanel get_expanel() {
-		return explanation;
-	}
+	
 	public void set_pokemon_num(int pokemon_num, int Lv) {
 	    if (Lv == 1) {
 	        this.pokemonNum = Integer.toString(pokemon_num);
@@ -130,7 +161,7 @@ public class Obj_Panel3 extends JPanel {
 	    }else if (Lv == 3) {
 	    	 this.pokemonNum = "3_" + Integer.toString(pokemon_num);
 	    }
-	    update_pokemon_Image(); // í¬ì¼“ëª¬ íŒ¨ë„ ê°’ set í›„ ì—…ë°ì´íŠ¸
+	    update_pokemon_Image(); // ?¬ì¼“ëª¬ ?Œ¨?„ ê°? set ?›„ ?—…?°?´?Š¸
 	}
 	
 	public int get_pokemon_num() {
@@ -163,8 +194,18 @@ public class Obj_Panel3 extends JPanel {
 		return Integer.parseInt(this.exp);
 	}
 	
+	public void set_grade(int grade) {
+		this.grade = Integer.toString(grade);
+		update_grade_label();
+	}
+	
 	public int get_grade() {
 		return Integer.parseInt(this.grade);
+	}
+	
+	public void update_grade_label() { //?´ë¯¸ì? ?Œ¨?„?´ 2ê°œì—¬?„œ 2ê°œì˜ label?„ ?—…?°?´?Š¸ ?•˜ê¸°ìœ„?•œ ?•¨?ˆ˜
+		check_grade_label.setText(this.grade);
+		no_check_grade_label.setText(this.grade);
 	}
 	
 	public void set_heart(int heart) {
@@ -174,6 +215,7 @@ public class Obj_Panel3 extends JPanel {
 	public int get_heart() {
 		return Integer.parseInt(this.heart);
 	}
+	
 	
 	public void set_damage(int damage) {
 		this.damage = Integer.toString(damage);
@@ -190,21 +232,34 @@ public class Obj_Panel3 extends JPanel {
     public int get_location_num() {
     	return this.location_num;
     }
-    
-    public ImagePanel get_pokemon_panel() { //ì´ë¯¸ì§€ íŒ¨ë„ì„ ë°›ì•„ì„œ ë‹¤ë¥¸ í´ë˜ìŠ¤ì—ì„œë„ ì‚¬ìš©í•  ìˆ˜ ìˆê²Œ í•¨
-    	return pokemon_panel;
-    }
 	
-    private void update_pokemon_Image() { //í¬ì¼“ëª¬ ê°’ì„ ì„¤ì •í•˜ê³  ê·¸ íŒ¨ë„ì„ ì—…ë°ì´íŠ¸ í•´ì£¼ëŠ” í•¨ìˆ˜.
-        String imagePath = "C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\" + this.pokemonNum + ".png";
+    private void update_pokemon_Image() { //?¬ì¼“ëª¬ ê°’ì„ ?„¤? •?•˜ê³? ê·? ?Œ¨?„?„ ?—…?°?´?Š¸ ?•´ì£¼ëŠ” ?•¨?ˆ˜.
+        String imagePath = "C:\\ex1\\AutoPocket_ex1\\src\\Images\\" + this.pokemonNum + ".png";
         this.pokemon_panel.setImage(new ImageIcon(imagePath).getImage());
         repaint(); 
     }
     
-    public boolean ischecked() { //ì²´í¬ ì—¬ë¶€ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜.
+    public boolean ischecked() { //ì²´í¬ ?—¬ë¶?ë¥? ë°˜í™˜?•˜?Š” ?•¨?ˆ˜.
     	return ischecked;
     }
-  
+    
+    public void check() { //ì²´í¬ ?–ˆ?„?•Œ
+    	ischecked = true;
+    	default_check_panel.setVisible(false);
+		check_panel.setVisible(true);
+    }
+    public void no_check() { //ì²´í¬ ?•´? œ ?–ˆ?„?•Œ
+    	ischecked = false;
+    	default_check_panel.setVisible(true);
+		check_panel.setVisible(false);
+    }
+    public ImagePanel get_pokemon_panel() { //?´ë¯¸ì? ?Œ¨?„?„ ë°›ì•„?„œ ?‹¤ë¥? ?´?˜?Š¤?—?„œ?„ ?‚¬?š©?•  ?ˆ˜ ?ˆê²? ?•¨
+    	return pokemon_panel;
+    }
+    
+    public ImagePanel get_frozen_panel() { //?´ë¯¸ì? ?Œ¨?„?„ ë°›ì•„?„œ ?‹¤ë¥? ?´?˜?Š¤?—?„œ ?‚¬?š©?•  ?ˆ˜ ?ˆê²? ?•˜ê¸°ìœ„?•¨
+    	return frozen_panel;
+    }
     
     public void set_ex(String ex) {
     	this.ex = ex;

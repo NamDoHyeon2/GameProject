@@ -1,5 +1,9 @@
 package Placement;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -9,6 +13,8 @@ import java.util.Scanner;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+
 
 public class StartBattle extends JPanel {
 	private ImagePanel background;
@@ -22,6 +28,8 @@ public class StartBattle extends JPanel {
 	private LinkedList<Pokemon> forreplace; //
 	private LinkedList <Button> buttons;
 	private boolean isnext;
+	private ImagePanel ballImg;
+	private Status_Panel status_panel;
 	
 	Random random = new Random();
 	int turnNum; // 턴 수
@@ -39,13 +47,13 @@ public class StartBattle extends JPanel {
 	int friendlyHP45 = 0; // 45번 포켓몬 체력 저장 피해량 20% 돌려줘야함
 	int enemyHP45 = 0;
 
-	int replaceHitNum[] = { -1, -1, -1, -1, -1 };
-	int whoHitEnemy[] = { -1, -1, -1, -1, -1 }; // 적군 공격한 아군 위치 저장
-	int whoHitFriendly[] = { -1, -1, -1, -1, -1 }; // 아군 공격한 적군 위치 저장
+	int replaceHitNum[] = { -1, -1, -1, -1, -1 ,-1, -1, -1, -1, -1, -1};
+	int whoHitEnemy[] = { -1, -1, -1, -1, -1 ,-1, -1, -1, -1, -1, -1}; // 적군 공격한 아군 위치 저장
+	int whoHitFriendly[] = { -1, -1, -1, -1, -1 ,-1, -1, -1, -1, -1, -1}; // 아군 공격한 적군 위치 저장
 
-	int replacePoisonNum[] = { 0, 0, 0, 0, 0 };
-	int friendlyPoisonNum[] = { 0, 0, 0, 0, 0 }; // 아군 독 피해량 저장
-	int enemyPoisonNum[] = { 0, 0, 0, 0, 0 }; // 적군 독 피해량 저장
+	int replacePoisonNum[] = { 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0};
+	int friendlyPoisonNum[] = {  0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0}; // 아군 독 피해량 저장
+	int enemyPoisonNum[] = {  0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0 }; // 적군 독 피해량 저장
 
 	Pokemon dan = new Pokemon(61, 2, 1, "단데기", "벌레", 1, 2, 2, "기절 시 능력 없는 2/2단데기 2 소환");
 	Obj_Panel3 dan_panel = new Obj_Panel3();
@@ -55,7 +63,8 @@ public class StartBattle extends JPanel {
 	 * Create the panel.
 	 */
 	public StartBattle(int turnNum, Pokemon f1, Pokemon f2, Pokemon f3, Pokemon f4, Pokemon f5, 
-			int findEffect[], ImagePanel placement) {
+			int findEffect[], ImagePanel placement, Status_Panel status) {
+		this.status_panel = status;
 		this.PlacementScreen = placement;
 		this.friendly_panel = new LinkedList<>();
 		this.friendly = new LinkedList<>();
@@ -99,6 +108,7 @@ public class StartBattle extends JPanel {
 		this.add(background);
 		isnext = false;
 		
+		
 		//---------------------다음 버튼-------------------
 		this.next_btn = new ImagePanel (new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\Next_Battle.png").getImage());
 		this.background.add(next_btn);
@@ -111,7 +121,10 @@ public class StartBattle extends JPanel {
 			button.setVisible(false);
 			buttons.add(i, button);
 		}
-
+		
+		this.ballImg = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\ball.png").getImage());
+		background.add(ballImg);
+		ballImg.setVisible(false);
 		//----------------------------------------------
 		
 		//---------------------아군 진영-------------------
@@ -127,6 +140,7 @@ public class StartBattle extends JPanel {
 			friendly_panel_1.set_damage(friendly.get(0).getPower());
 			friendly_panel_1.set_exp(friendly.get(0).getExp());
 			friendly_panel_1.set_Lv(friendly.get(0).getLv());
+			friendly_panel_1.set_ex(friendly.get(0).getAbility());
 			friendly_panel_1.setVisible(true);
 		}
 	
@@ -141,6 +155,7 @@ public class StartBattle extends JPanel {
 			friendly_panel_2.set_damage(friendly.get(1).getPower());
 			friendly_panel_2.set_exp(friendly.get(1).getExp());
 			friendly_panel_2.set_Lv(friendly.get(1).getLv());
+			friendly_panel_2.set_ex(friendly.get(1).getAbility());
 			friendly_panel_2.setVisible(true);
 		}
 		
@@ -155,6 +170,7 @@ public class StartBattle extends JPanel {
 			friendly_panel_3.set_damage(friendly.get(2).getPower());
 			friendly_panel_3.set_exp(friendly.get(2).getExp());
 			friendly_panel_3.set_Lv(friendly.get(2).getLv());
+			friendly_panel_3.set_ex(friendly.get(2).getAbility());
 			friendly_panel_3.setVisible(true);
 		}
 		
@@ -170,6 +186,7 @@ public class StartBattle extends JPanel {
 			friendly_panel_4.set_damage(friendly.get(3).getPower());
 			friendly_panel_4.set_exp(friendly.get(3).getExp());
 			friendly_panel_4.set_Lv(friendly.get(3).getLv());
+			friendly_panel_4.set_ex(friendly.get(3).getAbility());
 			friendly_panel_4.setVisible(true);
 		}
 		
@@ -184,6 +201,7 @@ public class StartBattle extends JPanel {
 			friendly_panel_5.set_damage(friendly.get(4).getPower());
 			friendly_panel_5.set_exp(friendly.get(4).getExp());
 			friendly_panel_5.set_Lv(friendly.get(4).getLv());
+			friendly_panel_5.set_ex(friendly.get(4).getAbility());
 			friendly_panel_5.setVisible(true);
 		}
 		//----------------------------------------------
@@ -200,6 +218,7 @@ public class StartBattle extends JPanel {
 			enemy_panel_1.set_damage(enemy.get(0).getPower());
 			enemy_panel_1.set_exp(enemy.get(0).getExp());
 			enemy_panel_1.set_Lv(enemy.get(0).getLv());
+			enemy_panel_1.set_ex(enemy.get(0).getAbility());
 			enemy_panel_1.setVisible(true);
 		}
 		
@@ -214,6 +233,7 @@ public class StartBattle extends JPanel {
 			enemy_panel_2.set_damage(enemy.get(1).getPower());
 			enemy_panel_2.set_exp(enemy.get(1).getExp());
 			enemy_panel_2.set_Lv(enemy.get(1).getLv());
+			enemy_panel_2.set_ex(enemy.get(1).getAbility());
 			enemy_panel_2.setVisible(true);
 		}
 		
@@ -228,6 +248,7 @@ public class StartBattle extends JPanel {
 			enemy_panel_3.set_damage(enemy.get(2).getPower());
 			enemy_panel_3.set_exp(enemy.get(2).getExp());
 			enemy_panel_3.set_Lv(enemy.get(2).getLv());
+			enemy_panel_3.set_ex(enemy.get(2).getAbility());
 			enemy_panel_3.setVisible(true);
 		}
 		
@@ -237,12 +258,13 @@ public class StartBattle extends JPanel {
 		enemy_panel_4.setLocation(1540, 391);
 		enemy_panel_4.setVisible(false); //디폴트는 안보이게
 		if(enemy.get(3) != null) {
-			enemy_panel_1.set_pokemon_num(enemy.get(3).getPokemonNum(), enemy.get(3).getLv());
-			enemy_panel_1.set_heart(enemy.get(3).getHealth());
-			enemy_panel_1.set_damage(enemy.get(3).getPower());
-			enemy_panel_1.set_exp(enemy.get(3).getExp());
-			enemy_panel_1.set_Lv(enemy.get(3).getLv());
-			enemy_panel_1.setVisible(true);
+			enemy_panel_4.set_pokemon_num(enemy.get(3).getPokemonNum(), enemy.get(3).getLv());
+			enemy_panel_4.set_heart(enemy.get(3).getHealth());
+			enemy_panel_4.set_damage(enemy.get(3).getPower());
+			enemy_panel_4.set_exp(enemy.get(3).getExp());
+			enemy_panel_4.set_Lv(enemy.get(3).getLv());
+			enemy_panel_4.set_ex(enemy.get(3).getAbility());
+			enemy_panel_4.setVisible(true);
 		}
 		
 		Obj_Panel3 enemy_panel_5 = new Obj_Panel3();
@@ -256,6 +278,7 @@ public class StartBattle extends JPanel {
 			enemy_panel_5.set_damage(enemy.get(4).getPower());
 			enemy_panel_5.set_exp(enemy.get(4).getExp());
 			enemy_panel_5.set_Lv(enemy.get(4).getLv());
+			enemy_panel_5.set_ex(enemy.get(4).getAbility());
 			enemy_panel_5.setVisible(true);
 		}
 		
@@ -269,53 +292,60 @@ public class StartBattle extends JPanel {
 	    		settingEnemySummonModapi(); // 적군 모다피 능력 구현
 	    		next_btn.setVisible(false);
 	    		show1();
+	    		System.out.println("");
 	        }
 	    });
 		buttons.get(0).setVisible(true);
 		buttons.get(0).addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				ballImg.setVisible(false);
 				useStartBattleAbility(); //시작시 능력 사용
 				buttons.get(0).setVisible(false);
 				show1();
+				System.out.println("");
 			}
 		});
 		buttons.get(1).setVisible(true);
 		buttons.get(1).addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				ballImg.setVisible(false);
 				isDownFriendly();  // 아군 기절 확인
 				isDownEnemy(); // 적군 기절 확인
 				buttons.get(1).setVisible(false);
-				//show1();
+				show1();
+				System.out.println("");
 			}
 		});
 		buttons.get(3).setVisible(true);
 		buttons.get(3).addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (winFriendly()) { // 승리 확인
-					background.setVisible(false);
-					PlacementScreen.setVisible(true);					
-				} else if (winEnemy()) { //패배확인
-					background.setVisible(false);
-					PlacementScreen.setVisible(true);
-				}
-				buttons.get(3).setVisible(false);
-				//show1();
+				if (winFriendly()) {
+					PlacementScreen.remove(status_panel);
+	            	background.setVisible(false);
+	            	status_panel.up_win();
+	            	PlacementScreen.add(status_panel);
+	            	PlacementScreen.setVisible(true);
+	            	
+	            }else if(winEnemy()) {
+	            	PlacementScreen.remove(status_panel);
+	            	background.setVisible(false);
+	            	status_panel.down_heart();
+	            	PlacementScreen.add(status_panel);
+	            	PlacementScreen.setVisible(true);
+	            }
+	            buttons.get(3).setVisible(false);
+	            show1();
+	            System.out.println("");
 			}
 		});
 		buttons.get(4).setVisible(true);
 		buttons.get(4).addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				useFriendlyHitAbility(); //아군 맞았을 때 능력발동
-				buttons.get(4).setVisible(false);
-				//show1();
-			}
-		});
-		buttons.get(5).setVisible(true);
-		buttons.get(5).addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
 				useEnemyHitAbility();  //적군 맞았을 때 능력 발동
-				buttons.get(5).setVisible(false);
-				//show1();
+				buttons.get(4).setVisible(false);
+				show1();
+				System.out.println("");
 			}
 		});
 		buttons.get(7).setVisible(true);
@@ -324,38 +354,35 @@ public class StartBattle extends JPanel {
 				isDownFriendly(); //아군 다운됐는지 확인
 				isDownEnemy(); //적군 다운됐는지 확인
 				buttons.get(7).setVisible(false);
-				//show1();
+				show1();
+				System.out.println("");
 			}
 		});
 		
-		buttons.get(9).setVisible(true);
-		buttons.get(9).addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if (winFriendly()) { // 승리 확인
-					background.setVisible(false);
-					PlacementScreen.setVisible(true);					
-				} else if (winEnemy()) { //패배확인
-					background.setVisible(false);
-					PlacementScreen.setVisible(true);
-				}
-				buttons.get(9).setVisible(false);
-				//show1();
-			}
-		});
-		
-		for (int i = 9; i <= 60; i += 3) {
+
+		for (int i = 8; i <= 60; i += 3) {
 		    final int index = i;
 
 		    buttons.get(index).setVisible(true);
 		    buttons.get(index).addMouseListener(new MouseAdapter() {
 		        public void mouseClicked(MouseEvent e) {
-		            if (winFriendly() || winEnemy()) {
+		            if (winFriendly()) {
+		            	PlacementScreen.remove(status_panel);
 		            	background.setVisible(false);
+		            	status_panel.up_win();
+		            	PlacementScreen.add(status_panel);
 		            	PlacementScreen.setVisible(true);
 		            	
+		            }else if(winEnemy()) {
+		            	PlacementScreen.remove(status_panel);
+		            	background.setVisible(false);
+		            	status_panel.down_heart();
+		            	PlacementScreen.add(status_panel);
+		            	PlacementScreen.setVisible(true);
 		            }
 		            buttons.get(index).setVisible(false);
-		            //show1();
+		            show1();
+		            System.out.println("");
 		        }
 		    });
 
@@ -364,8 +391,14 @@ public class StartBattle extends JPanel {
 		        public void mouseClicked(MouseEvent e) {
 		            hitEnemy();
 		            hitFriendly();
+		        	friendlyAttackAbility(0);
+		        	enemyAttackAbility(0);
+		        	useFriendlyHitAbility();
+		        	useEnemyHitAbility();
+		            pokemonfight(friendly_panel.get(0), enemy_panel.get(0));
 		            buttons.get(index + 1).setVisible(false);
-		            //show1();
+		            show1();
+		            System.out.println("");
 		        }
 		    });
 
@@ -375,48 +408,187 @@ public class StartBattle extends JPanel {
 		            isDownFriendly();
 		            isDownEnemy();
 		            buttons.get(index + 2).setVisible(false);
-		            //show1();
+		            show1();
+		            System.out.println("");
 		        }
 		    });
+		    
+			for (Obj_Panel3 friendly_panels : friendly_panel) {
+				friendly_panels.get_pokemon_panel().addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						friendly_panels.show_ex();
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						friendly_panels.no_show_ex();
+					}
+				});
+				
+			}
+				for (Obj_Panel3 enemy_panels : enemy_panel) {
+					enemy_panels.get_pokemon_panel().addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseEntered(MouseEvent e) {
+							enemy_panels.show_ex();
+					}
+
+						@Override
+						public void mouseExited(MouseEvent e) {
+							enemy_panels.no_show_ex();
+					}
+				});	
+			}	
 		}
 	}
 	
 	
-		
 	
 	
 	//--------------------------------------------------------------
+	 private <T extends Component> T findPanel(Container container, Class<T> panelClass) {
+	        for (Component component : container.getComponents()) {
+	            if (panelClass.isInstance(component)) {
+	                return (T) component;  // 찾았을 경우 해당 컴포넌트 반환
+	            }
+	            if (component instanceof Container) {
+	                T foundPanel = findPanel((Container) component, panelClass);
+	                if (foundPanel != null) {
+	                    return foundPanel;  // 내부 컨테이너에서 찾았을 경우 해당 컴포넌트 반환
+	                }
+	            }
+	        }
+	        return null;  // 찾지 못한 경우 null 반환
+	    }
 	
-	public void sleepMilliseconds(long milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+	void pokemonfight(Obj_Panel3 friendly_panel,Obj_Panel3 enemy_panel) {
+		int targetXEnemy = enemy_panel.getX();
+        int targetYEnemy = enemy_panel.getY();
+
+        int targetXFriendly = friendly_panel.getX();
+        int targetYFriendly = friendly_panel.getY();
+
+        int steps = 60;
+
+        int deltaXEnemy = (targetXFriendly - enemy_panel.getX()) / steps;
+        int deltaYEnemy = (targetYFriendly - enemy_panel.getY()) / steps;
+
+        int deltaXFriendly = (targetXEnemy - friendly_panel.getX()) / steps;
+        int deltaYFriendly = (targetYEnemy - friendly_panel.getY()) / steps;
+
+        Timer timer = new Timer(10, new ActionListener() {
+            int stepCount = 52;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (stepCount < steps) {
+                    
+                    int newXEnemy = enemy_panel.getX() + deltaXEnemy - 5;
+                    int newYEnemy = enemy_panel.getY() + deltaYEnemy;
+                    enemy_panel.setLocation(newXEnemy, newYEnemy);
+
+                    int newXFriendly = friendly_panel.getX() + deltaXFriendly + 5;
+                    int newYFriendly = friendly_panel.getY() + deltaYFriendly;
+                    friendly_panel.setLocation(newXFriendly, newYFriendly);
+
+                    stepCount++;
+                } else {
+                    
+                	enemy_panel.setLocation(targetXEnemy, targetYEnemy);
+                	friendly_panel.setLocation(targetXFriendly, targetYFriendly);
+
+                    ((Timer) e.getSource()).stop(); 
+                }
+            }
+        });
+
+        timer.start();
+    }
+	
+	//적이 쏜다 아군한테
+	void drawParabola(Obj_Panel3 friendly_panel, Obj_Panel3 enemy_panel) {
+	    int enemygetX = enemy_panel.getX();
+	    int enemygetY = enemy_panel.getY();
+	    
+
+	    int centerX = (friendly_panel.getX() + enemy_panel.getX() + enemy_panel.getWidth()) / 2; // 포물선 중앙
+	    int centerY = next_btn.getY(); // 포물선 중앙
+	    
+	    System.out.println(centerX);
+
+	    int sX = (enemy_panel.getX() - friendly_panel.getX()) / 40; // 더 빨리 가게 하고 싶으면 30을 줄이면됨
+	    
+	    ballImg.setLocation(enemygetX, enemygetY);
+	    ballImg.setVisible(true);
+
+	    Timer timer = new Timer(10, new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	double a = 40.0;
+	    	    double x = 1.5;
+	    	    
+	    	    double cal = (a / 100) * ((x / 2) - a) * x + 10;
+	            
+	            int enemyX = ballImg.getX() - sX;
+	            int enemyY = ballImg.getY() + (int) cal; // cal을 Y 위치 계산에 사용
+	            
+	            if (enemyX >= centerX) {
+	                ballImg.setLocation(enemyX, enemyY);
+	            }else if(enemyX >= friendly_panel.getX()) { // 제약조건을 걸어야함 현재 friendly_panel_3, enemy_panel_2 기준 
+	            	enemyY = ballImg.getY() - (int) cal ; // - 8 값 , x값 같이 건드려서 설정하면 됨
+	            	ballImg.setLocation(enemyX , enemyY);
+	            }
+	            else {
+	            	ballImg.setVisible(false);
+	            	
+	            	((Timer) e.getSource()).stop();
+	            }
+	        }
+	    });
+
+	    timer.start();
 	}
 	
 	void friendly_change_pokemon_panel(int location, int pokemon_num,
-			int pokemon_Lv, int pokemon_Health, int pokemon_power, int pokemon_exp) {
+			int pokemon_Lv, int pokemon_Health, int pokemon_power, int pokemon_exp, String pokemon_ex) {
 		
 		friendly_panel.get(location).set_pokemon_num(pokemon_num, pokemon_Lv);
 		friendly_panel.get(location).set_heart(pokemon_Health);
 		friendly_panel.get(location).set_damage(pokemon_power);
 		friendly_panel.get(location).set_exp(pokemon_exp);
 		friendly_panel.get(location).set_Lv(pokemon_Lv);
+		friendly_panel.get(location).set_ex(pokemon_ex);
 		friendly_panel.get(location).setVisible(true);
 	}
 	
 	void enemy_change_pokemon_panel(int location, int pokemon_num,
-			int pokemon_Lv, int pokemon_Health, int pokemon_power, int pokemon_exp) {
+			int pokemon_Lv, int pokemon_Health, int pokemon_power, int pokemon_exp, String pokemon_ex) {
 		
 		enemy_panel.get(location).set_pokemon_num(pokemon_num, pokemon_Lv);
 		enemy_panel.get(location).set_heart(pokemon_Health);
 		enemy_panel.get(location).set_damage(pokemon_power);
 		enemy_panel.get(location).set_exp(pokemon_exp);
 		enemy_panel.get(location).set_Lv(pokemon_Lv);
+		enemy_panel.get(location).set_ex(pokemon_ex);
 		enemy_panel.get(location).setVisible(true);
 	}
 	
+    void show_ex(JPanel panel, int seconds) {
+        panel.setVisible(true);
+
+        Timer timer = new Timer(seconds * 1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+            }
+        });
+        timer.setRepeats(false); // 한 번만 실행되도록 설정
+        timer.start();
+    }
+	
+	
+
 
 	//---------------------------------------------------------------
 	int run() {
@@ -642,7 +814,7 @@ public class StartBattle extends JPanel {
 	void useEnemyHitAbility() { // 공격에 맞을 시 능력 사용
 		System.out.println("<<< 적군이 공격에 맞을 시 능력 발동 >>>");
 		for (int i = 0; i < remainEnemyNum(); i++) {
-			if (whoHitEnemy[i] != 0) {
+			if (whoHitEnemy[i] != -1) {
 				enemyHitAbility(i);
 				whoHitEnemy[i] = -1;
 			}
@@ -715,19 +887,19 @@ public class StartBattle extends JPanel {
 			switch(forreplace.get(i).getPokemonNum()) {
 			case 61:
 				friendly_change_pokemon_panel(i,1,2,forreplace.get(i).getHealth(),
-						forreplace.get(i).getPower(), forreplace.get(i).getExp());
+						forreplace.get(i).getPower(), forreplace.get(i).getExp(), forreplace.get(i).getAbility());
 				break;
 			case 62:
 				friendly_change_pokemon_panel(i,19,2,forreplace.get(i).getHealth(),
-						forreplace.get(i).getPower(), forreplace.get(i).getExp());
+						forreplace.get(i).getPower(), forreplace.get(i).getExp(), forreplace.get(i).getAbility());
 				break;
 			case 63:
 				friendly_change_pokemon_panel(i,28,1,forreplace.get(i).getHealth(),
-						forreplace.get(i).getPower(), forreplace.get(i).getExp());
+						forreplace.get(i).getPower(), forreplace.get(i).getExp(),forreplace.get(i).getAbility());
 				break;
 			default:
 				friendly_change_pokemon_panel(i,forreplace.get(i).getPokemonNum(),forreplace.get(i).getLv(),forreplace.get(i).getHealth(),
-						forreplace.get(i).getPower(), forreplace.get(i).getExp());
+						forreplace.get(i).getPower(), forreplace.get(i).getExp(),forreplace.get(i).getAbility());
 				break;
 		}
 			whoHitFriendly[i] = replaceHitNum[i];
@@ -785,19 +957,19 @@ public class StartBattle extends JPanel {
 			switch(forreplace.get(i).getPokemonNum()) {
 				case 61:
 					enemy_change_pokemon_panel(i,1,2,forreplace.get(i).getHealth(),
-							forreplace.get(i).getPower(), forreplace.get(i).getExp());
+							forreplace.get(i).getPower(), forreplace.get(i).getExp(),forreplace.get(i).getAbility());
 					break;
 				case 62:
 					enemy_change_pokemon_panel(i,19,2,forreplace.get(i).getHealth(),
-							forreplace.get(i).getPower(), forreplace.get(i).getExp());
+							forreplace.get(i).getPower(), forreplace.get(i).getExp(),forreplace.get(i).getAbility());
 					break;
 				case 63:
 					enemy_change_pokemon_panel(i,28,1,forreplace.get(i).getHealth(),
-							forreplace.get(i).getPower(), forreplace.get(i).getExp());
+							forreplace.get(i).getPower(), forreplace.get(i).getExp(),forreplace.get(i).getAbility());
 					break;
 				default:
 					enemy_change_pokemon_panel(i,forreplace.get(i).getPokemonNum(),forreplace.get(i).getLv(),forreplace.get(i).getHealth(),
-							forreplace.get(i).getPower(), forreplace.get(i).getExp());
+							forreplace.get(i).getPower(), forreplace.get(i).getExp(),forreplace.get(i).getAbility());
 					break;
 			}
 			forreplace.set(i, null);
@@ -891,6 +1063,7 @@ public class StartBattle extends JPanel {
 	void friendlyPowerAdjust(int placeNum, int adjustNum) { // 아군 공격력 조정
 		if (friendly.get(placeNum) != null)
 			friendly.get(placeNum).setPower(friendly.get(placeNum).getPower() + adjustNum);
+			friendly_panel.get(placeNum).set_damage(friendly_panel.get(placeNum).get_damage() + adjustNum);
 	}
 
 	void enemyHealthAdjust(int placeNum, int adjustNum) { // 적군 체력 조정
@@ -917,6 +1090,7 @@ public class StartBattle extends JPanel {
 	void enemyPowerAdjust(int placeNum, int adjustNum) { // 적군 공격력 조정
 		if (enemy.get(placeNum) != null)
 			enemy.get(placeNum).setPower(enemy.get(placeNum).getPower() + adjustNum);
+			enemy_panel.get(placeNum).set_damage(enemy_panel.get(placeNum).get_damage() + adjustNum);
 	}
 
 	void findHitEnemy(int hit, int who) { // 적군을 때린 아군의 위치를 저장
@@ -994,6 +1168,7 @@ public class StartBattle extends JPanel {
 				int rNum = random.nextInt(remainEnemyNum());
 				if (enemy.get(rNum) != null) {
 					System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+					show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 					System.out.println("<<< " + friendly.get(placeNum).getAbility() + " >>>");
 					if (friendlyFindPokemon(54)) {
 						if (rNum - 1 >= 0 && enemy.get(rNum - 1) != null) {
@@ -1019,6 +1194,8 @@ public class StartBattle extends JPanel {
 						enemyHealthAdjust(rNum, -abilityNum);
 						findHitEnemy(rNum, placeNum);
 						System.out.println("<<< " + enemy.get(rNum).getName() + "에게 " + (abilityNum) + " 피해! >>>");
+						drawParabola(enemy_panel.get(rNum), friendly_panel.get(placeNum));
+						
 					}
 					return;
 				}
@@ -1031,6 +1208,7 @@ public class StartBattle extends JPanel {
 				return;
 			}
 			System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 			if (friendlyFindPokemon(54)) {
 				if (enemyPlaceNum - 1 >= 0 && enemy.get(enemyPlaceNum - 1) != null) {
 					if (enemy.get(enemyPlaceNum - 1).getPokemonNum() == 52) {
@@ -1063,6 +1241,7 @@ public class StartBattle extends JPanel {
 			int enemyPlaceNum = remainEnemyNum();
 			int abilityNum = lv;
 			System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용>>>");
+			show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 			for (int i = 0; i < enemyPlaceNum; i++) {
 				if (friendlyFindPokemon(54)) {
 					if (i - 1 >= 0 && enemy.get(i - 1) != null) {
@@ -1102,6 +1281,7 @@ public class StartBattle extends JPanel {
 		case 23: { // 대결 시작 시 앞에 있는 아군에게 체력 50%, 70%, 100% 만큼 증가
 			if (placeNum != 0) {
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = friendly.get(placeNum).getHealth() / 2;
 				if (lv == 2) {
 					adjustNum = friendly.get(placeNum).getHealth() * 7 / 10;
@@ -1119,6 +1299,7 @@ public class StartBattle extends JPanel {
 			int lv25 = findFriendlylv(25);
 			if (placeNum != 0) {
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = friendly.get(placeNum).getPower() / 2;
 				if (lv == 2) {
 					adjustNum = friendly.get(placeNum).getPower() * 7 / 10;
@@ -1141,6 +1322,7 @@ public class StartBattle extends JPanel {
 		case 29: {// 대결 시작 시 가장 뒤에 있는 적군에게 1, 2, 3 독 피해
 			int abilityNum = lv;
 			System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 			int enemyPlaceNum = remainEnemyNum() - 1;
 			if (enemyPlaceNum - 1 >= 0 && enemy.get(enemyPlaceNum - 1) != null) {
 				if (enemy.get(enemyPlaceNum - 1).getPokemonNum() == 52) {
@@ -1158,6 +1340,7 @@ public class StartBattle extends JPanel {
 			int friendlyNum = remainFriendlyNum();
 			int enemyNum = remainEnemyNum();
 			System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 			for (int i = 0; i < friendlyNum; i++) {
 				if (i - 1 >= 0 && friendly.get(i - 1) != null) {
 					if (friendly.get(i - 1).getPokemonNum() == 52) {
@@ -1214,6 +1397,7 @@ public class StartBattle extends JPanel {
 		case 37: { // 대결 시작 시 모든 아군의 체력 30%, 40%, 50% 만큼 증가
 			int friendlyNum = remainFriendlyNum();
 			System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 			int adjustNum = friendly.get(placeNum).getHealth() * 3 / 10;
 			if (lv == 2) {
 				adjustNum = friendly.get(placeNum).getHealth() * 4 / 10;
@@ -1228,6 +1412,7 @@ public class StartBattle extends JPanel {
 		}
 		case 50: { // 대결 시작 시 같은 위치에 있는 적군에게 피해 입힙니다.
 			System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 			int adjustNum = friendly.get(placeNum).getPower();
 			if (friendlyFindPokemon(54)) {
 				if (placeNum - 1 >= 0 && enemy.get(placeNum - 1) != null) {
@@ -1281,6 +1466,7 @@ public class StartBattle extends JPanel {
 			case 5: { // 공격 시 공격력 2, 3, 4 증가
 				int abilityNum = 1 + lv;
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				friendlyPowerAdjust(placeNum, abilityNum);
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 공격력 " + abilityNum + "만큼 증가! >>>");
 				if (friendlyFindPokemon(25)) {
@@ -1292,10 +1478,11 @@ public class StartBattle extends JPanel {
 			}
 			case 16: { // 공격 시 뒤에 있는 아군 체력 2, 3, 4 증가
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				if (friendly.get(placeNum + 1) != null) {
 					friendlyHealthAdjust(placeNum + 1, lv + 1);
 					System.out.println(
-							"<<< " + friendly.get(placeNum - 1).getName() + "에게 체력 " + (lv + 1) + "만큼 증가! >>>");
+							"<<< " + friendly.get(placeNum + 1).getName() + "에게 체력 " + (lv + 1) + "만큼 증가! >>>");
 				}
 				return;
 			}
@@ -1304,6 +1491,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(5);
 					if (enemy.get(rNum) != null) {
 						System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+						show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 						int adjustNum = friendly.get(placeNum).getPower() / 2;
 						if (lv == 2) {
 							adjustNum = friendly.get(placeNum).getPower() * 7 / 10;
@@ -1322,6 +1510,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(4);
 					if (rNum == 0) {
 						System.out.println("<<< " + friendly.get(0).getName() + " 능력 사용! >>>");
+						show_ex(friendly_panel.get(0).get_expanel(), 2);
 						hitEnemy();
 					}
 					return;
@@ -1329,6 +1518,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(100);
 					if (rNum < 35) {
 						System.out.println("<<< " + friendly.get(0).getName() + " 능력 사용! >>>");
+						show_ex(friendly_panel.get(0).get_expanel(), 2);
 						hitEnemy();
 					}
 					return;
@@ -1336,6 +1526,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(100);
 					if (rNum < 35) {
 						System.out.println("<<< " + friendly.get(0).getName() + " 능력 사용! >>>");
+						show_ex(friendly_panel.get(0).get_expanel(), 2);
 						hitEnemy();
 					}
 					return;
@@ -1345,6 +1536,7 @@ public class StartBattle extends JPanel {
 			case 27: { // 공격 시 공격력 4, 5, 6 증가
 				int abilityNum = 3 + lv;
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				friendlyPowerAdjust(placeNum, abilityNum);
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 공격력 " + abilityNum + " 만큼 증가! >>>");
 				if (friendlyFindPokemon(25)) {
@@ -1357,6 +1549,7 @@ public class StartBattle extends JPanel {
 			case 40: { // 공격 시 공격력, 체력 3, 4, 5 증가
 				int abilityNum = 2 + lv;
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				friendlyPowerAdjust(placeNum, abilityNum);
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 공격력 " + abilityNum + " 만큼 증가! >>>");
 				friendlyHealthAdjust(placeNum, abilityNum);
@@ -1370,12 +1563,14 @@ public class StartBattle extends JPanel {
 			}
 			case 44: { // 이 포켓몬은 2번 공격 합니다
 				System.out.println("<<< " + friendly.get(0).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(0).get_expanel(), 2);
 				hitEnemy();
 				return;
 
 			}
 			case 46: { // 공격 시 적군의 공격력 20%, 30%, 50% 만큼 감소합니다
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = enemy.get(0).getPower() / 5;
 				if (lv == 2) {
 					adjustNum = enemy.get(0).getPower() * 3 / 10;
@@ -1388,6 +1583,7 @@ public class StartBattle extends JPanel {
 			}
 			case 58: { // 공격 시 공격력의 50%, 60%, 75%만큼 그 뒤에있는 적군에게 피해
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = friendly.get(placeNum).getPower() / 2;
 				if (lv == 2) {
 					adjustNum = friendly.get(placeNum).getPower() * 6 / 10;
@@ -1553,6 +1749,7 @@ public class StartBattle extends JPanel {
 			switch (friendly.get(placeNum).getPokemonNum()) {
 			case 1: { // 기절 시 능력 없는 2/2단데기 1,2, 3 소환
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				for (int i = 0; i < lv; i++) {
 					friendlyGoBack();
 					friendly.set(0, dan);
@@ -1567,11 +1764,12 @@ public class StartBattle extends JPanel {
 					friendlyUseSummonAbility();
 					enemyFriendlySummonAbility();
 				}
-				friendly.set(placeNum + lv, null);
+				friendly.set(placeNum + lv, null);   
 				return;
 			}
 			case 6: { // 기절 시 가장 뒤에 있는 적군 1, 2, 3 독 피해
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				int i = remainEnemyNum() - 1;
 				friendlyPoisonNum[i] += lv;
 				System.out.println("<<< " + enemy.get(i).getName() + "에게 " + lv + " 독 피해! >>>");
@@ -1581,6 +1779,7 @@ public class StartBattle extends JPanel {
 			}
 			case 18: { // 기절 시 가장 앞에 있는 적군 2, 3, 4 피해
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				int abilityNum = 1 + lv;
 				if (enemy.get(0) == null) {
 					return;
@@ -1594,6 +1793,7 @@ public class StartBattle extends JPanel {
 			}
 			case 19: { // 기절 시 능력 없는 망키 1, 2, 3 소환
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				for (int i = 0; i < lv; i++) {
 					friendlyGoBack();
 					friendly.set(0, mang);
@@ -1608,6 +1808,7 @@ public class StartBattle extends JPanel {
 
 			case 28: { // 기절 시 체력 2, 2.5, 3배인 능력 없는 모다피 2 소환
 				System.out.println("<<< " + friendly.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(friendly_panel.get(placeNum).get_expanel(), 2);
 				if (lv == 2) {
 					mo.setHealth(mo.getHealth() / 2 * 25 / 10);
 				} else if (lv == 3) {
@@ -1903,6 +2104,7 @@ public class StartBattle extends JPanel {
 				int rNum = random.nextInt(remainFriendlyNum());
 				if (friendly.get(rNum) != null) {
 					System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+					show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 					System.out.println("<<< " + enemy.get(placeNum).getAbility() + " >>>");
 					if (enemyFindPokemon(54)) {
 						if (rNum - 1 >= 0 && friendly.get(rNum - 1) != null) {
@@ -1940,6 +2142,7 @@ public class StartBattle extends JPanel {
 			}
 			int abilityNum = lv;
 			System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 			if (enemyFindPokemon(54)) {
 				if (enemyPlaceNum - 1 >= 0 && friendly.get(enemyPlaceNum - 1) != null) {
 					if (friendly.get(enemyPlaceNum - 1).getPokemonNum() == 52) {
@@ -1964,6 +2167,7 @@ public class StartBattle extends JPanel {
 				friendlyHealthAdjust(enemyPlaceNum, -abilityNum);
 				findHitfriendly(enemyPlaceNum, placeNum);
 				System.out.println("<<< " + friendly.get(enemyPlaceNum).getName() + "에게 " + (abilityNum) + " 피해! >>>");
+				drawParabola(friendly_panel.get(enemyPlaceNum),enemy_panel.get(1));
 			}
 			return;
 
@@ -1972,6 +2176,7 @@ public class StartBattle extends JPanel {
 			int enemyPlaceNum = remainEnemyNum();
 			int abilityNum = lv;
 			System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용>>>");
+			show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 			for (int i = 0; i < enemyPlaceNum; i++) {
 				if (enemyFindPokemon(54)) {
 					if (i - 1 >= 0 && friendly.get(i - 1) != null) {
@@ -2013,6 +2218,7 @@ public class StartBattle extends JPanel {
 		case 23: { // 대결 시작 시 앞에 있는 아군에게 체력 50%, 70%, 100% 만큼 증가
 			if (placeNum != 0) {
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = enemy.get(placeNum).getHealth() / 2;
 				if (lv == 2) {
 					adjustNum = enemy.get(placeNum).getHealth() * 7 / 10;
@@ -2029,6 +2235,7 @@ public class StartBattle extends JPanel {
 			int lv25 = findEnemylv(25);
 			if (placeNum != 0) {
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = enemy.get(placeNum).getPower() / 2;
 				if (lv == 2) {
 					adjustNum = enemy.get(placeNum).getPower() * 7 / 10;
@@ -2049,6 +2256,7 @@ public class StartBattle extends JPanel {
 		case 29: {// 대결 시작 시 가장 뒤에 있는 적군에게 1, 2, 3 독 피해
 			int abilityNum = lv;
 			System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 			int enemyPlaceNum = remainFriendlyNum() - 1;
 			if (enemyPlaceNum - 1 >= 0 && friendly.get(enemyPlaceNum - 1) != null) {
 				if (friendly.get(enemyPlaceNum - 1).getPokemonNum() == 52) {
@@ -2066,6 +2274,7 @@ public class StartBattle extends JPanel {
 			int friendlyNum = remainFriendlyNum();
 			int enemyNum = remainEnemyNum();
 			System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 			for (int i = 0; i < enemyNum; i++) {
 				if (i - 1 >= 0 && enemy.get(i - 1) != null) {
 					if (enemy.get(i - 1).getPokemonNum() == 52) {
@@ -2124,6 +2333,7 @@ public class StartBattle extends JPanel {
 		case 37: { // 대결 시작 시 모든 아군의 체력 30%, 40%, 50% 만큼 증가
 			int enemtyNum = remainEnemyNum();
 			System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 			int adjustNum = enemy.get(placeNum).getHealth() * 3 / 10;
 			if (lv == 2) {
 				adjustNum = enemy.get(placeNum).getHealth() * 4 / 10;
@@ -2138,6 +2348,7 @@ public class StartBattle extends JPanel {
 		}
 		case 50: { // 대결 시작 시 같은 위치에 있는 적군에게 피해 입힙니다.
 			System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+			show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 			int adjustNum = enemy.get(placeNum).getPower();
 			if (enemyFindPokemon(54)) {
 				if (placeNum - 1 >= 0 && friendly.get(placeNum - 1) != null) {
@@ -2192,6 +2403,7 @@ public class StartBattle extends JPanel {
 			case 5: { // 공격 시 공격력 2, 3, 4 증가
 				int abilityNum = 1 + lv;
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				enemyPowerAdjust(placeNum, abilityNum);
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 공격력 " + abilityNum + "만큼 증가! >>>");
 				if (enemyFindPokemon(25)) {
@@ -2203,6 +2415,7 @@ public class StartBattle extends JPanel {
 			}
 			case 16: { // 공격 시 뒤에 있는 아군 체력 2, 3, 4 증가
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				if (enemy.get(placeNum + 1) != null) {
 					enemyHealthAdjust(placeNum + 1, lv + 1);
 					System.out.println("<<< " + enemy.get(placeNum - 1).getName() + "에게 체력 " + (lv + 1) + "만큼 증가! >>>");
@@ -2214,6 +2427,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(5);
 					if (friendly.get(rNum) != null) {
 						System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+						show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 						int adjustNum = enemy.get(placeNum).getPower() / 2;
 						if (lv == 2) {
 							adjustNum = enemy.get(placeNum).getPower() * 7 / 10;
@@ -2232,6 +2446,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(4);
 					if (rNum == 0) {
 						System.out.println("<<< " + enemy.get(0).getName() + " 능력 사용! >>>");
+						show_ex(enemy_panel.get(0).get_expanel(), 2);
 						hitFriendly();
 					}
 					return;
@@ -2239,6 +2454,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(100);
 					if (rNum < 35) {
 						System.out.println("<<< " + enemy.get(0).getName() + " 능력 사용! >>>");
+						show_ex(enemy_panel.get(0).get_expanel(), 2);
 						hitFriendly();
 					}
 					return;
@@ -2246,6 +2462,7 @@ public class StartBattle extends JPanel {
 					int rNum = random.nextInt(100);
 					if (rNum < 35) {
 						System.out.println("<<< " + enemy.get(0).getName() + " 능력 사용! >>>");
+						show_ex(enemy_panel.get(0).get_expanel(), 2);
 						hitFriendly();
 					}
 					return;
@@ -2255,6 +2472,7 @@ public class StartBattle extends JPanel {
 			case 27: { // 공격 시 공격력 4, 5, 6 증가
 				int abilityNum = 3 + lv;
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				enemyPowerAdjust(placeNum, abilityNum);
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 공격력 " + abilityNum + " 만큼 증가! >>>");
 				if (enemyFindPokemon(25)) {
@@ -2267,6 +2485,7 @@ public class StartBattle extends JPanel {
 			case 40: { // 공격 시 공격력, 체력 3, 4, 5 증가
 				int abilityNum = 2 + lv;
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				enemyPowerAdjust(placeNum, abilityNum);
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 공격력 " + abilityNum + " 만큼 증가! >>>");
 				enemyHealthAdjust(placeNum, abilityNum);
@@ -2280,12 +2499,14 @@ public class StartBattle extends JPanel {
 			}
 			case 44: { // 이 포켓몬은 2번 공격 합니다
 				System.out.println("<<< " + enemy.get(0).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(0).get_expanel(), 2);
 				hitFriendly();
 				return;
 
 			}
 			case 46: { // 공격 시 적군의 공격력 20%, 30%, 50% 만큼 감소합니다
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = friendly.get(0).getPower() / 5;
 				if (lv == 2) {
 					adjustNum = friendly.get(0).getPower() * 3 / 10;
@@ -2298,6 +2519,7 @@ public class StartBattle extends JPanel {
 			}
 			case 58: { // 공격 시 공격력의 50%, 60%, 75%만큼 그 뒤에있는 적군에게 피해
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				int adjustNum = enemy.get(placeNum).getPower() / 2;
 				if (lv == 2) {
 					adjustNum = enemy.get(placeNum).getPower() * 6 / 10;
@@ -2463,6 +2685,7 @@ public class StartBattle extends JPanel {
 			switch (enemy.get(placeNum).getPokemonNum()) {
 			case 1: { // 기절 시 능력 없는 2/2단데기 1,2, 3 소환
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				for (int i = 0; i < lv; i++) {
 					enemyGoBack();
 					enemy.set(0, dan);
@@ -2476,6 +2699,7 @@ public class StartBattle extends JPanel {
 			}
 			case 6: { // 기절 시 가장 뒤에 있는 적군 1, 2, 3 독 피해
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				int i = remainFriendlyNum() - 1;
 				enemyPoisonNum[i] += lv;
 				System.out.println("<<< " + friendly.get(i).getName() + "에게 " + lv + " 독 피해! >>>");
@@ -2485,6 +2709,7 @@ public class StartBattle extends JPanel {
 			}
 			case 18: { // 기절 시 가장 앞에 있는 적군 2, 3, 4 피해
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				int abilityNum = 1 + lv;
 				if (friendly.get(0) == null) {
 					return;
@@ -2498,6 +2723,7 @@ public class StartBattle extends JPanel {
 			}
 			case 19: { // 기절 시 능력 없는 망키 1, 2, 3 소환
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				for (int i = 0; i < lv; i++) {
 					enemyGoBack();
 					enemy.set(0, mang);
@@ -2513,6 +2739,7 @@ public class StartBattle extends JPanel {
 
 			case 28: { // 기절 시 체력 2, 2.5, 3배인 능력 없는 모다피 2 소환
 				System.out.println("<<< " + enemy.get(placeNum).getName() + " 능력 사용! >>>");
+				show_ex(enemy_panel.get(placeNum).get_expanel(), 2);
 				if (lv == 2) {
 					mo.setHealth(mo.getHealth() / 2 * 25 / 10);
 				} else if (lv == 3) {

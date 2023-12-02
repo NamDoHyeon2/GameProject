@@ -1,4 +1,4 @@
-package Placement;
+package background;
 
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -31,7 +31,7 @@ public class Status_Panel extends JPanel {
 		this.add(shop_area);
 		//save_static_panel.add(shop_area);
 		
-		ImagePanel user_heart = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\user_heart.png").getImage());
+		ImagePanel user_heart = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\user_heart.png").getImage());
 		user_heart.setBounds(12, 10, 238, 151);
 		this.add(user_heart);
 		user_heart.setLayout(null);
@@ -42,7 +42,7 @@ public class Status_Panel extends JPanel {
 		heart_num.setBounds(136, 49, 79, 56);
 		user_heart.add(heart_num);
 		
-		ImagePanel user_coin = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\user_coin.png").getImage());
+		ImagePanel user_coin = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\user_coin.png").getImage());
 		user_coin.setBounds(313, 10, 238, 151);
 		this.add(user_coin);
 		user_coin.setLayout(null);
@@ -53,7 +53,7 @@ public class Status_Panel extends JPanel {
 		coin_num.setBounds(135, 50, 79, 56);
 		user_coin.add(coin_num);
 		
-		ImagePanel user_win = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\user_win.png").getImage());
+		ImagePanel user_win = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\user_win.png").getImage());
 		user_win.setBounds(615, 10, 238, 151);
 		this.add(user_win);
 		user_win.setLayout(null);
@@ -87,13 +87,5 @@ public class Status_Panel extends JPanel {
 	public void set_win_num (int win){
 		this.win = win;
 		win_num.setText(Integer.toString(this.win));
-	}
-	public void up_win() {
-		this.win++;
-		win_num.setText(Integer.toString(this.win));
-	}
-	public void down_heart() {
-		this.heart--;
-		heart_num.setText(Integer.toString(this.heart));
 	}
 }
