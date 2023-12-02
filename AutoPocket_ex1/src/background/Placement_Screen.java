@@ -18,7 +18,7 @@ public class Placement_Screen extends JFrame {
 	private int life = 10; // 紐⑹닲
 	private int coin = 100; // 肄붿씤
 	private int badge = 0; // 諭껋�
-	public int turnNum = 1;// �꽩 �닔
+	public int turnNum = 5;// �꽩 �닔
 	Random random = new Random();
 	private JPanel contentPane;
 	private LinkedList<Pokemon> shopPokemon;
@@ -63,10 +63,15 @@ public class Placement_Screen extends JFrame {
 	 * Create the frame.
 	 */
 	public Placement_Screen() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setUndecorated(true);
+		setTitle("SHOP_SCREEN");
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setBounds(0, 0, 1920, 1080);
 		placementbackground.setBounds(0, 0, 1920, 1080);
 		placementbackground.setBackground(new Color(255,255,255));
 		placementbackground.setLayout(null);
-		
+		setContentPane(placementbackground);
 		this.toBattle = new LinkedList<>();
 		this.shopPokemon = new LinkedList<>();
 		this.placePokemon = new LinkedList<>();
@@ -349,7 +354,7 @@ public class Placement_Screen extends JFrame {
 		        
 		        StartBattle battle_screen = new StartBattle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
 		                toBattle.get(4), effectNum);		        
-		        getContentPane().add(battle_screen);
+		        setContentPane(battle_screen);
 		        placementbackground.setVisible(false);
 		        battle_screen.setVisible(true);
 			}

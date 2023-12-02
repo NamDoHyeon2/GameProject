@@ -17,6 +17,7 @@ import javax.swing.Timer;
 public class StartBattle extends JPanel {
 	private ImagePanel background;
 	private ImagePanel next_btn;
+	private ImagePanel ballImg;
 	
 	Scanner sc = new Scanner(System.in);
 	private LinkedList<Pokemon> friendly; // �븘援� 由ъ뒪�듃
@@ -79,12 +80,16 @@ public class StartBattle extends JPanel {
 		friendly.set(4, f1);
 		settingEnemy();
 		findEffect();
+		
 		this.setLayout(null);
 		this.setBounds(0, 0, 1920, 1080);
 		this.background = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\combat_background.png").getImage());
+		this.ballImg = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\ball.png").getImage());
 		background.setBounds(0, 0, 1920, 1080);
 		background.setLayout(null);
 		this.add(background);
+		background.add(ballImg);
+		ballImg.setVisible(false);
 		
 		//---------------------�떎�쓬 踰꾪듉-------------------
 		this.next_btn = new ImagePanel (new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\Next_Battle.png").getImage());
@@ -216,12 +221,12 @@ public class StartBattle extends JPanel {
 		enemy_panel_4.setLocation(1540, 391);
 		enemy_panel_4.setVisible(false); //�뵒�뤃�듃�뒗 �븞蹂댁씠寃�
 		if(enemy.get(3) != null) {
-			enemy_panel_1.set_pokemon_num(enemy.get(3).getPokemonNum(), enemy.get(3).getLv());
-			enemy_panel_1.set_heart(enemy.get(3).getHealth());
-			enemy_panel_1.set_damage(enemy.get(3).getPower());
-			enemy_panel_1.set_exp(enemy.get(3).getExp());
-			enemy_panel_1.set_Lv(enemy.get(3).getLv());
-			enemy_panel_1.setVisible(true);
+			enemy_panel_4.set_pokemon_num(enemy.get(3).getPokemonNum(), enemy.get(3).getLv());
+			enemy_panel_4.set_heart(enemy.get(3).getHealth());
+			enemy_panel_4.set_damage(enemy.get(3).getPower());
+			enemy_panel_4.set_exp(enemy.get(3).getExp());
+			enemy_panel_4.set_Lv(enemy.get(3).getLv());
+			enemy_panel_4.setVisible(true);
 		}
 		
 		Obj_Panel3 enemy_panel_5 = new Obj_Panel3();
@@ -247,14 +252,14 @@ public class StartBattle extends JPanel {
 		next_btn.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
-		    	
-		        int targetXEnemy = enemy_panel_1.getX(); // enemy_panel_1의 X 좌표
-		        int targetYEnemy = enemy_panel_1.getY(); // enemy_panel_1의 Y 좌표
+		    	drawParabola(friendly_panel_4, enemy_panel_2);
+		        int targetXEnemy = enemy_panel_1.getX();
+		        int targetYEnemy = enemy_panel_1.getY();
 
-		        int targetXFriendly = friendly_panel_1.getX(); // friendly_panel_1의 X 좌표
-		        int targetYFriendly = friendly_panel_1.getY(); // friendly_panel_1의 Y 좌표
+		        int targetXFriendly = friendly_panel_1.getX();
+		        int targetYFriendly = friendly_panel_1.getY();
 
-		        int steps = 60; // 애니메이션 단계 수
+		        int steps = 60;
 
 		        int deltaXEnemy = (targetXFriendly - enemy_panel_1.getX()) / steps;
 		        int deltaYEnemy = (targetYFriendly - enemy_panel_1.getY()) / steps;
@@ -268,23 +273,22 @@ public class StartBattle extends JPanel {
 		            @Override
 		            public void actionPerformed(ActionEvent e) {
 		                if (stepCount < steps) {
-		                    // enemy_panel_1 이동
+		                    
 		                    int newXEnemy = enemy_panel_1.getX() + deltaXEnemy - 5;
 		                    int newYEnemy = enemy_panel_1.getY() + deltaYEnemy;
 		                    enemy_panel_1.setLocation(newXEnemy, newYEnemy);
-		                    
-		                    newXEnemy = enemy_panel_1.getX() + deltaXEnemy + 5;
-		                    newYEnemy = enemy_panel_1.getY() + deltaYEnemy;
-		                    enemy_panel_1.setLocation(newXEnemy, newYEnemy);
 
-		                    // friendly_panel_1 이동
 		                    int newXFriendly = friendly_panel_1.getX() + deltaXFriendly + 5;
 		                    int newYFriendly = friendly_panel_1.getY() + deltaYFriendly;
 		                    friendly_panel_1.setLocation(newXFriendly, newYFriendly);
 
 		                    stepCount++;
 		                } else {
-		                    ((Timer) e.getSource()).stop(); // 애니메이션이 완료되면 타이머 중지
+		                    
+		                    enemy_panel_1.setLocation(targetXEnemy, targetYEnemy);
+		                    friendly_panel_1.setLocation(targetXFriendly, targetYFriendly);
+
+		                    ((Timer) e.getSource()).stop(); 
 		                }
 		            }
 		        });
@@ -293,8 +297,52 @@ public class StartBattle extends JPanel {
 		    }
 		});
 
+
 		
 	}
+	
+	void drawParabola(Obj_Panel3 friendly_panel, Obj_Panel3 enemy_panel) {
+	    int enemygetX = enemy_panel.getX();
+	    int enemygetY = enemy_panel.getY();
+
+	    int centerX = next_btn.getX(); // 포물선 중앙
+	    int centerY = next_btn.getY(); // 포물선 중앙
+	    
+	    
+	    ballImg.setVisible(true);
+
+	    int sX = (enemy_panel.getX() - friendly_panel.getX()) / 30; // 더 빨리 가게 하고 싶으면 30을 줄이면됨
+
+	    Timer timer = new Timer(2, new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	double a = 52.0;
+	    	    double x = 1.8;
+	    	    
+	    	    double cal = (a / 100) * ((x / 2) - a) * x + 10;
+	            
+	            int enemyX = ballImg.getX() - sX;
+	            int enemyY = ballImg.getY() + (int) cal; // cal을 Y 위치 계산에 사용
+
+	            if (enemyX >= centerX) {
+	                ballImg.setLocation(enemyX, enemyY);
+	            }else if(enemyX >= friendly_panel.getX()) { // 제약조건을 걸어야함 현재 friendly_panel_3, enemy_panel_2 기준 
+	            	enemyY = ballImg.getY() - (int) cal - 20; // - 8 값 , x값 같이 건드려서 설정하면 됨
+	            	ballImg.setLocation(enemyX, enemyY);
+	            }
+	            else {
+	            	ballImg.setLocation(enemygetX, enemygetY);
+	            	
+	            	((Timer) e.getSource()).stop();
+	            }
+	        }
+	    });
+
+	    timer.start();
+	}
+
+
+
 
 	
 	//---------------------------------------------------------------------------------------------------------

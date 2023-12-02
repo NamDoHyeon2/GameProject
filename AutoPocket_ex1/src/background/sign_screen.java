@@ -90,7 +90,7 @@ public class sign_screen {
 				boolean duplicate = false;
 				try {
 				Class.forName("oracle.jdbc.OracleDriver");
-				String url = "jdbc:oracle:thin:@172.16.117.226:1521:xe";
+				String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
 				String user = "JUNG";
 				String password = "1234";
 
@@ -169,7 +169,7 @@ public class sign_screen {
 				boolean duplicate = false;
 				try {
 				Class.forName("oracle.jdbc.OracleDriver");
-				String url = "jdbc:oracle:thin:@172.16.117.226:1521:xe";
+				String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
 				String user = "JUNG";
 				String password = "1234";
 
@@ -216,7 +216,7 @@ public class sign_screen {
 
 			    try {
 			        Class.forName("oracle.jdbc.OracleDriver");
-			        String url = "jdbc:oracle:thin:@172.16.117.226:1521:xe";
+			        String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
 			        String user = "JUNG";
 			        String password = "1234";
 

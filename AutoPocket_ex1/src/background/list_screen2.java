@@ -156,7 +156,7 @@ public class list_screen2 {
 		                public void run() {
 		                    try {
 		                    	Class.forName("oracle.jdbc.OracleDriver");
-		            	        String url = "jdbc:oracle:thin:@172.16.117.226:1521:xe";
+		            	        String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
 		            	        String user = "JUNG";
 		            	        String password = "1234";
 
@@ -860,7 +860,7 @@ public class list_screen2 {
 	    try {
 	        int i = 1;
 	        Class.forName("oracle.jdbc.OracleDriver");
-	        String url = "jdbc:oracle:thin:@172.16.117.226:1521:xe";
+	        String url = "jdbc:oracle:thin:@119.195.135.42:1521:xe";
 	        String user = "JUNG";
 	        String password = "1234";
 
