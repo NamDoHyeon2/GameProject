@@ -28,12 +28,13 @@ public class Win_or_Lose extends JPanel {
 		this.setBounds(0, 0, 1920, 1080);
 		setLayout(null);
 		setOpaque(false);
-		placementbackground = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\combat_background.png").getImage());
+		placementbackground = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\combat_background.png").getImage());
+		
 		placementbackground.setLayout(null);
 		this.add(placementbackground);
-        ImagePanel winImg = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\user_win.png").getImage());
+        ImagePanel winImg = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\user_win.png").getImage());
         winImg.setLocation(434, 388);
-        ImagePanel heartImg = new ImagePanel(new ImageIcon("C:\\Project\\GameProject-DB_feature\\Image\\src\\Image\\user_heart.png").getImage());
+        ImagePanel heartImg = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\user_heart.png").getImage());
         heartImg.setLocation(1020, 388);
         
         

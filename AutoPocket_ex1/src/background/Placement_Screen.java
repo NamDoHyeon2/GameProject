@@ -2,12 +2,16 @@ package background;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -31,6 +35,7 @@ public class Placement_Screen{
 	public LinkedList<Pokemon> placePokemon;
 	private LinkedList<Pokemon> forReplace;
 	private Status_Panel status_panel;
+	private main_screen main;
 	
 	public Status_Panel getStatus_panel() {
 		return status_panel;
@@ -50,13 +55,18 @@ public class Placement_Screen{
 	boolean item24Effect = false;
 	public StartBattle battle_screen;
 	public ImagePanel next_btn;
+	private ImageIcon exitImg = new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Image\\exit.png");
+	public JButton exitBtn;
 
 
 	/**
 	 * Create the frame.
 	 */
 	public Placement_Screen() {
-
+		exitBtn = new JButton(exitImg);
+		exitBtn.setBounds(1832,0,88,88);
+		
+		placementbackground.add(exitBtn);
 		placementbackground.setBounds(0, 0, 1920, 1080);
 		placementbackground.setBackground(new Color(255, 255, 255));
 		placementbackground.setLayout(null);

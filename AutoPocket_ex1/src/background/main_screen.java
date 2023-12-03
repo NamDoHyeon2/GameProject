@@ -199,19 +199,7 @@ public class main_screen {
         
         });
         
-        Record_Screen2 rs = new Record_Screen2(181);
         
-        rs.exit_btn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				rs.scrollPane.setVisible(false);
-				
-				loginImg.setVisible(true);
-				
-			}
-        	
-        });
         
         exitbutton.addActionListener(new ActionListener(){
         	

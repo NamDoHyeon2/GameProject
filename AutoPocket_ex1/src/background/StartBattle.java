@@ -17,9 +17,13 @@ import javax.swing.Timer;
 
 
 public class StartBattle extends JPanel {
-	private ImagePanel background;
+	public ImagePanel background;
 	private ImagePanel next_btn;
 	private ImagePanel PlacementScreen;
+	public ImagePanel getPlacementScreen() {
+		return PlacementScreen;
+	}
+
 	public Win_or_Lose win_or_lose;
 	Scanner sc = new Scanner(System.in);
 	private LinkedList<Pokemon> friendly; // 아군 리스트
@@ -105,7 +109,7 @@ public class StartBattle extends JPanel {
 		
 		this.setLayout(null);
 		this.setBounds(0, 0, 1920, 1080);
-		this.background = new ImagePanel(new ImageIcon("C:\\Placement_2\\src\\Image\\combat_background.png").getImage());
+		this.background = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\combat_background.png").getImage());
 		background.setBounds(0, 0, 1920, 1080);
 		background.setLayout(null);
 		this.add(background);
@@ -113,7 +117,7 @@ public class StartBattle extends JPanel {
 		
 		
 		//---------------------다음 버튼-------------------
-		this.next_btn = new ImagePanel (new ImageIcon("C:\\Placement_2\\src\\Image\\Next_Battle.png").getImage());
+		this.next_btn = new ImagePanel (new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\Next_Battle.png").getImage());
 		this.background.add(next_btn);
 		next_btn.setLocation(910, 200);
 		
@@ -125,7 +129,7 @@ public class StartBattle extends JPanel {
 			buttons.add(i, button);
 		}
 		
-		this.ballImg = new ImagePanel(new ImageIcon("C:\\Placement_2\\src\\Image\\ball.png").getImage());
+		this.ballImg = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\ball.png").getImage());
 		background.add(ballImg);
 		ballImg.setVisible(false);
 		//----------------------------------------------
@@ -286,7 +290,7 @@ public class StartBattle extends JPanel {
 		}
 		
 		win_or_lose = new Win_or_Lose(PlacementScreen, status_panel);
-		
+				
 		//----------------------------------------------
         next_btn.addMouseListener(new MouseAdapter() {
 	        @Override
@@ -328,14 +332,14 @@ public class StartBattle extends JPanel {
 					PlacementScreen.remove(status_panel);
 	            	status_panel.up_win();
 	            	PlacementScreen.add(status_panel);
-	            	background.setVisible(false);
-	            	win_or_lose.placementbackground.setVisible(true);      	
+	            	setVisible(false);
+	            	win_or_lose.setVisible(true);      	
 	            }else if(winEnemy()) {
 	            	PlacementScreen.remove(status_panel);
 	            	status_panel.down_heart();
 	            	PlacementScreen.add(status_panel);
-	            	background.setVisible(false);
-	            	win_or_lose.placementbackground.setVisible(true);
+	            	setVisible(false);
+	            	win_or_lose.setVisible(true);
 	            }
 	            buttons.get(3).setVisible(false);
 	            show1();
@@ -377,8 +381,8 @@ public class StartBattle extends JPanel {
 		            	win_or_lose.get_lose_label().setText(Integer.toString(status_panel.get_life_num()));
 		            	win_or_lose.get_title_label().setText("승리");
 		            	PlacementScreen.add(status_panel);
-		            	background.setVisible(false);
-		            	win_or_lose.placementbackground.setVisible(true);
+		            	setVisible(false);
+		            	win_or_lose.setVisible(true);
 		            	
 		            	
 		            	
@@ -389,8 +393,8 @@ public class StartBattle extends JPanel {
 		            	win_or_lose.get_lose_label().setText(Integer.toString(status_panel.get_life_num()));
 		            	win_or_lose.get_title_label().setText("패배");
 		            	PlacementScreen.add(status_panel);
-		            	background.setVisible(false);
-		            	win_or_lose.placementbackground.setVisible(true);
+		            	setVisible(false);
+		            	win_or_lose.setVisible(true);
 		            }
 		            buttons.get(index).setVisible(false);
 		            show1();

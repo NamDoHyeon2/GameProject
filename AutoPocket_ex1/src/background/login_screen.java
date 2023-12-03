@@ -33,6 +33,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -84,7 +85,7 @@ public class login_screen extends JFrame{
     	help_screen hs = new help_screen();
     	option_screen os = new option_screen();
     	Placement_Screen ps = new Placement_Screen();
-    	Record_Screen2 record_screen = new Record_Screen2(181); //pk값이야
+    	Record_Screen2 rs = new Record_Screen2(181); //pk값이야
     	
     	os.initialize();
     	
@@ -203,8 +204,10 @@ public class login_screen extends JFrame{
         hs.helpImg.setVisible(false);
         frmAutoPockmon.add(ps.placementbackground);
         ps.placementbackground.setVisible(false);
-        frmAutoPockmon.add(record_screen);
-        record_screen.setVisible(false);
+        frmAutoPockmon.add(rs);
+        rs.setVisible(false);
+        
+        
 
         
         if (backgroundMusic == null) { // 음악
@@ -293,24 +296,45 @@ public class login_screen extends JFrame{
      				ps.shop_reroll();
      				ps.turnNum++;
      				
+     				frmAutoPockmon.add(ps.battle_screen.win_or_lose);
+     				
      			}
      		});
-     	
+     	     	
      	ms.recordButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ms.loginImg.setVisible(false);
 				
-                record_screen.setVisible(true);
-				
+                rs.setVisible(true);
+     
+                rs.exit_btn.addActionListener(new ActionListener() {
+
+        			@Override
+        			public void actionPerformed(ActionEvent e) {
+        				rs.setVisible(false);
+        				
+        				ms.loginImg.setVisible(true);
+        				
+        			}
+                	
+                });
 			};
 			
         
         });
      	
      	
-        
+     	ps.exitBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ps.placementbackground.setVisible(false);
+				ms.loginImg.setVisible(true);
+			}
+			
+		});
         
         
         frmAutoPockmon.getContentPane().add(loginPanel);
@@ -318,4 +342,5 @@ public class login_screen extends JFrame{
            
     }
 }
+
 
