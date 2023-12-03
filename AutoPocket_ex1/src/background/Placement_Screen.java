@@ -12,66 +12,55 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class Placement_Screen extends JFrame {
-	
+public class Placement_Screen{
+
 	int effectNum[] = { 0, 0, 0, 0, 0 };
-	private int life = 10; // 紐⑹닲
-	private int coin = 100; // 肄붿씤
-	private int badge = 0; // 諭껋�
-	public int turnNum = 5;// �꽩 �닔
+	private int life = 10; // 목숨
+	private int coin = 100; // 코인
+	private int badge = 0; // 뱃지
+	public int turnNum = 1;// 턴 수
 	Random random = new Random();
 	private JPanel contentPane;
 	private LinkedList<Pokemon> shopPokemon;
-	private LinkedList<Obj_Panel2> shop_pokemon_panel; //�긽�젏 �뙣�꼸�쓣 ���옣�븯怨� �엳�쓬
-	private Obj_Panel2 select_shop_pokemon; //�긽�젏�뿉�꽌 �꽑�깮�븳 �뙣�꼸�쓣 ���옣�븿
-	private LinkedList<Place_Area2> place_area_panel; //諛곗튂 �뙣�꼸�쓣 ���옣�븯怨� �엳�쓬
-	private Place_Area2 select_place; //�꽑�깮 �븳 諛곗튂 �뙣�꼸�쓣 媛�吏�怨좎엳�쓬
-	private LinkedList<Obj_Panel2> place_pokemon_panel; //諛곗튂�뿉 �쐞移섑븳 �룷耳볥が �뙣�꼸�쓣 媛�吏�怨좎엳�쓬
-	private Obj_Panel2 select_place_pokemon; 
+	private LinkedList<Obj_Panel2> shop_pokemon_panel; // 상점 패널을 저장하고 있음
+	private Obj_Panel2 select_shop_pokemon; // 상점에서 선택한 패널을 저장함
+	private LinkedList<Place_Area2> place_area_panel; // 배치 패널을 저장하고 있음
+	private Place_Area2 select_place; // 선택 한 배치 패널을 가지고있음
+	private LinkedList<Obj_Panel2> place_pokemon_panel; // 배치에 위치한 포켓몬 패널을 가지고있음
+	private Obj_Panel2 select_place_pokemon;
 	public LinkedList<Pokemon> placePokemon;
 	private LinkedList<Pokemon> forReplace;
 	private Status_Panel status_panel;
+	
+	public Status_Panel getStatus_panel() {
+		return status_panel;
+	}
+
 	setPokemon s = new setPokemon();
 	private LinkedList<item> item;
 	private LinkedList<Item_Panel> item_panel;
 	public LinkedList<Pokemon> toBattle;
 	setItem t = new setItem();
-	boolean frozenPokemonNum[] = { false, false, false, false, false }; // �긽�젏 �룷耳볥が �뼹由ш린 �꽕�젙
-	boolean frozenItemNum[] = { false, false };// �븘�씠�뀥 �뼹由ш린
-	public ImagePanel placementbackground = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\placement_background.png").getImage());
+	boolean frozenPokemonNum[] = { false, false, false, false, false }; // 상점 포켓몬 얼리기 설정
+	boolean frozenItemNum[] = { false, false };// 아이템 얼리기
+	public ImagePanel placementbackground = new ImagePanel(
+			new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\placement_background.png")
+					.getImage());
 	private Item_Panel select_item;
 	boolean item24Effect = false;
-	private StartBattle battle_screen;
+	public StartBattle battle_screen;
 	public ImagePanel next_btn;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Placement_Screen frame = new Placement_Screen();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.
 	 */
 	public Placement_Screen() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setUndecorated(true);
-		setTitle("SHOP_SCREEN");
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 1920, 1080);
+
 		placementbackground.setBounds(0, 0, 1920, 1080);
-		placementbackground.setBackground(new Color(255,255,255));
+		placementbackground.setBackground(new Color(255, 255, 255));
 		placementbackground.setLayout(null);
-		setContentPane(placementbackground);
+
 		this.toBattle = new LinkedList<>();
 		this.shopPokemon = new LinkedList<>();
 		this.placePokemon = new LinkedList<>();
@@ -84,392 +73,366 @@ public class Placement_Screen extends JFrame {
 		settingList();
 		panel_setting();
 		shop_reroll();
-		
+
 	}
-	
-	public void panel_setting() { //�긽�젏 �룷耳볥が 珥덇린�꽕�젙
-		
-		//---------------Item_1_panel------------------//
+
+	public void panel_setting() { // 상점 포켓몬 초기설정
+
+		// ---------------Item_1_panel------------------//
 		Item_Panel item1 = new Item_Panel();
-		ImagePanel item_location_1 = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\select_location.png").getImage());
+		ImagePanel item_location_1 = new ImagePanel(
+				new ImageIcon("C:\\Placement_2\\src\\Image\\select_location.png")
+						.getImage());
 		item1.setBounds(1325, 600, 409, 245);
 		item_location_1.setBounds(1328, 780, 184, 110);
 		placementbackground.add(item1);
 		placementbackground.add(item_location_1);
 		item_panel.add(0, item1);
-		//-------------------------------------------//	
-			
-		//---------------Item_2_panel------------------//
+		// -------------------------------------------//
+
+		// ---------------Item_2_panel------------------//
 		Item_Panel item2 = new Item_Panel();
-		ImagePanel item_location_2 = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\select_location.png").getImage());
+		ImagePanel item_location_2 = new ImagePanel(
+				new ImageIcon("C:\\Placement_2\\src\\Image\\select_location.png")
+						.getImage());
 		item2.setBounds(1564, 600, 356, 245);
 		item_location_2.setBounds(1570, 780, 184, 110);
 		placementbackground.add(item2);
 		placementbackground.add(item_location_2);
 		item_panel.add(1, item2);
-		//-------------------------------------------//	
-			
-			
-		
-		//---------------shop_obj_panel--------------------//
-		
-		
-			Obj_Panel2 shop_obj_1 = new Obj_Panel2();
-			placementbackground.add(shop_obj_1);
-			shop_pokemon_panel.add(0, shop_obj_1);
-			shop_obj_1.setVisible(false); //�뵒�뤃�듃�뒗 �븞蹂댁씠寃�
-				
-			Obj_Panel2 shop_obj_2 = new Obj_Panel2();
-			shop_obj_2.setLocation(373, 566);
-			placementbackground.add(shop_obj_2);
-			shop_pokemon_panel.add(1, shop_obj_2);
-			shop_obj_2.setVisible(false);
-				
-			Obj_Panel2 shop_obj_3 = new Obj_Panel2();
-			shop_obj_3.setLocation(585, 566);
-			placementbackground.add(shop_obj_3);
-			shop_pokemon_panel.add(2, shop_obj_3);
-			shop_obj_3.setVisible(false);
-				
-			Obj_Panel2 shop_obj_4 = new Obj_Panel2();
-			shop_obj_4.setLocation(797, 566);
-			placementbackground.add(shop_obj_4);
-			shop_pokemon_panel.add(3, shop_obj_4);
-			shop_obj_4.setVisible(false);
-				
-			Obj_Panel2 shop_obj_5 = new Obj_Panel2();
-			shop_obj_5.setLocation(1009, 566);
-			placementbackground.add(shop_obj_5);
-			shop_pokemon_panel.add(4, shop_obj_5);
-			shop_obj_5.setVisible(false);
-				
-		//------------------------------------------//
-			Shop_Area shop_area = new Shop_Area();
-			shop_area.setBounds(150, 797, 1045, 113);
-			placementbackground.add(shop_area);
-				
-		//---------------user_obj_panel------------------//
-			Obj_Panel2 user_obj_1 = new Obj_Panel2();
-			user_obj_1.setLocation(505, 190);
-			placementbackground.add(user_obj_1);
-			place_pokemon_panel.add(0, user_obj_1);
-			user_obj_1.setVisible(false); 
-				
-			Obj_Panel2 user_obj_2 = new Obj_Panel2();
-			user_obj_2.setLocation(717, 190);
-			placementbackground.add(user_obj_2);
-			place_pokemon_panel.add(1, user_obj_2);
-			user_obj_2.setVisible(false); 
-			
-			Obj_Panel2 user_obj_3 = new Obj_Panel2();
-			user_obj_3.setLocation(929, 190);
-			placementbackground.add(user_obj_3);
-			place_pokemon_panel.add(2, user_obj_3);
-			user_obj_3.setVisible(false); 
-				
-			Obj_Panel2 user_obj_4 = new Obj_Panel2();
-			user_obj_4.setLocation(1141, 190);
-			placementbackground.add(user_obj_4);
-			place_pokemon_panel.add(3, user_obj_4);
-			user_obj_4.setVisible(false); 
-			
-			Obj_Panel2 user_obj_5 = new Obj_Panel2();
-			user_obj_5.setLocation(1353, 190);
-			placementbackground.add(user_obj_5);
-			place_pokemon_panel.add(4, user_obj_5);
-			user_obj_5.setVisible(false); 
-		//------------------------------------------//
-			
-		//---------------user_place_panel------------------//
+		// -------------------------------------------//
+
+		// ---------------shop_obj_panel--------------------//
+
+		Obj_Panel2 shop_obj_1 = new Obj_Panel2();
+		placementbackground.add(shop_obj_1);
+		shop_pokemon_panel.add(0, shop_obj_1);
+		shop_obj_1.setVisible(false); // 디폴트는 안보이게
+
+		Obj_Panel2 shop_obj_2 = new Obj_Panel2();
+		shop_obj_2.setLocation(373, 566);
+		placementbackground.add(shop_obj_2);
+		shop_pokemon_panel.add(1, shop_obj_2);
+		shop_obj_2.setVisible(false);
+
+		Obj_Panel2 shop_obj_3 = new Obj_Panel2();
+		shop_obj_3.setLocation(585, 566);
+		placementbackground.add(shop_obj_3);
+		shop_pokemon_panel.add(2, shop_obj_3);
+		shop_obj_3.setVisible(false);
+
+		Obj_Panel2 shop_obj_4 = new Obj_Panel2();
+		shop_obj_4.setLocation(797, 566);
+		placementbackground.add(shop_obj_4);
+		shop_pokemon_panel.add(3, shop_obj_4);
+		shop_obj_4.setVisible(false);
+
+		Obj_Panel2 shop_obj_5 = new Obj_Panel2();
+		shop_obj_5.setLocation(1009, 566);
+		placementbackground.add(shop_obj_5);
+		shop_pokemon_panel.add(4, shop_obj_5);
+		shop_obj_5.setVisible(false);
+
+		// ------------------------------------------//
+		Shop_Area shop_area = new Shop_Area();
+		shop_area.setBounds(150, 797, 1045, 113);
+		placementbackground.add(shop_area);
+
+		// ---------------user_obj_panel------------------//
+		Obj_Panel2 user_obj_1 = new Obj_Panel2();
+		user_obj_1.setLocation(505, 190);
+		placementbackground.add(user_obj_1);
+		place_pokemon_panel.add(0, user_obj_1);
+		user_obj_1.setVisible(false);
+
+		Obj_Panel2 user_obj_2 = new Obj_Panel2();
+		user_obj_2.setLocation(717, 190);
+		placementbackground.add(user_obj_2);
+		place_pokemon_panel.add(1, user_obj_2);
+		user_obj_2.setVisible(false);
+
+		Obj_Panel2 user_obj_3 = new Obj_Panel2();
+		user_obj_3.setLocation(929, 190);
+		placementbackground.add(user_obj_3);
+		place_pokemon_panel.add(2, user_obj_3);
+		user_obj_3.setVisible(false);
+
+		Obj_Panel2 user_obj_4 = new Obj_Panel2();
+		user_obj_4.setLocation(1141, 190);
+		placementbackground.add(user_obj_4);
+		place_pokemon_panel.add(3, user_obj_4);
+		user_obj_4.setVisible(false);
+
+		Obj_Panel2 user_obj_5 = new Obj_Panel2();
+		user_obj_5.setLocation(1353, 190);
+		placementbackground.add(user_obj_5);
+		place_pokemon_panel.add(4, user_obj_5);
+		user_obj_5.setVisible(false);
+		// ------------------------------------------//
+
+		// ---------------user_place_panel------------------//
 		Place_Area2 place_1 = new Place_Area2(0);
 		placementbackground.add(place_1);
 		place_area_panel.add(place_1);
-			
+
 		Place_Area2 place_2 = new Place_Area2(1);
 		place_2.setLocation(707, 418);
 		placementbackground.add(place_2);
 		place_area_panel.add(place_2);
-		
+
 		Place_Area2 place_3 = new Place_Area2(2);
 		place_3.setLocation(919, 418);
 		placementbackground.add(place_3);
 		place_area_panel.add(place_3);
-		
+
 		Place_Area2 place_4 = new Place_Area2(3);
 		place_4.setLocation(1131, 418);
 		placementbackground.add(place_4);
 		place_area_panel.add(place_4);
-		
+
 		Place_Area2 place_5 = new Place_Area2(4);
 		place_5.setLocation(1343, 418);
 		placementbackground.add(place_5);
 		place_area_panel.add(place_5);
-		//------------------------------------------//
-		
-		//---------------status_panel------------------//
+		// ------------------------------------------//
+
+		// ---------------status_panel------------------//
 		status_panel = new Status_Panel(coin, life, badge);
 		status_panel.setBounds(0, 0, 874, 168);
 		placementbackground.add(status_panel);
-		//-------------------------------------------//
-		
-		//---------------reroll_panel------------------//
-		ImagePanel reroll = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\reroll.png").getImage());
+		// -------------------------------------------//
+
+		// ---------------reroll_panel------------------//
+		ImagePanel reroll = new ImagePanel(
+				new ImageIcon("C:\\Placement_2\\src\\Image\\reroll.png").getImage());
 		reroll.setLocation(12, 957);
 		placementbackground.add(reroll);
-		//-------------------------------------------//
-			
-		//---------------frozen_panel------------------//
-		ImagePanel frozen = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\prozen.png").getImage());
+		// -------------------------------------------//
+
+		// ---------------frozen_panel------------------//
+		ImagePanel frozen = new ImagePanel(
+				new ImageIcon("C:\\Placement_2\\src\\Image\\prozen.png").getImage());
 		frozen.setLocation(253, 935);
 		placementbackground.add(frozen);
-		//-------------------------------------------//	
-		
-		//---------------next_panel------------------//
-		next_btn = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\next_btn.png").getImage());
+		// -------------------------------------------//
+
+		// ---------------next_panel------------------//
+		next_btn = new ImagePanel(
+				new ImageIcon("C:\\Placement_2\\src\\Image\\next_btn.png").getImage());
 		next_btn.setLocation(1663, 911);
 		placementbackground.add(next_btn);
 		next_btn.setLocation(1663, 911);
-		//-------------------------------------------//	
-		
-		//---------------next_panel------------------//
-		ImagePanel sell_btn = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\sell_1.png").getImage());
+		// -------------------------------------------//
+
+		// ---------------next_panel------------------//
+		ImagePanel sell_btn = new ImagePanel(
+				new ImageIcon("C:\\Placement_2\\src\\Image\\sell_1.png").getImage());
 		sell_btn.setBounds(1259, 916, 300, 145);
 		placementbackground.add(sell_btn);
-		
-		
-		//item 1踰덉㎏ �꽑�깮�떆
+
+		// item 1번째 선택시
 		item1.get_item_panel().addMouseListener(new MouseAdapter() {
-	        @Override
-	        public void mouseClicked(MouseEvent e) {
-	        	if(item1.ischecked() == false) {
-	        		item1.check();
-	        		select_item = item1;
-	        		item2.no_check();
-	        	}else {
-	        		item1.no_check();
-	        		select_item = null;
-	        	}
-	        }
-	    });
-		//�븘�씠�뀥 �꽕紐�
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (item1.ischecked() == false) {
+					item1.check();
+					select_item = item1;
+					item2.no_check();
+				} else {
+					item1.no_check();
+					select_item = null;
+				}
+			}
+		});
+		// 아이템 설명
 		item1.get_item_panel().addMouseListener(new MouseAdapter() {
-			
+
 			public void mouseEntered(MouseEvent e) {
 				item1.show_ex();
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				item1.no_show_ex();
 			}
-		
-		 });
-		
-		//item 2踰덉㎏ �꽑�깮�떆
+
+		});
+
+		// item 2번째 선택시
 		item2.get_item_panel().addMouseListener(new MouseAdapter() {
-	        @Override
-	        public void mouseClicked(MouseEvent e) {
-	             if(item2.ischecked() == false) {
-	            	 item2.check();
-	            	 select_item = item2;
-	            	 item1.no_check();
-	             }else {
-	            	 item2.no_check();
-	            	 select_item = null;
-	             }
-	        }
-	    });
-		
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (item2.ischecked() == false) {
+					item2.check();
+					select_item = item2;
+					item1.no_check();
+				} else {
+					item2.no_check();
+					select_item = null;
+				}
+			}
+		});
+
 		item2.get_item_panel().addMouseListener(new MouseAdapter() {
-			
+
 			public void mouseEntered(MouseEvent e) {
 				item2.show_ex();
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				item2.no_show_ex();
 			}
-		
-		 });
-		
+
+		});
+
 		sell_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(select_place_pokemon != null) {
+				if (select_place_pokemon != null) {
 					place_sell(select_place_pokemon.get_location_num());
 				}
 			}
 		});
-		
-		
+
 		for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
 			shop_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					shop_pokemon_panel.show_ex();
 				}
+
 				@Override
 				public void mouseExited(MouseEvent e) {
 					shop_pokemon_panel.no_show_ex();
 				}
 
-		    });
+			});
 		}
-		
+
 		for (Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
 			place_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					place_pokemon_panel.show_ex();
 				}
+
 				@Override
 				public void mouseExited(MouseEvent e) {
 					place_pokemon_panel.no_show_ex();
 				}
 
-		    });
+			});
 		}
 		
-		//寃뚯엫 �솕硫� 吏꾪뻾
-		next_btn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-		        
-				//諛고��떆�옉
-		        for (int i = 0; i < 5; i++) {
-		            if (placePokemon.get(i) != null) {
-		                int pokemonNum = placePokemon.get(i).getPokemonNum();
-		                int Lv = placePokemon.get(i).getLv();
-		                int exp = placePokemon.get(i).getExp();
-		                String name = placePokemon.get(i).getName();
-		                String type = placePokemon.get(i).getType();
-		                int grade = placePokemon.get(i).getGrade();
-		                int health = placePokemon.get(i).getHealth();
-		                int power = placePokemon.get(i).getPower();
-		                String ability = placePokemon.get(i).getAbility();
-		                Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
-		                toBattle.set(i, p);
-		            } else
-		                toBattle.set(i, null);
-		        }
-		        
-		        StartBattle battle_screen = new StartBattle(turnNum, toBattle.get(0), toBattle.get(1), toBattle.get(2), toBattle.get(3),
-		                toBattle.get(4), effectNum);		        
-		        setContentPane(battle_screen);
-		        placementbackground.setVisible(false);
-		        battle_screen.setVisible(true);
-			}
-		});
-			
-		//�긽�젏 �룷耳볥が �븯�굹留� �꽑�깮�릺寃� �븯怨� �꽑�깮�븳 媛앹껜瑜� ���옣�븿
+		// 상점 포켓몬 하나만 선택되게 하고 선택한 객체를 저장함
 		for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
 			shop_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
-		        @Override
-		        public void mouseClicked(MouseEvent e) {
-		            shop_select_obj(shop_pokemon_panel); 	            
-		        }
-		    });
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					shop_select_obj(shop_pokemon_panel);
+				}
+			});
 		}
-		 //諛곗튂援ъ뿭�뿉 �엳�뒗 �룷耳볥が�쓽 �룞�옉�쓣 �븿(寃쏀뿕移� 利앷� �씠踰ㅽ듃)
-		 for (Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
-			 place_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
-			        @Override
-			        public void mouseClicked(MouseEvent e) {
-			        	place_select_obj(place_pokemon_panel);		        	
-			        	if(select_shop_pokemon != null && select_place_pokemon != null) {
-				        	if(select_shop_pokemon.get_pokemon_num() == select_place_pokemon.get_pokemon_num()) {
-				        		if(coin >= 3) {
-					        		int select_shop_pokemon_location = select_shop_pokemon.get_location_num();
-							        int select_place_pokemon_location = select_place_pokemon.get_location_num();
-							        buyAbility(select_place_pokemon_location);
-							        shop_buy_expUp(select_shop_pokemon_location,select_place_pokemon_location);
-							        coin = coin - 3;
-							        status_panel.set_coin_num(coin);
-				        		}else {
-				        			System.out.println("肄붿씤�씠 遺�議깊빀�땲�떎.");
-				        		}
-				        	}else {
-				        		System.out.println("�룷耳볥が �젅踰⑥뾽 �븷�젮�뒗嫄� �븘�떂");
-				        	}
-			        	}
-			        	//�븘�씠�뀥 �궗�슜 �씠踰ㅽ듃
-			        	if(select_item != null && select_place_pokemon != null) {
-			        		if (coin > 3) {
-				        		shop_item_buy(select_item.getItemLocation(), select_place_pokemon.get_location_num());
-				        		select_item = null;
-				        		select_place_pokemon = null;
-			        		}
-			        	}
-			        }
-			    });
-			}
-		 
-		//諛곗튂 �옣�냼 �꽑�깮�쓣 �븯�굹諛뽰뿉 �꽑�깮�븯寃� �븯怨� �꽑�깮�븳 媛앹껜�쓽 �쐞移섎�� ���옣�븿
-		 for (Place_Area2 placeArea : place_area_panel) {
-	            placeArea.get_no_select_place_panel().addMouseListener(new MouseAdapter() {
-	                @Override
-	                public void mouseClicked(MouseEvent e) {
-	                    selectPlaceArea(placeArea);
-	                    
-	                    if(select_shop_pokemon != null) { //select_shop_pokemon�뿉 媛앹껜 �뾾�쑝硫� �긽�젏 援щℓ x //�긽�젏 援щℓ
-	                    	if(coin >= 3) {
-		                    	int shop_select_location = select_shop_pokemon.get_location_num();  
-			                	int place_select_location = select_place.get_location_num();
-			                	shop_buy(shop_select_location, place_select_location);
-			                	status_panel.set_coin_num(coin);
-	                    	}else {
-	                    		System.out.println("肄붿씤�씠 遺�議깊빀�땲�떎.");
-	                    	}
-	                    }else {
-	                    	System.out.println("�룷耳볥が�쓣 援щℓ�븯�뒗 �뻾�룞 �븘�떂");
-	                    }
-		                     
-	                    if(select_place_pokemon != null) { //select_place_pokemon�뿉 媛앹껜 �뾾�쑝硫� �쐞移� �씠�룞 x
-			                int place_select_pokemon = select_place_pokemon.get_location_num(); //�룷耳볥が �쐞移� �삷湲곌린
-			                int place_select = select_place.get_location_num();
-			                place_replace(place_select_pokemon, place_select);
-	                    }else {
-	                    	//System.out.println("�쐞移섍뎄�뿭�뿉�꽌 �꽑�깮�븳 �룷耳볥が�씠 �뾾�뒿�땲�떎");
-	                    }
-	                }
-	            });
+		// 배치구역에 있는 포켓몬의 동작을 함(경험치 증가 이벤트)
+		for (Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
+			place_pokemon_panel.get_pokemon_panel().addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					place_select_obj(place_pokemon_panel);
+					if (select_shop_pokemon != null && select_place_pokemon != null) {
+						if (select_shop_pokemon.get_pokemon_num() == select_place_pokemon.get_pokemon_num()) {
+							if (coin >= 3) {
+								int select_shop_pokemon_location = select_shop_pokemon.get_location_num();
+								int select_place_pokemon_location = select_place_pokemon.get_location_num();
+								buyAbility(select_place_pokemon_location);
+								shop_buy_expUp(select_shop_pokemon_location, select_place_pokemon_location);
+								coin = coin - 3;
+								status_panel.set_coin_num(coin);
+							} else {
+								System.out.println("코인이 부족합니다.");
+							}
+						} else {
+							System.out.println("포켓몬 레벨업 할려는거 아님");
+						}
+					}
+					// 아이템 사용 이벤트
+					if (select_item != null && select_place_pokemon != null) {
+						if (coin >= 3) {
+							shop_item_buy(select_item.getItemLocation(), select_place_pokemon.get_location_num());
+							select_item = null;
+							select_place_pokemon = null;
+						}
+					}
+				}
+			});
+		}
 
-	            placeArea.get_select_place_panel().addMouseListener(new MouseAdapter() {
-	                @Override
-	                public void mouseClicked(MouseEvent e) {
-	                    deselectPlaceArea(placeArea);
-	                }
-	            });
-	        }
-		
-		//由щ· �겢由� �씠踰ㅽ듃
+		// 배치 장소 선택을 하나밖에 선택하게 하고 선택한 객체의 위치를 저장함
+		for (Place_Area2 placeArea : place_area_panel) {
+			placeArea.get_no_select_place_panel().addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					selectPlaceArea(placeArea);
+
+					if (select_shop_pokemon != null) { // select_shop_pokemon에 객체 없으면 상점 구매 x //상점 구매
+						if (coin >= 3) {
+							int shop_select_location = select_shop_pokemon.get_location_num();
+							int place_select_location = select_place.get_location_num();
+							shop_buy(shop_select_location, place_select_location);
+							status_panel.set_coin_num(coin);
+						} else {
+							System.out.println("코인이 부족합니다.");
+						}
+					} else {
+						System.out.println("포켓몬을 구매하는 행동 아님");
+					}
+
+					if (select_place_pokemon != null) { // select_place_pokemon에 객체 없으면 위치 이동 x
+						int place_select_pokemon = select_place_pokemon.get_location_num(); // 포켓몬 위치 옮기기
+						int place_select = select_place.get_location_num();
+						place_replace(place_select_pokemon, place_select);
+					} else {
+						// System.out.println("위치구역에서 선택한 포켓몬이 없습니다");
+					}
+				}
+			});
+
+			placeArea.get_select_place_panel().addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					deselectPlaceArea(placeArea);
+				}
+			});
+		}
+
+		// 리롤 클릭 이벤트
 		reroll.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(coin > 0) {
+				if (coin > 0) {
 					shop_reroll();
 					coin = coin - 1;
 					status_panel.set_coin_num(coin);
-				}else {
-					System.out.println("肄붿씤�씠 遺�議깊빀�땲�떎");
+				} else {
+					System.out.println("코인이 부족합니다");
 				}
 			}
 		});
-		
-		
-		
-		//�뼹由ш린 �겢由� �씠踰ㅽ듃
+
+		// 얼리기 클릭 이벤트
 		frozen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(select_shop_pokemon != null) {
+				if (select_shop_pokemon != null) {
 					int shop_select_location = select_shop_pokemon.get_location_num();
 					select_shop_pokemon.no_check();
 					pokemon_frozen(shop_select_location);
 					select_shop_pokemon = null;
-				}else {
-					System.out.println("�뼹由ш린 �뻾�룞�븘�떂");
+				} else {
+					System.out.println("얼리기 행동아님");
 				}
-				if(select_item != null) {
+				if (select_item != null) {
 					int select_item_location = select_item.getItemLocation();
 					select_item.no_check();
 					item_frozen(select_item_location);
@@ -477,18 +440,45 @@ public class Placement_Screen extends JFrame {
 				}
 			}
 		});
-	
+
+	}
+	public void up_bedge() {
+		this.badge++;
 	}
 	
-	void startPlacement() { // 諛곗튂 �떒怨� �떆�옉 �떆 援ы쁽
+	void down_heart() {
+		this.life--;
+	}
+	
+	void setBattleScreen() {
+		for (int i = 0; i < 5; i++) {
+            if (placePokemon.get(i) != null) {
+                int pokemonNum = placePokemon.get(i).getPokemonNum();
+                int Lv = placePokemon.get(i).getLv();
+                int exp = placePokemon.get(i).getExp();
+                String name = placePokemon.get(i).getName();
+                String type = placePokemon.get(i).getType();
+                int grade = placePokemon.get(i).getGrade();
+                int health = placePokemon.get(i).getHealth();
+                int power = placePokemon.get(i).getPower();
+                String ability = placePokemon.get(i).getAbility();
+                Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
+                toBattle.set(i, p);
+            } else
+                toBattle.set(i, null);
+        }
+	}
+	
+
+	void startPlacement() { // 배치 단계 시작 시 구현
 		shop_reroll();
 		coin = 10;
 		turnNum++;
 	}
-	
+
 	int coinUp() {
 		for (Pokemon p : placePokemon) {
-			if (p != null && p.getPokemonNum() == 56) { // ��寃� �듅由� �떆 肄붿씤 1, 2, 3 利앷�
+			if (p != null && p.getPokemonNum() == 56) { // 대결 승리 시 코인 1, 2, 3 증가
 				if (p.getLv() == 1) {
 					return 1;
 				} else if (p.getLv() == 2) {
@@ -500,9 +490,8 @@ public class Placement_Screen extends JFrame {
 		}
 		return 0;
 	}
-	
-	
-	void settingList() { // 洹몃깷 鍮꾩뼱�몢硫� �뿉�윭 �뼚�꽌 null濡� 吏��젙 �븿
+
+	void settingList() { // 그냥 비어두면 에러 떠서 null로 지정 함
 		shopPokemon.add(0, null);
 		shopPokemon.add(1, null);
 		shopPokemon.add(2, null);
@@ -520,10 +509,10 @@ public class Placement_Screen extends JFrame {
 		toBattle.add(2, null);
 		toBattle.add(3, null);
 		toBattle.add(4, null);
-		
+
 	}
-	
-	void shop_reroll() { // �긽�젏 �룷耳볥が 由щ·
+
+	void shop_reroll() { // 상점 포켓몬 리롤
 		int i = shop_place_num() - 1;
 
 		while (i >= 0) {
@@ -532,7 +521,7 @@ public class Placement_Screen extends JFrame {
 			} else {
 				int randomnum = randomNum();
 				shopPokemon.set(i, s.getLV1Pokemon(randomnum));
-				
+
 				int pokemonnum = s.getLV1Pokemon(randomnum).getPokemonNum();
 				int Lv = s.getLV1Pokemon(randomnum).getLv();
 				int exp = s.getLV1Pokemon(randomnum).getExp();
@@ -540,9 +529,8 @@ public class Placement_Screen extends JFrame {
 				int health = s.getLV1Pokemon(randomnum).getHealth();
 				int power = s.getLV1Pokemon(randomnum).getPower();
 				String ability = s.getLV1Pokemon(randomnum).getAbility();
-						
-				
-				shop_pokemon_panel.get(i).set_pokemon_num(pokemonnum,Lv);
+
+				shop_pokemon_panel.get(i).set_pokemon_num(pokemonnum, Lv);
 				shop_pokemon_panel.get(i).set_Lv(Lv);
 				shop_pokemon_panel.get(i).set_exp(exp);
 				shop_pokemon_panel.get(i).set_grade(grade);
@@ -551,17 +539,17 @@ public class Placement_Screen extends JFrame {
 				shop_pokemon_panel.get(i).set_location_num(i);
 				shop_pokemon_panel.get(i).set_ex(ability);
 				shop_pokemon_panel.get(i).setVisible(true);
-				
+
 				select_place_pokemon = null;
-				for(Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
+				for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
 					shop_pokemon_panel.no_check();
 				}
 				select_shop_pokemon = null;
-				for(Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
+				for (Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
 					place_pokemon_panel.no_check();
 				}
 				select_place = null;
-				for(Place_Area2 place_panel : place_area_panel) {
+				for (Place_Area2 place_panel : place_area_panel) {
 					place_panel.no_check();
 				}
 			}
@@ -583,17 +571,24 @@ public class Placement_Screen extends JFrame {
 			j++;
 		}
 	}
-	
-	int randomNum() { // �룷耳볥が �닔 留뚰겮�쓽 �궃�닔
-		if(turnNum<=6) {
-			return random.nextInt(turnNum*10) + 1;
-		}else {
+
+	int randomNum() { // 포켓몬 수 만큼의 난수
+		if (turnNum <= 6) {
+			return random.nextInt(turnNum * 10) + 1;
+		} else {
 			return random.nextInt(60) + 1;
 		}
 	}
-	
-	
-	int shop_place_num() { // �긽�젏 湲곕Ъ �닔瑜� �쐞�븳 �븿�닔 �꽩�씠 �뒛�뼱 �궇�닔濡� 媛믪씠 而ㅼ쭊�떎.
+
+	int randomItemNum() { // 아이템 수 만큼 난수
+		if (turnNum <= 6) {
+			return random.nextInt(turnNum * 4) + 1;
+		} else {
+			return random.nextInt(24) + 1;
+		}
+	}
+
+	int shop_place_num() { // 상점 기물 수를 위한 함수 턴이 늘어 날수록 값이 커진다.
 		if (turnNum == 1) {
 			return 3;
 		} else if (turnNum <= 3) {
@@ -602,129 +597,131 @@ public class Placement_Screen extends JFrame {
 			return 5;
 		}
 	}
-	
-	void shop_show(int shopPlaceNum) { // �긽�젏 �룷耳볥が �솗�씤
-		System.out.println("<<<�긽�젏 援ъ뿭 異쒕젰>>>");
+
+	void shop_show(int shopPlaceNum) { // 상점 포켓몬 확인
+		System.out.println("<<<상점 구역 출력>>>");
 		int i = 0;
 		while (i < shopPlaceNum) {
 			if (shopPokemon.get(i) == null) {
-				System.out.println((i + 1) + "踰� 鍮꾩뼱�엳�쓬");
+				System.out.println((i + 1) + "번 비어있음");
 			} else if (frozenPokemonNum[i]) {
-				System.out.println((i + 1) + "踰� �뼹由�! �씠由� : " + shopPokemon.get(i).getName() + " / ���엯 : "
-						+ shopPokemon.get(i).getType() + " / �벑湲� : " + shopPokemon.get(i).getGrade() + " / LV : "
-						+ shopPokemon.get(i).getLv() + " / 泥대젰 : " + shopPokemon.get(i).getHealth() + " / 怨듦꺽�젰 : "
-						+ shopPokemon.get(i).getPower() + " / �뒫�젰 : " + shopPokemon.get(i).getAbility());
+				System.out.println((i + 1) + "번 얼림! 이름 : " + shopPokemon.get(i).getName() + " / 타입 : "
+						+ shopPokemon.get(i).getType() + " / 등급 : " + shopPokemon.get(i).getGrade() + " / LV : "
+						+ shopPokemon.get(i).getLv() + " / 체력 : " + shopPokemon.get(i).getHealth() + " / 공격력 : "
+						+ shopPokemon.get(i).getPower() + " / 능력 : " + shopPokemon.get(i).getAbility());
 			} else {
-				System.out.println((i + 1) + "踰� �씠由� : " + shopPokemon.get(i).getName() + " / ���엯 : "
-						+ shopPokemon.get(i).getType() + " / �벑湲� : " + shopPokemon.get(i).getGrade() + " / LV : "
-						+ shopPokemon.get(i).getLv() + " / 泥대젰 : " + shopPokemon.get(i).getHealth() + " / 怨듦꺽�젰 : "
-						+ shopPokemon.get(i).getPower() + " / �뒫�젰 : " + shopPokemon.get(i).getAbility());
-				
+				System.out.println((i + 1) + "번 이름 : " + shopPokemon.get(i).getName() + " / 타입 : "
+						+ shopPokemon.get(i).getType() + " / 등급 : " + shopPokemon.get(i).getGrade() + " / LV : "
+						+ shopPokemon.get(i).getLv() + " / 체력 : " + shopPokemon.get(i).getHealth() + " / 공격력 : "
+						+ shopPokemon.get(i).getPower() + " / 능력 : " + shopPokemon.get(i).getAbility());
+
 				/*
-				if(shop_pokemon_panel.get(i).get_pokemon_num() != 0) {
-					shop_pokemon_panel.get(i).setVisible(true);
-					shop_pokemon_panel.get(i).repaint();
-				}
-				*/
+				 * if(shop_pokemon_panel.get(i).get_pokemon_num() != 0) {
+				 * shop_pokemon_panel.get(i).setVisible(true);
+				 * shop_pokemon_panel.get(i).repaint(); }
+				 */
 			}
 			i++;
 		}
 	}
-	void shop_select_obj(Obj_Panel2 selectedPanel) { //�븯�굹�쓽 �긽�젏 �뙣�꼸�쓣 �꽑�깮�뻽�쓣�븣 �굹癒몄� �긽�젏 �뙣�꼸�� 泥댄겕 �빐�젣 �맖
-	    for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
-	        if (shop_pokemon_panel.equals(selectedPanel)) {
-	            if (shop_pokemon_panel.ischecked()) {
-	            	shop_pokemon_panel.no_check();
-	                select_shop_pokemon = null; // �꽑�깮 �빐�젣 �떆 select_shop_pokemon�쓣 null濡� �꽕�젙
-	            } else {
-	            	shop_pokemon_panel.check();
-	                select_shop_pokemon = shop_pokemon_panel;
-	                System.out.println("�긽�젏�뿉�꽌 �꽑�깮�븳 �룷耳볥が �쐞移�" + select_shop_pokemon.get_location_num());
-	            }
-	        } else {
-	            shop_pokemon_panel.no_check();
-	        }
-	    }
-	}
-	
-	void place_select_obj(Obj_Panel2 selectedPanel) { 
-	    for (Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
-	        if (place_pokemon_panel.equals(selectedPanel)) {
-	            if (place_pokemon_panel.ischecked()) {
-	            	place_pokemon_panel.no_check();
-	                select_place_pokemon = null; // �꽑�깮 �빐�젣 �떆 select_shop_pokemon�쓣 null濡� �꽕�젙
-	            } else {
-	                place_pokemon_panel.check();
-	            	if(select_place_pokemon != null) {
-		        		if(select_place_pokemon.get_pokemon_num() == place_pokemon_panel.get_pokemon_num()) {
-		        			int place_pokemon = place_pokemon_panel.get_location_num();
-		        			int select_pokemon = select_place_pokemon.get_location_num();
-		        			System.out.println(select_pokemon);
-		        			System.out.println(place_pokemon);
-		        		    place_replace(select_pokemon, place_pokemon);
-		        		}else {
-		        			int place_pokemon = place_pokemon_panel.get_location_num();
-		        			int select_pokemon = select_place_pokemon.get_location_num();
-		        			place_replace(select_pokemon, place_pokemon);
-		        			place_pokemon_panel.no_check();
-		        			select_place_pokemon = null;
-		        		}
-		        	}
-	            	select_place_pokemon = selectedPanel;
-	            	System.out.println("�꽑�깮�븳 諛곗튂援ъ뿭 �룷耳볥が �쐞移섎뒗" + select_place_pokemon.get_location_num() + "�엯�땲�떎.");
-	            	
-	            }
-	        } else {
-	        	place_pokemon_panel.no_check();
-	        }
-	    }
+
+	void shop_select_obj(Obj_Panel2 selectedPanel) { // 하나의 상점 패널을 선택했을때 나머지 상점 패널은 체크 해제 됨
+		for (Obj_Panel2 shop_pokemon_panel : shop_pokemon_panel) {
+			if (shop_pokemon_panel.equals(selectedPanel)) {
+				if (shop_pokemon_panel.ischecked()) {
+					shop_pokemon_panel.no_check();
+					select_shop_pokemon = null; // 선택 해제 시 select_shop_pokemon을 null로 설정
+				} else {
+					shop_pokemon_panel.check();
+					select_shop_pokemon = shop_pokemon_panel;
+					System.out.println("상점에서 선택한 포켓몬 위치" + select_shop_pokemon.get_location_num());
+				}
+			} else {
+				shop_pokemon_panel.no_check();
+			}
+		}
 	}
 
-	
-    private void selectPlaceArea(Place_Area2 placeArea) { //�쐞移섎�� �꽑�깮�뻽�쓣�븣 泥섎━�빐二쇰뒗 �븿�닔
-        placeArea.check();
-        select_place = placeArea;
-        System.out.println("�꽑�깮�븳 諛곗튂 �쐞移� 踰덊샇�뒗 " + select_place.get_location_num()+ "�엯�땲�떎.");
-    }
+	void place_select_obj(Obj_Panel2 selectedPanel) {
+		for (Obj_Panel2 place_pokemon_panel : place_pokemon_panel) {
+			if (place_pokemon_panel.equals(selectedPanel)) {
+				if (place_pokemon_panel.ischecked()) {
+					place_pokemon_panel.no_check();
+					select_place_pokemon = null; // 선택 해제 시 select_shop_pokemon을 null로 설정
+				} else {
+					place_pokemon_panel.check();
+					if (select_place_pokemon != null) {
+						if (select_place_pokemon.get_pokemon_num() == place_pokemon_panel.get_pokemon_num()) {
+							int place_pokemon = place_pokemon_panel.get_location_num();
+							int select_pokemon = select_place_pokemon.get_location_num();
+							System.out.println(select_pokemon);
+							System.out.println(place_pokemon);
+							place_replace(select_pokemon, place_pokemon);
+						} else {
+							int place_pokemon = place_pokemon_panel.get_location_num();
+							int select_pokemon = select_place_pokemon.get_location_num();
+							place_replace(select_pokemon, place_pokemon);
+							place_pokemon_panel.no_check();
+							select_place_pokemon = null;
+						}
+					}
+					select_place_pokemon = selectedPanel;
+					System.out.println("선택한 배치구역 포켓몬 위치는" + select_place_pokemon.get_location_num() + "입니다.");
 
-    private void deselectPlaceArea(Place_Area2 placeArea) { //�쐞移섎━瑜� �빐�젣 �뻽�쓣�븣 泥섎━�빐二쇰뒗 �븿�닔
-        placeArea.no_check();
-        select_place = null;
-    }
-	
+				}
+			} else {
+				place_pokemon_panel.no_check();
+			}
+		}
+	}
 
-    void pokemon_frozen(int placeNum) { // �긽�젏 �룷耳볥が �뼹由ш린
-        if (!validationShopPokemonNum(placeNum)) {
-            System.out.println("<<<�엯�젰 �삤瑜�>>>");
-            return;
-        } else if (isNullShopPokemon(placeNum)) {
-            System.out.println("<<<鍮꾩뼱�엳�뒿�땲�떎.>>>");
-            return;
-        } else if (frozenPokemonNum[placeNum] == false) {
-            frozenPokemonNum[placeNum] = true;
-            select_shop_pokemon.get_frozen_panel().setVisible(true);
-            System.out.println("<<<" + (placeNum + 1) + "踰덉뿉 �뼹由ш린 �꽕�젙>>>");
-            return;
-        } else {
-            frozenPokemonNum[placeNum] = false;
-            select_shop_pokemon.get_frozen_panel().setVisible(false);
-            System.out.println("<<<" + (placeNum + 1) + "踰덉뿉 �뼹由ш린 痍⑥냼 �꽕�젙>>>");
-            return;
-        }
-    }
-	
-	void shop_buy(int shopPlaceNum, int myPlaceNum) { // �긽�젏�뿉�꽌 �룷耳볥が 援щℓ
+	private void selectPlaceArea(Place_Area2 placeArea) { // 위치를 선택했을때 처리해주는 함수
+		placeArea.check();
+		select_place = placeArea;
+		System.out.println("선택한 배치 위치 번호는 " + select_place.get_location_num() + "입니다.");
+	}
+
+	private void deselectPlaceArea(Place_Area2 placeArea) { // 위치리를 해제 했을때 처리해주는 함수
+		placeArea.no_check();
+		select_place = null;
+	}
+
+	void pokemon_frozen(int placeNum) { // 상점 포켓몬 얼리기
+		if (!validationShopPokemonNum(placeNum)) {
+			System.out.println("<<<입력 오류>>>");
+			return;
+		} else if (isNullShopPokemon(placeNum)) {
+			System.out.println("<<<비어있습니다.>>>");
+			return;
+		} else if (frozenPokemonNum[placeNum] == false) {
+			frozenPokemonNum[placeNum] = true;
+			select_shop_pokemon.get_frozen_panel().setVisible(true);
+			System.out.println("<<<" + (placeNum + 1) + "번에 얼리기 설정>>>");
+			return;
+		} else {
+			frozenPokemonNum[placeNum] = false;
+			select_shop_pokemon.get_frozen_panel().setVisible(false);
+			System.out.println("<<<" + (placeNum + 1) + "번에 얼리기 취소 설정>>>");
+			return;
+		}
+	}
+
+	void shop_buy(int shopPlaceNum, int myPlaceNum) { // 상점에서 포켓몬 구매
 		if (!validationShopNum(shopPlaceNum) || !validationPlaceNum(myPlaceNum)) {
-			System.out.println("�엯�젰 �삤瑜�");
+			System.out.println("입력 오류");
 			return;
-		} else if (isNullShopPokemon(shopPlaceNum)) { // �씠誘� 援щℓ�븳 �긽�젏 踰덊샇硫� 援щℓ 遺덇�
-			System.out.println("<<<" + (shopPlaceNum + 1) + "踰� �긽�젏�씠 鍮꾩뼱�엳�뒿�땲�떎.>>>");
+		} else if (isNullShopPokemon(shopPlaceNum)) { // 이미 구매한 상점 번호면 구매 불가
+			System.out.println("<<<" + (shopPlaceNum + 1) + "번 상점이 비어있습니다.>>>");
 			return;
-		} else if (!isNullPlacePokemon(myPlaceNum)) { // 諛곗튂 援ъ뿭�뿉 �룷耳볥が�씠 �엳�쑝硫� 援щℓ 遺덇�
+		} else if (!isNullPlacePokemon(myPlaceNum)) { // 배치 구역에 포켓몬이 있으면 구매 불가
 			if (shop_buy_expUp(shopPlaceNum, myPlaceNum)) {
+				if (is3Grade(shopPlaceNum) && findPokemonNum(53) != -1) {
+					use53Ability(findPokemonNum(53));
+				}
 				shopPokemon.set(shopPlaceNum, null);
 				frozenPokemonNum[shopPlaceNum] = false;
-				System.out.println("<<<援щℓ �꽦怨�>>>");
+				System.out.println("<<<구매 성공>>>");
+				buyAbility(myPlaceNum);
 				for (int i = 0; i < 5; i++) {
 					if (placePokemon.get(i) != null) {
 						if (placePokemon.get(i).getPokemonNum() == 53) {
@@ -736,11 +733,14 @@ public class Placement_Screen extends JFrame {
 				coin = coin - 3;
 				return;
 			} else
-				System.out.println("<<<" + (myPlaceNum + 1) + "踰덉뿉 �씠誘� �엳�뒿�땲�떎.>>>");
+				System.out.println("<<<" + (myPlaceNum + 1) + "번에 이미 있습니다.>>>");
 			{
 				return;
 			}
-		} else { // 諛곗튂援ъ뿭�뿉 �룷耳볥が�씠 �뾾�쑝硫� 援щℓ�꽦怨�
+		} else { // 배치구역에 포켓몬이 없으면 구매성공
+			if (is3Grade(shopPlaceNum) && findPokemonNum(53) != -1) {
+				use53Ability(findPokemonNum(53));
+			}
 			placePokemon.set(myPlaceNum, shopPokemon.get(shopPlaceNum));
 			place_pokemon_panel.get(myPlaceNum).set_Lv(shop_pokemon_panel.get(shopPlaceNum).get_LV());
 			place_pokemon_panel.get(myPlaceNum).set_exp(shop_pokemon_panel.get(shopPlaceNum).get_exp());
@@ -748,84 +748,114 @@ public class Placement_Screen extends JFrame {
 			place_pokemon_panel.get(myPlaceNum).set_heart(shop_pokemon_panel.get(shopPlaceNum).get_heart());
 			place_pokemon_panel.get(myPlaceNum).set_damage(shop_pokemon_panel.get(shopPlaceNum).get_damage());
 			place_pokemon_panel.get(myPlaceNum).set_location_num(myPlaceNum);
-			place_pokemon_panel.get(myPlaceNum).set_pokemon_num(shop_pokemon_panel.get(shopPlaceNum).get_pokemon_num(),shop_pokemon_panel.get(shopPlaceNum).get_LV());
+			place_pokemon_panel.get(myPlaceNum).set_pokemon_num(shop_pokemon_panel.get(shopPlaceNum).get_pokemon_num(),
+					shop_pokemon_panel.get(shopPlaceNum).get_LV());
 			place_pokemon_panel.get(myPlaceNum).set_ex(shop_pokemon_panel.get(shopPlaceNum).get_ex());
-			place_pokemon_panel.get(myPlaceNum).setVisible(true); //�뙣�꼸�뿉 set�빐二쇨퀬 蹂댁씠寃� �븯湲�
-			
-	
-			shopPokemon.set(shopPlaceNum, null); 
-			shop_pokemon_panel.get(shopPlaceNum).setVisible(false); //shop_place_num�씠 null�맆�븣 �븞蹂댁씠寃� �븯湲�
+			place_pokemon_panel.get(myPlaceNum).setVisible(true); // 패널에 set해주고 보이게 하기
+
+			shopPokemon.set(shopPlaceNum, null);
+			shop_pokemon_panel.get(shopPlaceNum).setVisible(false); // shop_place_num이 null될때 안보이게 하기
 			shop_pokemon_panel.get(shopPlaceNum).no_frozen();
 			shop_pokemon_panel.get(myPlaceNum).get_frozen_panel().setVisible(false);
 			select_place.no_check();
-			
+
 			frozenPokemonNum[shopPlaceNum] = false;
-			System.out.println(select_shop_pokemon.get_location_num() + "踰� �긽�젏 �룷耳볥が�쓣");
-        	System.out.println(select_place.get_location_num() + "踰덉뿉 諛곗튂�븯���뒿�땲�떎.");
-			System.out.println("援щℓ �꽦怨�");
-			
+			System.out.println(select_shop_pokemon.get_location_num() + "번 상점 포켓몬을");
+			System.out.println(select_place.get_location_num() + "번에 배치하였습니다.");
+			System.out.println("구매 성공");
+
 			select_place_pokemon = null;
-			select_shop_pokemon = null; //�긽�젏 �꽑�깮 珥덇린�솕
-			select_place = null; //�쐞移� �꽑�깮 珥덇린�솕
-			
+			select_shop_pokemon = null; // 상점 선택 초기화
+			select_place = null; // 위치 선택 초기화
 			buyAbility(myPlaceNum);
 			coin = coin - 3;
 			return;
 		}
 	}
-	
-	boolean validationShopNum(int placeNum) { // �긽�젏 援ъ뿭 踰덊샇 �쑀�슚�꽦 寃��궗
+
+	boolean is3Grade(int shopPlaceNum) { // 구매한 포켓몬이 3등급 이면 true
+		if (shopPokemon.get(shopPlaceNum).getGrade() <= 3) {
+			return true;
+		}
+		return false;
+	}
+
+	int findPokemonNum(int pokemonNum) {
+		for (int i = 0; i < 5; i++) {
+			if (placePokemon.get(i) != null) {
+				if (placePokemon.get(i).getPokemonNum() == pokemonNum) {
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
+
+	void use53Ability(int placeNum) { // 3등급 이하 포켓몬 구매 시 3/3 증가
+		int lv = placePokemon.get(placeNum).getLv();
+		int abilityNum = 3;
+		if (lv == 2) {
+			abilityNum = 4;
+		} else if (lv == 3) {
+			abilityNum = 5;
+		}
+		System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
+		placePowerAdjust(placeNum, abilityNum);
+		placeHealthAdjust(placeNum, abilityNum);
+	}
+
+	boolean validationShopNum(int placeNum) { // 상점 구역 번호 유효성 검사
 		if (shop_place_num() < placeNum || placeNum < 0) {
 			return false;
 		} else
 			return true;
 	}
-	
-	boolean validationPlaceNum(int placeNum) { // 諛곗튂 援ъ뿭 踰덊샇 �쑀�슚�꽦 寃��궗
+
+	boolean validationPlaceNum(int placeNum) { // 배치 구역 번호 유효성 검사
 		if (4 < placeNum || placeNum < 0) {
 			return false;
 		} else
 			return true;
 	}
-	
-	boolean isNullShopPokemon(int placeNum) { // �긽�젏 援ъ뿭 �룷耳볥が�씠 null�씤吏� �솗�씤
+
+	boolean isNullShopPokemon(int placeNum) { // 상점 구역 포켓몬이 null인지 확인
 		if (shopPokemon.get(placeNum) == null)
 			return true;
 		return false;
 	}
-	
-	boolean isNullPlacePokemon(int placeNum) { // 諛곗튂 援ъ뿭 �룷耳볥が�씠 null�씤吏� �솗�씤
+
+	boolean isNullPlacePokemon(int placeNum) { // 배치 구역 포켓몬이 null인지 확인
 		if (placePokemon.get(placeNum) == null)
 			return true;
 		return false;
 	}
-	
+
 	boolean shop_buy_expUp(int shopPlaceNum, int myPlaceNum) {
-		if (placePokemon.get(myPlaceNum) != null) { // 媛숈� �룷耳볥が�씠硫� 寃쏀뿕移� 利앷�
+		if (placePokemon.get(myPlaceNum) != null) { // 같은 포켓몬이면 경험치 증가
 			if (shopPokemon.get(shopPlaceNum).getPokemonNum() == placePokemon.get(myPlaceNum).getPokemonNum()) {
 				if (placePokemon.get(myPlaceNum).getLv() == 3) {
-					System.out.println("<< 3�젅踰� �엯�땲�떎!! >>");
+					System.out.println("<< 3레벨 입니다!! >>");
 					return false;
-				}	
+				}
 				placePokemon.get(myPlaceNum).setExp(placePokemon.get(myPlaceNum).getExp() + 1);
 				place_pokemon_panel.get(myPlaceNum).set_exp(place_pokemon_panel.get(myPlaceNum).get_exp() + 1);
-				
+
 				shop_pokemon_panel.get(shopPlaceNum).setVisible(false);
 				select_place_pokemon.no_check();
 				select_shop_pokemon.no_check();
-				
+
 				select_place_pokemon = null;
 				select_shop_pokemon = null;
-				
+
 				isRankup(myPlaceNum);
-				System.out.println("<<<寃쏀뿕移� 利앷�!>>>");
+				System.out.println("<<<경험치 증가!>>>");
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	int checkRemainNum() { // �궓�븘�엳�뒗 諛곗튂 援ъ뿭 �룷耳볥が �닔 諛섑솚
+
+	int checkRemainNum() { // 남아있는 배치 구역 포켓몬 수 반환
 		int i = 0;
 		for (Pokemon p : placePokemon) {
 			if (p != null) {
@@ -834,23 +864,22 @@ public class Placement_Screen extends JFrame {
 		}
 		return i;
 	}
-	
-	
-	void buyAbility(int placeNum) { // 援щℓ �떆 �뒫�젰
+
+	void buyAbility(int placeNum) { // 구매 시 능력
 		int lv = placePokemon.get(placeNum).getLv();
 		switch (placePokemon.get(placeNum).getPokemonNum()) {
-		case 8: { // 援щℓ �떆 �옖�뜡�븳 �븘援� 1, 2, 3紐� 怨듦꺽�젰 1 利앷�
+		case 8: { // 구매 시 랜덤한 아군 1, 2, 3명 공격력 1 증가
 			int remainNum = checkRemainNum();
 			if ((lv == 1 && remainNum >= 1) || (lv == 2 && remainNum == 1) || (lv == 3 && remainNum == 1)) {
 				while (true) {
 					int i = random.nextInt(5);
 					if (placePokemon.get(i) != null) {
-						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 						placePowerAdjust(i, 1);
 						return;
 					}
 				}
-			} else if ((lv == 2 && remainNum >= 2) || (lv == 3 && remainNum == 2)) { // 援щℓ �떆 �옖�뜡�븳 �븘援� 2紐� 怨듦꺽�젰 1 利앷�
+			} else if ((lv == 2 && remainNum >= 2) || (lv == 3 && remainNum == 2)) { // 구매 시 랜덤한 아군 2명 공격력 1 증가
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
@@ -859,13 +888,13 @@ public class Placement_Screen extends JFrame {
 						j = random.nextInt(5);
 					}
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null) {
-						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 						placePowerAdjust(i, 1);
 						placePowerAdjust(j, 1);
 						return;
 					}
 				}
-			} else if (remainNum >= 3) { // 援щℓ �떆 �옖�뜡�븳 �븘援� 3紐� 怨듦꺽�젰 1 利앷�
+			} else if (remainNum >= 3) { // 구매 시 랜덤한 아군 3명 공격력 1 증가
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
@@ -876,17 +905,17 @@ public class Placement_Screen extends JFrame {
 						k = random.nextInt(5);
 					}
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null) {
-						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+						System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 						placePowerAdjust(i, 1);
 						placePowerAdjust(j, 1);
 						placePowerAdjust(k, 1);
-						System.out.println("<<<�뒫�젰 �궗�슜>>>");
+						System.out.println("<<<능력 사용>>>");
 						return;
 					}
 				}
 			}
 		}
-		case 13: { // 援щℓ �떆 �뼇 �쁿�뿉 諛곗튂�맂 �븘援� 怨듦꺽�젰, 泥대젰 2利앷�
+		case 13: { // 구매 시 양 옆에 배치된 아군 공격력, 체력 2증가
 			int abilityNum = 2;
 			if (lv == 2) {
 				abilityNum = 3;
@@ -897,24 +926,34 @@ public class Placement_Screen extends JFrame {
 				if (placePokemon.get(placeNum + 1) == null) {
 					return;
 				} else {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 					placeHealthAdjust(placeNum + 1, abilityNum);
 					placePowerAdjust(placeNum + 1, abilityNum);
 					return;
 				}
-			}
-			if (placeNum == 4) {
+			} else if (placeNum == 4) {
 				if (placePokemon.get(placeNum - 1) == null) {
 					return;
 				} else {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 					placeHealthAdjust(placeNum - 1, abilityNum);
 					placePowerAdjust(placeNum - 1, abilityNum);
 					return;
 				}
+			} else {
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
+				if (placePokemon.get(placeNum + 1) != null) {
+					placeHealthAdjust(placeNum + 1, abilityNum);
+					placePowerAdjust(placeNum + 1, abilityNum);
+				}
+				if (placePokemon.get(placeNum - 1) != null) {
+					placeHealthAdjust(placeNum - 1, abilityNum);
+					placePowerAdjust(placeNum - 1, abilityNum);
+				}
+				return;
 			}
 		}
-		case 17: { // 援щℓ �떆 怨듦꺽�젰�씠 媛��옣 �쟻�� �븘援곗뿉寃� 怨듦꺽�젰 2諛� 利앷�
+		case 17: { // 구매 시 공격력이 가장 적은 아군에게 공격력 2배 증가
 			int lowPowerPlaceNum = -1;
 			int powerNumArr[] = { -1, -1, -1, -1, -1 };
 			int min = -1;
@@ -923,7 +962,6 @@ public class Placement_Screen extends JFrame {
 				if (placePokemon.get(i) != null) {
 					powerNumArr[i] = placePokemon.get(i).getPower();
 				}
-				powerNumArr[i] = -1;
 			}
 			for (int i = 0; i < 5; i++) {
 				if (powerNumArr[i] > -1) {
@@ -936,17 +974,20 @@ public class Placement_Screen extends JFrame {
 					}
 				}
 			}
+			if (lowPowerPlaceNum < -1) {
+				lowPowerPlaceNum = placeNum;
+			}
 			int adjustNum = placePokemon.get(lowPowerPlaceNum).getPower();
 			if (lv == 2) {
 				adjustNum = adjustNum * 15 / 10;
-			} else {
+			} else if (lv == 3) {
 				adjustNum = adjustNum * 2;
 			}
-			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 			placePowerAdjust(lowPowerPlaceNum, adjustNum);
 			return;
 		}
-		case 33: { // 援щℓ �떆 �뼇 �쁿�뿉 諛곗튂�맂 �븘援� 怨듦꺽�젰 3 利앷�
+		case 33: { // 구매 시 양 옆에 배치된 아군 공격력 3 증가
 			int abilityNum = 3;
 			if (lv == 2) {
 				abilityNum = 4;
@@ -957,24 +998,30 @@ public class Placement_Screen extends JFrame {
 				if (placePokemon.get(placeNum + 1) == null) {
 					return;
 				} else {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
-					placeHealthAdjust(placeNum + 1, abilityNum);
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 					placePowerAdjust(placeNum + 1, abilityNum);
 					return;
 				}
-			}
-			if (placeNum == 4) {
+			} else if (placeNum == 4) {
 				if (placePokemon.get(placeNum - 1) == null) {
 					return;
 				} else {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
-					placeHealthAdjust(placeNum - 1, abilityNum);
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 					placePowerAdjust(placeNum - 1, abilityNum);
 					return;
 				}
+			} else {
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
+				if (placePokemon.get(placeNum + 1) != null) {
+					placePowerAdjust(placeNum + 1, abilityNum);
+				}
+				if (placePokemon.get(placeNum - 1) != null) {
+					placePowerAdjust(placeNum - 1, abilityNum);
+				}
+				return;
 			}
 		}
-		case 48: { // 援щℓ �떆 �옖�뜡�븳 �븘援곗뿉寃� 怨듦꺽�젰, 泥대젰 3 利앷�
+		case 48: { // 구매 시 랜덤한 아군에게 공격력, 체력 3 증가
 			int abilityNum = 3;
 			if (lv == 2) {
 				abilityNum = 4;
@@ -984,7 +1031,7 @@ public class Placement_Screen extends JFrame {
 			while (true) {
 				int i = random.nextInt(5);
 				if (placePokemon.get(i) != null) {
-					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+					System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 					placeHealthAdjust(i, abilityNum);
 					placePowerAdjust(i, abilityNum);
 					return;
@@ -996,235 +1043,257 @@ public class Placement_Screen extends JFrame {
 		}
 		}
 	}
-	
-	void placeHealthAdjust(int placeNum, int adjustNum) { // �븘援� 泥대젰 議곗젙
+
+	void placeHealthAdjust(int placeNum, int adjustNum) { // 아군 체력 조정
 		if (placePokemon.get(placeNum) != null) {
 			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth() + adjustNum);
 			place_pokemon_panel.get(placeNum).set_heart(place_pokemon_panel.get(placeNum).get_heart() + adjustNum);
-			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " 泥대젰 議곗젙 " + adjustNum + " >>>");
+			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " 체력 조정 " + adjustNum + " >>>");
 		}
 	}
 
-	void placePowerAdjust(int placeNum, int adjustNum) { // �븘援� 怨듦꺽�젰 議곗젙
+	void placePowerAdjust(int placeNum, int adjustNum) { // 아군 공격력 조정
 		if (placePokemon.get(placeNum) != null) {
 			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower() + adjustNum);
 			place_pokemon_panel.get(placeNum).set_damage(place_pokemon_panel.get(placeNum).get_damage() + adjustNum);
-			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " 怨듦꺽�젰 議곗젙 " + adjustNum + " >>>");
+			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " 공격력 조정 " + adjustNum + " >>>");
 		}
 	}
-	
-	
-	void place_replace(int place1, int place2) { // 諛곗튂 援ъ뿭 �룷耳볥が �쐞移� 諛붽씀湲�
-        if (place1 == place2 || !validationPlaceNum(place1) ||  !validationPlaceNum(place2)) {
-            System.out.println("<<<�엯�젰 �삤瑜�>>>");
-            return;
-        } else if (isNullPlacePokemon(place1) && isNullPlacePokemon(place2)) {
-            System.out.println("<<<�몮 �떎 鍮꾩뼱�엳�뒗 諛곗튂 踰덊샇瑜� �엯�젰�븯�뀲�뒿�땲�떎.>>>");
-            return;
-        } else if (placePokemon.get(place1) != null && placePokemon.get(place2) == null) { // place 1�씠 null�씠 �븘�땲硫�
-            placePokemon.set(place2, placePokemon.get(place1));// place2 濡� 蹂듭궗 �썑 plcae1�� null濡�
-            placePokemon.set(place1, null);
-           place_pokemon_panel.get(place1).setVisible(false);
-            
-            place_pokemon_panel.get(place2).set_Lv(place_pokemon_panel.get(place1).get_LV());
-            place_pokemon_panel.get(place2).set_exp(place_pokemon_panel.get(place1).get_exp());
-            place_pokemon_panel.get(place2).set_grade(place_pokemon_panel.get(place1).get_grade());
-            place_pokemon_panel.get(place2).set_heart(place_pokemon_panel.get(place1).get_heart());
-            place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),place_pokemon_panel.get(place1).get_LV()); //�뿬湲� 臾몄젣 李얠븯�떎.
-            place_pokemon_panel.get(place2).set_damage(place_pokemon_panel.get(place1).get_damage());
-            place_pokemon_panel.get(place2).set_location_num(place2);
-            place_pokemon_panel.get(place2).set_ex(place_pokemon_panel.get(place1).get_ex());
-            place_pokemon_panel.get(place2).setVisible(true);
-            
-            System.out.println(place_pokemon_panel.get(place1).get_location_num() + "踰� �쐞移섏쓽 �룷耳볥が�쓣 " + place_pokemon_panel.get(place2).get_location_num() + "濡� �삷源�");
-            
-            place_area_panel.get(place2).no_check();
-            place_pokemon_panel.get(place2).no_check();
-            
-            select_place_pokemon = null;
-            select_place = null;
-            
-            return;
-        } else if (placePokemon.get(place1) == null && placePokemon.get(place2) != null) { // place 2�씠 null�씠 �븘�땲硫�
-            placePokemon.set(place1, placePokemon.get(place2));// place1 濡� 蹂듭궗 �썑 plcae2�� null濡�
-            placePokemon.set(place2, null);
-            return;
-        } else if (placePokemon.get(place1).getPokemonNum() == placePokemon.get(place2).getPokemonNum()) {
-        	if(placePokemon.get(place1).getLv() == 3 || placePokemon.get(place2).getLv() == 3) {
-        		place_pokemon_panel.get(place1).no_check();
-                place_pokemon_panel.get(place2).no_check();
-        		return;
-        	}
-            placePokemon.get(place2).setExp(placePokemon.get(place2).getExp() + 1);
-            place_pokemon_panel.get(place2).set_exp(place_pokemon_panel.get(place2).get_exp() + 1);
-            isRankup(place2);
-            System.out.println("�젅踰⑥뾽 �꽦怨�");
-            placePokemon.set(place1, null);
-            place_pokemon_panel.get(place1).setVisible(false);
-            select_place_pokemon = null;
-            place_pokemon_panel.get(place1).no_check();
-            place_pokemon_panel.get(place2).no_check();
-            return;
-        } else {
-            forReplace.add(0, placePokemon.get(place1));
-            placePokemon.set(place1, placePokemon.get(place2));
-            
-            place_pokemon_panel.get(place1).set_Lv(place_pokemon_panel.get(place2).get_LV());
-            place_pokemon_panel.get(place1).set_exp(place_pokemon_panel.get(place2).get_exp());
-            place_pokemon_panel.get(place1).set_grade(place_pokemon_panel.get(place2).get_grade());
-            place_pokemon_panel.get(place1).set_heart(place_pokemon_panel.get(place2).get_heart());
-            place_pokemon_panel.get(place1).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),place_pokemon_panel.get(place1).get_LV()); //�뿬湲� 臾몄젣 李얠븯�떎.
-            place_pokemon_panel.get(place1).set_damage(place_pokemon_panel.get(place2).get_damage());
-            place_pokemon_panel.get(place1).set_location_num(place1);
-            place_pokemon_panel.get(place1).set_ex(place_pokemon_panel.get(place2).get_ex());
-            place_pokemon_panel.get(place1).setVisible(true);
-            place_pokemon_panel.get(place1).no_check();
-            select_place_pokemon = null;
-            
-            placePokemon.set(place2, forReplace.get(0));
-            
-            place_pokemon_panel.get(place2).set_Lv(placePokemon.get(place2).getLv());
-            place_pokemon_panel.get(place2).set_exp(placePokemon.get(place2).getExp());
-            place_pokemon_panel.get(place2).set_grade(placePokemon.get(place2).getGrade());
-            place_pokemon_panel.get(place2).set_heart(placePokemon.get(place2).getHealth());
-            place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),placePokemon.get(place2).getLv()); //�뿬湲� 臾몄젣 李얠븯�떎.
-            place_pokemon_panel.get(place2).set_damage(placePokemon.get(place2).getPower());
-            place_pokemon_panel.get(place2).set_location_num(place2);
-            place_pokemon_panel.get(place2).set_ex(placePokemon.get(place2).getAbility());
-            place_pokemon_panel.get(place2).setVisible(true);
-            place_pokemon_panel.get(place1).no_check();
-            select_place_pokemon = null;
-            
-            //
-            forReplace.remove();
-            System.out.println("<<<�쐞移� 蹂�寃� �꽦怨�>>>");
-            return;
-        }
-    }
-	
-	void isRankup(int placeNum) { // 寃쏀뿕移섍� 3�씠硫� �젅踰� �뾽, �젅踰� �뾽 �븯硫� 2/2 利앷�
+
+	void place_replace(int place1, int place2) { // 배치 구역 포켓몬 위치 바꾸기
+		if (place1 == place2 || !validationPlaceNum(place1) || !validationPlaceNum(place2)) {
+			System.out.println("<<<입력 오류>>>");
+			return;
+		} else if (isNullPlacePokemon(place1) && isNullPlacePokemon(place2)) {
+			System.out.println("<<<둘 다 비어있는 배치 번호를 입력하셨습니다.>>>");
+			return;
+		} else if (placePokemon.get(place1) != null && placePokemon.get(place2) == null) { // place 1이 null이 아니면
+			placePokemon.set(place2, placePokemon.get(place1));// place2 로 복사 후 plcae1은 null로
+			placePokemon.set(place1, null);
+			place_pokemon_panel.get(place1).setVisible(false);
+
+			place_pokemon_panel.get(place2).set_Lv(place_pokemon_panel.get(place1).get_LV());
+			place_pokemon_panel.get(place2).set_exp(place_pokemon_panel.get(place1).get_exp());
+			place_pokemon_panel.get(place2).set_grade(place_pokemon_panel.get(place1).get_grade());
+			place_pokemon_panel.get(place2).set_heart(place_pokemon_panel.get(place1).get_heart());
+			place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),
+					place_pokemon_panel.get(place1).get_LV()); // 여기 문제 찾았다.
+			place_pokemon_panel.get(place2).set_damage(place_pokemon_panel.get(place1).get_damage());
+			place_pokemon_panel.get(place2).set_location_num(place2);
+			place_pokemon_panel.get(place2).set_ex(place_pokemon_panel.get(place1).get_ex());
+			place_pokemon_panel.get(place2).setVisible(true);
+
+			System.out.println(place_pokemon_panel.get(place1).get_location_num() + "번 위치의 포켓몬을 "
+					+ place_pokemon_panel.get(place2).get_location_num() + "로 옮김");
+
+			place_area_panel.get(place2).no_check();
+			place_pokemon_panel.get(place2).no_check();
+
+			select_place_pokemon = null;
+			select_place = null;
+
+			return;
+		} else if (placePokemon.get(place1) == null && placePokemon.get(place2) != null) { // place 2이 null이 아니면
+			placePokemon.set(place1, placePokemon.get(place2));// place1 로 복사 후 plcae2은 null로
+			placePokemon.set(place2, null);
+			return;
+		} else if (placePokemon.get(place1).getPokemonNum() == placePokemon.get(place2).getPokemonNum()) {
+			if (placePokemon.get(place1).getLv() == 3 || placePokemon.get(place2).getLv() == 3) {
+				place_pokemon_panel.get(place1).no_check();
+				place_pokemon_panel.get(place2).no_check();
+				return;
+			}
+			placePokemon.get(place2).setExp(placePokemon.get(place2).getExp() + 1);
+			place_pokemon_panel.get(place2).set_exp(place_pokemon_panel.get(place2).get_exp() + 1);
+			isRankup(place2);
+			System.out.println("레벨업 성공");
+			placePokemon.set(place1, null);
+			place_pokemon_panel.get(place1).setVisible(false);
+			select_place_pokemon = null;
+			place_pokemon_panel.get(place1).no_check();
+			place_pokemon_panel.get(place2).no_check();
+			return;
+		} else {
+			forReplace.add(0, placePokemon.get(place1));
+			placePokemon.set(place1, placePokemon.get(place2));
+
+			place_pokemon_panel.get(place1).set_Lv(place_pokemon_panel.get(place2).get_LV());
+			place_pokemon_panel.get(place1).set_exp(place_pokemon_panel.get(place2).get_exp());
+			place_pokemon_panel.get(place1).set_grade(place_pokemon_panel.get(place2).get_grade());
+			place_pokemon_panel.get(place1).set_heart(place_pokemon_panel.get(place2).get_heart());
+			place_pokemon_panel.get(place1).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),
+					place_pokemon_panel.get(place1).get_LV()); // 여기 문제 찾았다.
+			place_pokemon_panel.get(place1).set_damage(place_pokemon_panel.get(place2).get_damage());
+			place_pokemon_panel.get(place1).set_location_num(place1);
+			place_pokemon_panel.get(place1).set_ex(place_pokemon_panel.get(place2).get_ex());
+			place_pokemon_panel.get(place1).setVisible(true);
+			place_pokemon_panel.get(place1).no_check();
+			select_place_pokemon = null;
+
+			placePokemon.set(place2, forReplace.get(0));
+
+			place_pokemon_panel.get(place2).set_Lv(placePokemon.get(place2).getLv());
+			place_pokemon_panel.get(place2).set_exp(placePokemon.get(place2).getExp());
+			place_pokemon_panel.get(place2).set_grade(placePokemon.get(place2).getGrade());
+			place_pokemon_panel.get(place2).set_heart(placePokemon.get(place2).getHealth());
+			place_pokemon_panel.get(place2).set_pokemon_num(placePokemon.get(place2).getPokemonNum(),
+					placePokemon.get(place2).getLv()); // 여기 문제 찾았다.
+			place_pokemon_panel.get(place2).set_damage(placePokemon.get(place2).getPower());
+			place_pokemon_panel.get(place2).set_location_num(place2);
+			place_pokemon_panel.get(place2).set_ex(placePokemon.get(place2).getAbility());
+			place_pokemon_panel.get(place2).setVisible(true);
+			place_pokemon_panel.get(place1).no_check();
+			select_place_pokemon = null;
+
+			//
+			forReplace.remove();
+			System.out.println("<<<위치 변경 성공>>>");
+			return;
+		}
+	}
+
+	void isRankup(int placeNum) { // 경험치가 3이면 레벨 업, 레벨 업 하면 2/2 증가
 		if (placePokemon.get(placeNum).getExp() == 3 && placePokemon.get(placeNum).getLv() == 1) {
+			int lvUpAbilitynum = setLvUpAbilityNum(placeNum);
 			Pokemon p2 = s.getLV2Pokemon(placePokemon.get(placeNum).getPokemonNum());
 			System.out.println(p2.getPokemonNum() + p2.getName());
 			placePokemon.get(placeNum).setName(p2.getName());
 			placePokemon.get(placeNum).setGrade(p2.getGrade());
 			placePokemon.get(placeNum).setLv(2);
 			placePokemon.get(placeNum).setExp(1);
-			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth()+2);
-			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower()+2);
-			System.out.println("<<2�젅踰� �뾽!>>");
-			
-			//�뙣�꼸 �젅踰� 2濡� �뾽�뜲�씠�듃
+			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth() + 2 + lvUpAbilitynum);
+			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower() + 2 + lvUpAbilitynum);
+			System.out.println("<<2레벨 업!>>");
+
+			// 패널 레벨 2로 업데이트
 			place_pokemon_panel.get(placeNum).set_Lv(2);
 			place_pokemon_panel.get(placeNum).set_exp(1);
 			place_pokemon_panel.get(placeNum).set_grade(p2.getGrade());
 			place_pokemon_panel.get(placeNum).set_ex(p2.getAbility());
-			place_pokemon_panel.get(placeNum).set_heart(place_pokemon_panel.get(placeNum).get_heart() + 2);
-			place_pokemon_panel.get(placeNum).set_damage(place_pokemon_panel.get(placeNum).get_damage() + 2);
-			place_pokemon_panel.get(placeNum).set_pokemon_num(place_pokemon_panel.get(placeNum).get_pokemon_num(),place_pokemon_panel.get(placeNum).get_LV());
-			
+			place_pokemon_panel.get(placeNum)
+					.set_heart(place_pokemon_panel.get(placeNum).get_heart() + 2 + lvUpAbilitynum);
+			place_pokemon_panel.get(placeNum)
+					.set_damage(place_pokemon_panel.get(placeNum).get_damage() + 2 + lvUpAbilitynum);
+			place_pokemon_panel.get(placeNum).set_pokemon_num(place_pokemon_panel.get(placeNum).get_pokemon_num(),
+					place_pokemon_panel.get(placeNum).get_LV());
+
 			return;
 		} else if (placePokemon.get(placeNum).getExp() == 3 && placePokemon.get(placeNum).getLv() == 2) {
+			int lvUpAbilitynum = setLvUpAbilityNum(placeNum);
 			Pokemon p3 = s.getLV3Pokemon(placePokemon.get(placeNum).getPokemonNum());
 			System.out.println(p3.getPokemonNum() + p3.getName());
 			placePokemon.get(placeNum).setName(p3.getName());
 			placePokemon.get(placeNum).setGrade(p3.getGrade());
 			placePokemon.get(placeNum).setLv(3);
 			placePokemon.get(placeNum).setExp(1);
-			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth()+2);
-			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower()+2);
-			System.out.println("<<3�젅踰� �뾽!>>");
-			
-			//�뙣�꼸 �젅踰� 3�쑝濡� �뾽�뜲�씠�듃
+			placePokemon.get(placeNum).setHealth(placePokemon.get(placeNum).getHealth() + 2 + lvUpAbilitynum);
+			placePokemon.get(placeNum).setPower(placePokemon.get(placeNum).getPower() + 2 + lvUpAbilitynum);
+			System.out.println("<<3레벨 업!>>");
+
+			// 패널 레벨 3으로 업데이트
 			place_pokemon_panel.get(placeNum).set_Lv(3);
 			place_pokemon_panel.get(placeNum).set_exp(1);
 			place_pokemon_panel.get(placeNum).set_ex(p3.getAbility());
 			place_pokemon_panel.get(placeNum).set_grade(p3.getGrade());
-			place_pokemon_panel.get(placeNum).set_heart(place_pokemon_panel.get(placeNum).get_heart() + 2);
-			place_pokemon_panel.get(placeNum).set_damage(place_pokemon_panel.get(placeNum).get_damage() + 2);
-			place_pokemon_panel.get(placeNum).set_pokemon_num(place_pokemon_panel.get(placeNum).get_pokemon_num(),place_pokemon_panel.get(placeNum).get_LV());
-			
+			place_pokemon_panel.get(placeNum)
+					.set_heart(place_pokemon_panel.get(placeNum).get_heart() + 2 + lvUpAbilitynum);
+			place_pokemon_panel.get(placeNum)
+					.set_damage(place_pokemon_panel.get(placeNum).get_damage() + 2 + lvUpAbilitynum);
+			place_pokemon_panel.get(placeNum).set_pokemon_num(place_pokemon_panel.get(placeNum).get_pokemon_num(),
+					place_pokemon_panel.get(placeNum).get_LV());
+
 			return;
 		}
 	}
-	
-	void place_sell(int placeNum) { // 諛곗튂 援ъ뿭 �룷耳볥が �뙏湲�
+
+	int setLvUpAbilityNum(int placeNum) {
+		int LvNum = placePokemon.get(placeNum).getLv();
+		if (findLvUpAbility(placeNum)) {
+			if (LvNum == 1) {
+				System.out.println("<<< 추가 능력치 증가! (+1/+1) >>>");
+				return 1;
+			} else if (LvNum == 2) {
+				System.out.println("<<< 추가 능력치 증가! (+2/+2) >>>");
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	boolean findLvUpAbility(int placeNum) {
+		int pokemonNum = placePokemon.get(placeNum).getPokemonNum();
+		if (pokemonNum == 38 || pokemonNum == 44 || pokemonNum == 50 || pokemonNum == 52 || pokemonNum == 55
+				|| pokemonNum == 59 || pokemonNum == 60) {
+			System.out.println("<<< " + placePokemon.get(placeNum).getName() + " 능력 발동! >>>");
+			return true;
+		}
+		return false;
+	}
+
+	void place_sell(int placeNum) { // 배치 구역 포켓몬 팔기
 		if (!validationPlaceNum(placeNum)) {
-			System.out.println("<<<�엯�젰 �삤瑜�>>>");
+			System.out.println("<<<입력 오류>>>");
 			return;
 		} else if (isNullPlacePokemon(placeNum)) {
-			System.out.println("<<<鍮꾩뼱�엳�뒿�땲�떎.>>>");
-			return;
-		} else if (placePokemon.get(placeNum).getLv() == 3) {
-			sellAbility(placeNum);
-			placePokemon.set(placeNum, null);
-			place_pokemon_panel.get(placeNum).setVisible(false);
-			select_place_pokemon = null;
-			coin = coin + 3;
-			status_panel.set_coin_num(coin);
-			System.out.println("<<<�뙋留� �꽦怨�>>>");
-			return;
-		} else if (placePokemon.get(placeNum).getLv() == 2) {
-			sellAbility(placeNum);
-			placePokemon.set(placeNum, null);
-			place_pokemon_panel.get(placeNum).setVisible(false);
-			select_place_pokemon = null;
-			coin = coin + 2;
-			status_panel.set_coin_num(coin);
-			System.out.println("<<<�뙋留� �꽦怨�>>>");
+			System.out.println("<<<비어있습니다.>>>");
 			return;
 		} else {
+			coin = coin + placePokemon.get(placeNum).getLv();
 			sellAbility(placeNum);
 			placePokemon.set(placeNum, null);
+			if (effectNum[placeNum] == 3) {
+				coin++;
+				System.out.println("<<< 아이템 효과로 코인 +1 >>>");
+			}
+			effectNum[placeNum] = 0;
+			System.out.println("<<<판매 성공>>>");
 			place_pokemon_panel.get(placeNum).setVisible(false);
 			select_place_pokemon = null;
-			coin++;
 			status_panel.set_coin_num(coin);
-			System.out.println("<<<�뙋留� �꽦怨�>>>");
 			return;
 		}
-		
 	}
-	void sellAbility(int placeNum) { // �뙋留� �떆 �뒫�젰
+
+	void sellAbility(int placeNum) { // 판매 시 능력
 		int lv = placePokemon.get(placeNum).getLv();
 		switch (placePokemon.get(placeNum).getPokemonNum()) {
-		case 7: { // �뙋留� �떆 �븘援� 泥대젰 1 利앷�
+		case 7: { // 판매 시 아군 체력 1 증가
 			int adjustNum = lv;
-			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+			System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 			for (int i = 1; i < 5; i++) {
-				if (placePokemon.get(i) != null && i + 1 != placeNum) {
+				if (placePokemon.get(i) != null && i != placeNum) {
 					placeHealthAdjust(i, adjustNum);
 				}
 			}
 			return;
 		}
-		case 14: {// �뙋留� �떆 �옖�뜡�븳 �븘援� 1,2,3�뿉寃� 踰꾩꽢 �닾�뿬
+		case 14: {// 판매 시 랜덤한 아군 1,2,3에게 버섯 투여
 			int remainNum = checkRemainNum();
 			if ((lv == 1 && remainNum >= 1) || (lv == 2 && remainNum == 1) || (lv == 3 && remainNum == 1)) {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 				while (true) {
 					int i = random.nextInt(5);
 					if (placePokemon.get(i) != null && i + 1 != placeNum) {
-						effectNum[i] = 1; // �슚怨� 1�� 踰꾩꽢 �슚怨�
-						System.out.println("<<<" + placePokemon.get(i).getName() + " 踰꾩꽢 �슚怨�! >>>");
+						effectNum[i] = 1; // 효과 1은 버섯 효과
+						System.out.println("<<<" + placePokemon.get(i).getName() + " 버섯 효과! >>>");
 						return;
 					}
 				}
 			} else if ((lv == 2 && remainNum >= 2) || (lv == 3 && remainNum == 2)) {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null && i != j && i + 1 != placeNum) {
 						effectNum[i] = 1;
-						System.out.println("<<<" + placePokemon.get(i).getName() + " 踰꾩꽢 �슚怨�! >>>");
+						System.out.println("<<<" + placePokemon.get(i).getName() + " 버섯 효과! >>>");
 						effectNum[j] = 1;
-						System.out.println("<<<" + placePokemon.get(j).getName() + " 踰꾩꽢 �슚怨�! >>>");
+						System.out.println("<<<" + placePokemon.get(j).getName() + " 버섯 효과! >>>");
 						return;
 					}
 				}
 			} else {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 				while (true) {
 					int i = random.nextInt(5);
 					int j = random.nextInt(5);
@@ -1232,22 +1301,22 @@ public class Placement_Screen extends JFrame {
 					if (placePokemon.get(i) != null && placePokemon.get(j) != null && placePokemon.get(k) != null
 							&& i != j && i != k && k != j && i + 1 != placeNum) {
 						effectNum[i] = 1;
-						System.out.println("<<<" + placePokemon.get(i).getName() + " 踰꾩꽢 �슚怨�! >>>");
+						System.out.println("<<<" + placePokemon.get(i).getName() + " 버섯 효과! >>>");
 						effectNum[j] = 1;
-						System.out.println("<<<" + placePokemon.get(j).getName() + " 踰꾩꽢 �슚怨�! >>>");
+						System.out.println("<<<" + placePokemon.get(j).getName() + " 버섯 효과! >>>");
 						effectNum[k] = 1;
-						System.out.println("<<<" + placePokemon.get(k).getName() + " 踰꾩꽢 �슚怨�! >>>");
+						System.out.println("<<<" + placePokemon.get(k).getName() + " 버섯 효과! >>>");
 						return;
 					}
 				}
 			}
 
 		}
-		case 49: { // �뙋留� �떆 �븵�뿉 �엳�뒗 �븘援곗뿉寃� 怨듦꺽�젰,泥대젰�쓽 50%, 70%, 100%留뚰겮 利앷�
+		case 49: { // 판매 시 앞에 있는 아군에게 공격력,체력의 50%, 70%, 100%만큼 증가
 			if (placeNum == 4) {
 				return;
 			} else if (placePokemon.get(placeNum + 1) != null) {
-				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " �뒫�젰 �궗�슜 >>>");
+				System.out.println("<<<" + placePokemon.get(placeNum).getName() + " 능력 사용 >>>");
 				if (lv == 1) {
 					int adjustNum = placePokemon.get(placeNum).getHealth() / 2;
 					placeHealthAdjust(placeNum + 1, adjustNum);
@@ -1269,160 +1338,157 @@ public class Placement_Screen extends JFrame {
 		}
 		}
 	}
-	
-	boolean isAllNull() { //諛곗튂 援ъ뿭�씠 �쟾遺� null�씤吏� �솗�씤
-		for (int i = 0; i < 5; i++) {
-			if (placePokemon.get(i) != null) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	int randomItemNum() { // �븘�씠�뀥 �닔 留뚰겮 �궃�닔
-		if (turnNum <= 6) {
-			return random.nextInt(turnNum * 4) + 1;
-		} else {
-			return random.nextInt(24) + 1;
-		}
-	}
-	
-	void shop_item_buy(int shopPlaceNum, int myPlaceNum) { // �긽�젏�뿉�꽌 �븘�씠�뀥 援щℓ
+
+	void shop_item_buy(int shopPlaceNum, int myPlaceNum) { // 상점에서 아이템 구매
 		if (!validationShopItemNum(shopPlaceNum) || !validationPlaceNum(myPlaceNum)) {
-			System.out.println("�엯�젰 �삤瑜�");
+			System.out.println("입력 오류");
 			return;
-		} else if (isNullShopItem(shopPlaceNum)) { // �씠誘� 援щℓ�븳 �긽�젏 踰덊샇硫� 援щℓ 遺덇�
-			System.out.println("<<<" + (shopPlaceNum + 1) + "踰� �긽�젏�씠 鍮꾩뼱�엳�뒿�땲�떎.>>>");
+		} else if (isNullShopItem(shopPlaceNum)) { // 이미 구매한 상점 번호면 구매 불가
+			System.out.println("<<<" + (shopPlaceNum + 1) + "번 상점이 비어있습니다.>>>");
 			return;
-		} else if (isNullPlacePokemon(myPlaceNum)) { // 諛곗튂 援ъ뿭�뿉 �룷耳볥が�씠 �뾾�쑝硫� 援щℓ 遺덇�
-			System.out.println("<<<" + (myPlaceNum + 1) + "踰덉뿉 �뾾�뒿�땲�떎.>>>");
+		} else if (isNullPlacePokemon(myPlaceNum)) { // 배치 구역에 포켓몬이 없으면 구매 불가
+			System.out.println("<<<" + (myPlaceNum + 1) + "번에 없습니다.>>>");
 			return;
 		} else {
 			int itemNum = item.get(shopPlaceNum).getItemNum();
 			int remainNum = checkRemainNum();
 			if (itemNum == 8) {
 				if (remainNum < 3) {
-					select_item = null;
+					System.out.println("<<< 아이템을 쓰기에는 포켓몬이 적습니다! >>>");
+					select_item.no_check();
 					select_place_pokemon.no_check();
-					System.out.println("<<< �븘�씠�뀥�쓣 �벐湲곗뿉�뒗 �룷耳볥が�씠 �쟻�뒿�땲�떎! >>>");
+					select_item = null;
 					return;
 				}
-			}
-			if (itemNum == 3 && itemNum == 4 && itemNum == 6 && itemNum == 14) {
+			} else if (itemNum == 3 || itemNum == 4 || itemNum == 6 || itemNum == 14) {
 				if (remainNum < 2) {
-					select_item = null;
+					System.out.println("<<< 아이템을 쓰기에는 포켓몬이 적습니다! >>>");
+					select_item.no_check();
 					select_place_pokemon.no_check();
-					System.out.println("<<< �븘�씠�뀥�쓣 �벐湲곗뿉�뒗 �룷耳볥が�씠 �쟻�뒿�땲�떎! >>>");
+					select_item = null;
 					return;
 				}
 			}
+			System.out.println("<<<구매 성공>>>");
+			coin = coin - 3;
 			buyItemAbility(shopPlaceNum, myPlaceNum);
+			status_panel.set_coin_num(coin);
 			item.set(shopPlaceNum, null);
 			item_panel.get(shopPlaceNum).setVisible(false);
-			select_item = null;
-			select_place_pokemon.no_check();
 			frozenItemNum[shopPlaceNum] = false;
-			System.out.println("<<<援щℓ �꽦怨�>>>");
-			coin = coin - 3;
-			status_panel.set_coin_num(coin);
+			int num = findPokemonNum(36);
+			if (num != -1) { // 아이템 사용 시 공격력, 체력 1, 2, 3 증가
+				int adjustNum = placePokemon.get(num).getLv();
+				placeHealthAdjust(num, adjustNum);
+				placePowerAdjust(num, adjustNum);
+			}
+			select_item.no_check();
+			select_place_pokemon.no_check();
+			select_item = null;
 			return;
 		}
 	}
-	
-	boolean validationShopItemNum(int placeNum) { // �긽�젏 援ъ뿭 踰덊샇 �븘�씠�뀥 寃��궗
+
+	boolean validationShopItemNum(int placeNum) { // 상점 구역 번호 아이템 검사
 		if (2 < placeNum || placeNum < 0) {
 			return false;
 		} else
 			return true;
 	}
-	
+
 	boolean isNullShopItem(int placeNum) {
 		if (item.get(placeNum) == null)
 			return true;
 		return false;
 	}
-	
-	void buyItemAbility(int shopPlaceNum, int placeNum) { // �븘�씠�뀥 援щℓ �떆 �뒫�젰
+
+	void buyItemAbility(int shopPlaceNum, int placeNum) { // 아이템 구매 시 능력
+		int plusNum = 0;
+		int num = findPokemonNum(60);
+		if (num != -1) {
+			plusNum = 1;
+			System.out.println("<<< " + placePokemon.get(num).getName() + " 능력 사용! 아이템 능력치 증가! >>>"); // 추가
+		}
 		switch (item.get(shopPlaceNum).getItemNum()) {
-		case 1: { // 怨듦꺽�젰 1 利앷�
-			placePowerAdjust(placeNum, 1);
+		case 1: { // 공격력 1 증가
+			placePowerAdjust(placeNum, 1 + plusNum);
 			break;
 		}
-		case 2: { // 泥대젰 1 利앷�
-			placeHealthAdjust(placeNum, 1);
+		case 2: { // 체력 1 증가
+			placeHealthAdjust(placeNum, 1 + plusNum);
 			break;
 		}
-		case 3: { // �옖�뜡�쑝濡� 2 湲곕Ъ�뿉寃� 怨듦꺽�젰 1 利앷�
+		case 3: { // 랜덤으로 2 기물에게 공격력 1 증가
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
 				if (placePokemon.get(rNum1) != null && placePokemon.get(rNum2) != null && rNum1 != rNum2) {
-					placePowerAdjust(rNum1, 1);
-					placePowerAdjust(rNum2, 1);
+					placePowerAdjust(rNum1, 1 + plusNum);
+					placePowerAdjust(rNum2, 1 + plusNum);
 					break;
 				}
 			}
 			break;
 
 		}
-		case 4: { // �옖�뜡�쑝濡� 2 湲곕Ъ�뿉寃� 泥대젰 1 利앷�
+		case 4: { // 랜덤으로 2 기물에게 체력 1 증가
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
 				if (placePokemon.get(rNum1) != null && placePokemon.get(rNum2) != null && rNum1 != rNum2) {
-					placeHealthAdjust(rNum1, 1);
-					placeHealthAdjust(rNum2, 1);
+					placeHealthAdjust(rNum1, 1 + plusNum);
+					placeHealthAdjust(rNum2, 1 + plusNum);
 					break;
 				}
 			}
 			break;
 		}
-		case 5: { // 1/1 利앷�
-			placePowerAdjust(placeNum, 1);
-			placeHealthAdjust(placeNum, 1);
+		case 5: { // 1/1 증가
+			placePowerAdjust(placeNum, 1 + plusNum);
+			placeHealthAdjust(placeNum, 1 + plusNum);
 			break;
 		}
-		case 6: { // �옖�뜡�쑝濡� 2 湲곕Ъ�뿉寃� 1/1 利앷�
+		case 6: { // 랜덤으로 2 기물에게 1/1 증가
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
 				if (placePokemon.get(rNum1) != null && placePokemon.get(rNum2) != null && rNum1 != rNum2) {
-					placeHealthAdjust(rNum1, 1);
-					placePowerAdjust(rNum1, 1);
-					placeHealthAdjust(rNum2, 1);
-					placePowerAdjust(rNum2, 1);
+					placeHealthAdjust(rNum1, 1 + plusNum);
+					placePowerAdjust(rNum1, 1 + plusNum);
+					placeHealthAdjust(rNum2, 1 + plusNum);
+					placePowerAdjust(rNum2, 1 + plusNum);
 					break;
 				}
 			}
 			break;
 		}
-		case 7: { // �옖�뜡�쑝濡� 1 湲곕Ъ�뿉寃� 2/2 利앷�
+		case 7: { // 랜덤으로 1 기물에게 2/2 증가
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				if (placePokemon.get(rNum1) != null) {
-					placeHealthAdjust(rNum1, 2);
-					placePowerAdjust(rNum1, 2);
+					placeHealthAdjust(rNum1, 2 + plusNum);
+					placePowerAdjust(rNum1, 2 + plusNum);
 					break;
 				}
 			}
 			break;
 		}
-		case 8: { // �옖�뜡�쑝濡� 3 湲곕Ъ�뿉寃� 怨듦꺽�젰 1 利앷�
+		case 8: { // 랜덤으로 3 기물에게 공격력 1 증가
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
 				int rNum3 = random.nextInt(5);
 				if (placePokemon.get(rNum1) != null && placePokemon.get(rNum2) != null
 						&& placePokemon.get(rNum3) != null && rNum1 != rNum2 && rNum1 != rNum3 && rNum3 != rNum2) {
-					placeHealthAdjust(rNum1, 1);
-					placeHealthAdjust(rNum2, 1);
-					placeHealthAdjust(rNum3, 1);
+					placeHealthAdjust(rNum1, 1 + plusNum);
+					placeHealthAdjust(rNum2, 1 + plusNum);
+					placeHealthAdjust(rNum3, 1 + plusNum);
 					break;
 				}
 			}
 			break;
 		}
-		case 9: { // �궗�슜�븷 湲곕Ъ �뼇 �쁿 湲곕Ъ�쓽 怨듦꺽�젰 2�쓣 媛��졇 �샃�땲�떎.
+		case 9: { // 사용할 기물 양 옆 기물의 공격력 2을 가져 옵니다.
 			if (placeNum == 0) {
 				if (!isNullPlacePokemon(placeNum + 1)) {
 					placePowerAdjust(placeNum + 1, -2);
@@ -1447,73 +1513,73 @@ public class Placement_Screen extends JFrame {
 				break;
 			}
 		}
-		case 10: { // �궗�슜�븳 �룷耳볥が�씠 ��寃곗뿉�꽌 �궡�븘�궓�쑝硫� 寃쏀뿕移� 1 利앷�
+		case 10: { // 사용한 포켓몬이 대결에서 살아남으면 경험치 1 증가
 			effectNum[placeNum] = 2;
 			break;
 		}
-		case 11: { // 泥섏쓬 留욎� 怨듦꺽 臾댁떆
+		case 11: { // 처음 맞은 공격 무시
 			effectNum[placeNum] = 1;
 			break;
 		}
-		case 12: { // 肄붿씤 + 1
-			this.coin++;
+		case 12: { // 코인 + 5
+			this.coin += 5;
 			break;
 		}
-		case 13: { // 泥대젰 2 利앷�
-			placeHealthAdjust(placeNum, 2);
+		case 13: { // 체력 2 증가
+			placeHealthAdjust(placeNum, 2 + plusNum);
 			break;
 		}
-		case 14: { // �옖�뜡�쑝濡� 2 湲곕Ъ�뿉寃� 2/2 利앷�
+		case 14: { // 랜덤으로 2 기물에게 2/2 증가
 			while (true) {
 				int rNum1 = random.nextInt(5);
 				int rNum2 = random.nextInt(5);
 				if (placePokemon.get(rNum1) != null && placePokemon.get(rNum2) != null && rNum1 != rNum2) {
-					placeHealthAdjust(rNum1, 2);
-					placePowerAdjust(rNum1, 2);
-					placeHealthAdjust(rNum2, 2);
-					placePowerAdjust(rNum2, 2);
+					placeHealthAdjust(rNum1, 2 + plusNum);
+					placePowerAdjust(rNum1, 2 + plusNum);
+					placeHealthAdjust(rNum2, 2 + plusNum);
+					placePowerAdjust(rNum2, 2 + plusNum);
 					break;
 				}
 			}
 			break;
 		}
-		case 15: { // �궗�슜 湲곕Ъ怨� �뼇 �쁿�쓽 湲곕Ъ�뿉 1/2 利앷�
-			placePowerAdjust(placeNum, 1);
-			placeHealthAdjust(placeNum, 2);
+		case 15: { // 사용 기물과 양 옆의 기물에 1/2 증가
+			placePowerAdjust(placeNum, 1 + plusNum);
+			placeHealthAdjust(placeNum, 2 + plusNum);
 			if (placeNum == 0) {
 				if (!isNullPlacePokemon(placeNum + 1)) {
-					placePowerAdjust(placeNum + 1, 1);
-					placeHealthAdjust(placeNum + 1, 2);
+					placePowerAdjust(placeNum + 1, 1 + plusNum);
+					placeHealthAdjust(placeNum + 1, 2 + plusNum);
 					break;
 				}
 			} else if (placeNum == 4) {
 				if (!isNullPlacePokemon(placeNum - 1)) {
-					placePowerAdjust(placeNum - 1, 1);
-					placeHealthAdjust(placeNum - 1, 2);
+					placePowerAdjust(placeNum - 1, 1 + plusNum);
+					placeHealthAdjust(placeNum - 1, 2 + plusNum);
 					break;
 				}
 			} else {
 				if (!isNullPlacePokemon(placeNum + 1)) {
-					placePowerAdjust(placeNum + 1, 1);
-					placeHealthAdjust(placeNum + 1, 2);
+					placePowerAdjust(placeNum + 1, 1 + plusNum);
+					placeHealthAdjust(placeNum + 1, 2 + plusNum);
 				}
 				if (!isNullPlacePokemon(placeNum - 1)) {
-					placePowerAdjust(placeNum - 1, 1);
-					placeHealthAdjust(placeNum - 1, 2);
+					placePowerAdjust(placeNum - 1, 1 + plusNum);
+					placeHealthAdjust(placeNum - 1, 2 + plusNum);
 				}
 			}
 			break;
 		}
-		case 16: { // �궗�슜 �슚怨쇰뒗 �뾾吏�留� �씠 �븘�씠�뀥�씠 �쟻�슜�맂 湲곕Ъ �뙋留� �떆 �뙋留ㅼ퐫�씤 1 利앷�
+		case 16: { // 사용 효과는 없지만 이 아이템이 적용된 기물 판매 시 판매코인 1 증가
 			effectNum[placeNum] = 3;
 			break;
 		}
-		case 17: { // 2/2 利앷�
-			placePowerAdjust(placeNum, 2);
-			placeHealthAdjust(placeNum, 2);
+		case 17: { // 2/2 증가
+			placePowerAdjust(placeNum, 2 + plusNum);
+			placeHealthAdjust(placeNum, 2 + plusNum);
 			break;
 		}
-		case 18: { // �옖�뜡�쑝濡� 1湲곕Ъ�뿉寃� 寃쏀뿕移� 1 利앷�
+		case 18: { // 랜덤으로 1기물에게 경험치 1 증가
 			while (true) {
 				int rNum = random.nextInt(5);
 				if (!isNullPlacePokemon(rNum)) {
@@ -1524,37 +1590,36 @@ public class Placement_Screen extends JFrame {
 			}
 			break;
 		}
-		case 19: { // 50% �솗瑜좊줈 肄붿씤 2 利앷�
+		case 19: { // 50% 확률로 코인 7 증가
 			int rNum = random.nextInt(2);
 			if (rNum == 1) {
-				System.out.println("<<< �꽦怨�! >>>");
-				this.coin++;
-				this.coin++;
+				System.out.println("<<< 성공! >>>");
+				this.coin += 7;
 				break;
 			} else {
-				System.out.println("<<< �떎�뙣! >>> ");
+				System.out.println("<<< 실패! >>> ");
 				break;
 			}
 		}
-		case 20: { // 怨듦꺽�젰 3 利앷�
-			placePowerAdjust(placeNum, 3);
+		case 20: { // 공격력 3 증가
+			placePowerAdjust(placeNum, 3 + plusNum);
 			break;
 		}
-		case 21: { // 寃쏀뿕移� 1 利앷�
+		case 21: { // 경험치 1 증가
 			placePokemon.get(placeNum).setExp(placePokemon.get(placeNum).getExp() + 1);
+			isRankup(placeNum);
 			break;
 		}
-		case 22: { // 3/3 利앷�
-			placePowerAdjust(placeNum, 3);
-			placeHealthAdjust(placeNum, 3);
+		case 22: { // 3/3 증가
+			placePowerAdjust(placeNum, 3 + plusNum);
+			placeHealthAdjust(placeNum, 3 + plusNum);
 			break;
 		}
-		case 23: { // 肄붿씤 + 2
-			this.coin++;
-			this.coin++;
+		case 23: { // 코인 + 6
+			this.coin += 6;
 			break;
 		}
-		case 24: { // ��寃곗뿉 �듅由� �떆 肄붿씤 2, �뙣諛� �떆 1 利앷� 000000000000
+		case 24: { // 대결에 승리 시 코인 2, 패배 시 1 증가 000000000000
 			item24Effect = true;
 			break;
 		}
@@ -1562,34 +1627,32 @@ public class Placement_Screen extends JFrame {
 			break;
 		}
 		}
-
 	}
-	
+
 	void item_frozen(int placeNum) {
 		if (!validationShopItemNum(placeNum)) {
-			System.out.println("<<<�엯�젰 �삤瑜�>>>");
+			System.out.println("<<<입력 오류>>>");
 			return;
 		} else if (isNullShopItem(placeNum)) {
-			System.out.println("<<<鍮꾩뼱�엳�뒿�땲�떎.>>>");
+			System.out.println("<<<비어있습니다.>>>");
 			return;
 		} else if (frozenItemNum[placeNum] == false) {
 			frozenItemNum[placeNum] = true;
-			System.out.println("<<<" + (placeNum + 1) + "踰덉뿉 �뼹由ш린 �꽕�젙>>>");
+			System.out.println("<<<" + (placeNum + 1) + "번에 얼리기 설정>>>");
 			select_item.get_frozen_panel().setVisible(true);
 			return;
 		} else {
 			frozenItemNum[placeNum] = false;
-			System.out.println("<<<" + (placeNum + 1) + "踰덉뿉 �뼹由ш린 痍⑥냼 �꽕�젙>>>");
+			System.out.println("<<<" + (placeNum + 1) + "번에 얼리기 취소 설정>>>");
 			select_item.get_frozen_panel().setVisible(false);
 			return;
 		}
 	}
-	
-	boolean validationShopPokemonNum(int placeNum) { // �긽�젏 援ъ뿭 踰덊샇 �쑀�슚�꽦 寃��궗
+
+	boolean validationShopPokemonNum(int placeNum) { // 상점 구역 번호 유효성 검사
 		if (shop_place_num() < placeNum || placeNum < 0) {
 			return false;
 		} else
 			return true;
 	}
 }
-

@@ -38,7 +38,7 @@ public class Status_Panel extends JPanel {
 		//save_static_panel.add(user_heart);
 		
 		this.heart_num = new JLabel(Integer.toString(this.heart));
-		heart_num.setFont(new Font("êµ´ë¦¼", Font.BOLD, 65));
+		heart_num.setFont(new Font("±¼¸²", Font.BOLD, 65));
 		heart_num.setBounds(136, 49, 79, 56);
 		user_heart.add(heart_num);
 		
@@ -49,7 +49,7 @@ public class Status_Panel extends JPanel {
 		//save_static_panel.add(user_coin);
 		
 		this.coin_num = new JLabel(Integer.toString(this.coin));
-		coin_num.setFont(new Font("êµ´ë¦¼", Font.BOLD, 65));
+		coin_num.setFont(new Font("±¼¸²", Font.BOLD, 65));
 		coin_num.setBounds(135, 50, 79, 56);
 		user_coin.add(coin_num);
 		
@@ -60,7 +60,7 @@ public class Status_Panel extends JPanel {
 		//save_static_panel.add(user_win);
 		
 		this. win_num = new JLabel(Integer.toString(this.win));
-		win_num.setFont(new Font("êµ´ë¦¼", Font.BOLD, 65));
+		win_num.setFont(new Font("±¼¸²", Font.BOLD, 65));
 		win_num.setBounds(136, 50, 79, 56);
 		user_win.add(win_num);
 		
@@ -87,5 +87,19 @@ public class Status_Panel extends JPanel {
 	public void set_win_num (int win){
 		this.win = win;
 		win_num.setText(Integer.toString(this.win));
+	}
+	public void up_win() {
+		this.win++;
+		win_num.setText(Integer.toString(this.win));
+	}
+	public void down_heart() {
+		this.heart--;
+		heart_num.setText(Integer.toString(this.heart));
+	}
+	public int get_life_num() {
+		return this.heart;
+	}
+	public int get_bedge_num() {
+		return this.win;
 	}
 }

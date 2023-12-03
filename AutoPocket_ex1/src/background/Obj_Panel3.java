@@ -25,6 +25,8 @@ public class Obj_Panel3 extends JPanel {
 	private JLabel damage_label;
 	private JLabel Lv_label;
 	private JLabel exp_label;
+	private JPanel explanation;
+	private JTextArea ex_label;
 	
 	
 	private boolean ischecked;
@@ -44,15 +46,15 @@ public class Obj_Panel3 extends JPanel {
 	public Obj_Panel3() {
 		this.ischecked = false;
 		this.isfrozen = false;
-		
+		this.heart = "0";
 		setLayout(null);
-		setBounds(161, 566, 220, 340);
+		setBounds(161, 566, 486, 340);
 		setOpaque(false);
-		ImagePanel heart_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\shop_heart.png").getImage());
-		ImagePanel damage_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\shop_damage.png").getImage());
+		ImagePanel heart_panel = new ImagePanel(new ImageIcon("C:\\Placement_2\\src\\Image\\shop_heart.png").getImage());
+		ImagePanel damage_panel = new ImagePanel(new ImageIcon("C:\\Placement_2\\src\\Image\\shop_damage.png").getImage());
 		this.heart_label = new JLabel(this.heart);
 		this.damage_label = new JLabel(this.damage);
-		this.pokemon_panel = new ImagePanel(new ImageIcon("C:\\ex1\\AutoPocket_ex1\\src\\Images\\"+ pokemonNum +".png").getImage());
+		this.pokemon_panel = new ImagePanel(new ImageIcon("C:\\Placement_2\\src\\Image\\"+ pokemonNum +".png").getImage());
 		
 		pokemon_panel.setBounds(12, 126, 166, 166);
 		this.add(pokemon_panel);
@@ -60,7 +62,7 @@ public class Obj_Panel3 extends JPanel {
 		this.exp_label = new JLabel("null/2");
 		exp_label.setBounds(69, 68, 81, 28);
 		this.add(exp_label);
-		exp_label.setFont(new Font("援대┝", Font.BOLD, 24));
+		exp_label.setFont(new Font("굴림", Font.BOLD, 24));
 		exp_label.setHorizontalAlignment(JLabel.CENTER); 
 		exp_label.setVerticalAlignment(JLabel.CENTER);
 		exp_label.setForeground(Color.WHITE);
@@ -69,9 +71,9 @@ public class Obj_Panel3 extends JPanel {
 		heart_panel.setLayout(null);
 		this.add(heart_panel);
 		
-		heart_label.setFont(new Font("援대┝", Font.BOLD, 30));
+		heart_label.setFont(new Font("굴림", Font.BOLD, 30));
 		heart_label.setBounds(0, 15, 67, 33);
-		heart_label.setHorizontalAlignment(JLabel.CENTER); // �닔�룊 �젙�젹 �꽕�젙
+		heart_label.setHorizontalAlignment(JLabel.CENTER); // 수평 정렬 설정
 		heart_label.setVerticalAlignment(JLabel.CENTER);
 		heart_panel.add(heart_label);
 
@@ -79,22 +81,47 @@ public class Obj_Panel3 extends JPanel {
 		damage_panel.setLayout(null);
 		this.add(damage_panel);
 		
-		damage_label.setFont(new Font("援대┝", Font.BOLD, 30));
+		damage_label.setFont(new Font("굴림", Font.BOLD, 30));
 		damage_label.setBounds(0, 24, 70, 33);
 		damage_label.setHorizontalAlignment(JLabel.CENTER); 
 		damage_label.setVerticalAlignment(JLabel.CENTER);
 		damage_panel.add(damage_label);
 		
 		this.Lv_label = new JLabel("Lvnull");
-		Lv_label.setFont(new Font("援대┝", Font.BOLD, 24));
+		Lv_label.setFont(new Font("굴림", Font.BOLD, 24));
 		Lv_label.setBounds(28, 69, 53, 27);
 		add(Lv_label);
 		Lv_label.setForeground(Color.WHITE);
+		
+		this.explanation = new JPanel();
+		explanation.setBackground(new Color(255, 251, 202));
+		explanation.setBounds(201, 72, 250, 119);
 		Border border = BorderFactory.createTitledBorder("Panel Border");
+		explanation.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		add(explanation);
+		explanation.setLayout(null);
+		explanation.setVisible(false);
+		
+		this.ex_label = new JTextArea("", 5, 20);
+		ex_label.setFont(new Font("Monospaced", Font.BOLD | Font.ITALIC, 17));
+		ex_label.setLineWrap(true);
+		ex_label.setWrapStyleWord(true);
+		ex_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		ex_label.setAlignmentY(Component.CENTER_ALIGNMENT);
+		ex_label.setBounds(12, 10, 226, 94);
+		explanation.add(ex_label);
 	}
 	
 	//---------------------------------------------
-	
+	public void show_ex() {
+		explanation.setVisible(true);
+	}
+	public void no_show_ex() {
+		explanation.setVisible(false);
+	}
+	public JPanel get_expanel() {
+		return explanation;
+	}
 	public void set_pokemon_num(int pokemon_num, int Lv) {
 	    if (Lv == 1) {
 	        this.pokemonNum = Integer.toString(pokemon_num);
@@ -103,7 +130,7 @@ public class Obj_Panel3 extends JPanel {
 	    }else if (Lv == 3) {
 	    	 this.pokemonNum = "3_" + Integer.toString(pokemon_num);
 	    }
-	    update_pokemon_Image(); // �룷耳볥が �뙣�꼸 媛� set �썑 �뾽�뜲�씠�듃
+	    update_pokemon_Image(); // 포켓몬 패널 값 set 후 업데이트
 	}
 	
 	public int get_pokemon_num() {
@@ -148,7 +175,6 @@ public class Obj_Panel3 extends JPanel {
 		return Integer.parseInt(this.heart);
 	}
 	
-	
 	public void set_damage(int damage) {
 		this.damage = Integer.toString(damage);
 		damage_label.setText(this.damage);
@@ -164,21 +190,25 @@ public class Obj_Panel3 extends JPanel {
     public int get_location_num() {
     	return this.location_num;
     }
+    
+    public ImagePanel get_pokemon_panel() { //이미지 패널을 받아서 다른 클래스에서도 사용할 수 있게 함
+    	return pokemon_panel;
+    }
 	
-    private void update_pokemon_Image() { //�룷耳볥が 媛믪쓣 �꽕�젙�븯怨� 洹� �뙣�꼸�쓣 �뾽�뜲�씠�듃 �빐二쇰뒗 �븿�닔.
-        String imagePath = "C:\\ex1\\AutoPocket_ex1\\src\\Images\\" + this.pokemonNum + ".png";
+    private void update_pokemon_Image() { //포켓몬 값을 설정하고 그 패널을 업데이트 해주는 함수.
+        String imagePath = "C:\\Placement_2\\src\\Image\\" + this.pokemonNum + ".png";
         this.pokemon_panel.setImage(new ImageIcon(imagePath).getImage());
         repaint(); 
     }
     
-    public boolean ischecked() { //泥댄겕 �뿬遺�瑜� 諛섑솚�븯�뒗 �븿�닔.
+    public boolean ischecked() { //체크 여부를 반환하는 함수.
     	return ischecked;
     }
   
     
     public void set_ex(String ex) {
     	this.ex = ex;
-    	
+    	this.ex_label.setText(ex);
     }
     
     public String get_ex() {

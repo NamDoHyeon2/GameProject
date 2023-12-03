@@ -18,6 +18,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+
+import background.StartBattle;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -37,7 +40,7 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-public class login_screen {
+public class login_screen extends JFrame{
 	
 
 	public JPanel loginPanel;
@@ -81,6 +84,8 @@ public class login_screen {
     	help_screen hs = new help_screen();
     	option_screen os = new option_screen();
     	Placement_Screen ps = new Placement_Screen();
+    	Record_Screen2 record_screen = new Record_Screen2(181); //pk값이야
+    	
     	os.initialize();
     	
         frmAutoPockmon = new JFrame();
@@ -198,6 +203,9 @@ public class login_screen {
         hs.helpImg.setVisible(false);
         frmAutoPockmon.add(ps.placementbackground);
         ps.placementbackground.setVisible(false);
+        frmAutoPockmon.add(record_screen);
+        record_screen.setVisible(false);
+
         
         if (backgroundMusic == null) { // 음악
             backgroundMusic = new Music("backgroundsound.wav", true);
@@ -266,35 +274,42 @@ public class login_screen {
         	
         });
         
-        ps.next_btn.addMouseListener(new MouseAdapter() {
+        	// 게임 화면 진행
+     	ps.next_btn.addMouseListener(new MouseAdapter() {
+     			@Override
+     			public void mouseClicked(MouseEvent e) {
+     				if (ps.battle_screen != null && frmAutoPockmon.isAncestorOf(ps.battle_screen)) {
+     					frmAutoPockmon.remove(ps.battle_screen);  // battle_screen이 null이 아니고 contentPane의 자식인 경우에만 제거
+     					frmAutoPockmon.revalidate();
+     					frmAutoPockmon.repaint();
+     				}
+     				ps.setBattleScreen();
+     		        ps.battle_screen = new StartBattle(ps.turnNum, ps.toBattle.get(0), ps.toBattle.get(1), ps.toBattle.get(2), ps.toBattle.get(3),
+     		                ps.toBattle.get(4), ps.effectNum, ps.placementbackground, ps.getStatus_panel());
+     		        frmAutoPockmon.add(ps.battle_screen);
+     		        System.out.println("화면 넘어갔다잉");
+     		        ps.placementbackground.setVisible(false);
+     		        ps.battle_screen.setVisible(true);
+     				ps.shop_reroll();
+     				ps.turnNum++;
+     				
+     			}
+     		});
+     	
+     	ms.recordButton.addActionListener(new ActionListener() {
+
 			@Override
-			public void mouseClicked(MouseEvent e) {
-		        
+			public void actionPerformed(ActionEvent e) {
+				ms.loginImg.setVisible(false);
 				
-		        for (int i = 0; i < 5; i++) {
-		            if (ps.placePokemon.get(i) != null) {
-		                int pokemonNum = ps.placePokemon.get(i).getPokemonNum();
-		                int Lv = ps.placePokemon.get(i).getLv();
-		                int exp = ps.placePokemon.get(i).getExp();
-		                String name = ps.placePokemon.get(i).getName();
-		                String type = ps.placePokemon.get(i).getType();
-		                int grade = ps.placePokemon.get(i).getGrade();
-		                int health = ps.placePokemon.get(i).getHealth();
-		                int power = ps.placePokemon.get(i).getPower();
-		                String ability = ps.placePokemon.get(i).getAbility();
-		                Pokemon p = new Pokemon(pokemonNum, Lv, exp, name, type, grade, health, power, ability);
-		                ps.toBattle.set(i, p);
-		            } else
-		                ps.toBattle.set(i, null);
-		        }
-		        
-		        StartBattle battle_screen = new StartBattle(ps.turnNum, ps.toBattle.get(0), ps.toBattle.get(1), ps.toBattle.get(2), ps.toBattle.get(3),
-		                ps.toBattle.get(4), ps.effectNum);		        
-		        frmAutoPockmon.add(battle_screen);
-		        ps.placementbackground.setVisible(false);
-		        battle_screen.setVisible(true);
-			}
-		});
+                record_screen.setVisible(true);
+				
+			};
+			
+        
+        });
+     	
+     	
         
         
         
